@@ -1,0 +1,227 @@
+/* src/pages/ContactPage.css */
+
+.contact-page { padding-bottom: 0; }
+
+/* ── LAYOUT ───────────────────────────────────────────────────────────────── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 48px;
+  align-items: start;
+}
+
+/* ── FORM CARD ────────────────────────────────────────────────────────────── */
+.contact-form-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 36px;
+}
+.contact-form-card__title {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.contact-form-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* First-name / Last-name side-by-side */
+.contact-name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── PHONE INPUT — ISD CODE + NUMBER COMBINED ────────────────────────────── */
+.cf-phone-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border, #d1d5db);
+  border-radius: var(--radius-sm, 8px);
+  background: var(--white, #fff);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.cf-phone-wrapper:focus-within {
+  border-color: var(--deep);
+  outline: none;
+}
+
+/* Override any inherited border/outline on inner elements */
+.cf-phone-wrapper select,
+.cf-phone-wrapper input {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.cf-isd-select {
+  padding: 10px 4px 10px 10px !important;
+  font-size: 13px !important;
+  min-width: 84px;
+  max-width: 94px;
+  flex-shrink: 0;
+  cursor: pointer;
+  appearance: auto;
+  color: var(--dark, #111827);
+  font-family: inherit;
+}
+
+.cf-isd-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--border, #d1d5db);
+  flex-shrink: 0;
+}
+
+.cf-phone-input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px !important;
+  font-size: 14px !important;
+  color: var(--dark, #111827);
+  font-family: inherit;
+}
+
+/* ── VALIDATION — ERROR STATES ───────────────────────────────────────────── */
+
+/* Red border on plain inputs / selects */
+.form-input.cf-input-error {
+  border-color: #e53e3e !important;
+}
+
+/* Red border on phone wrapper */
+.cf-phone-wrapper.cf-input-error {
+  border-color: #e53e3e !important;
+}
+
+/* Error message text below field */
+.cf-field-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #e53e3e;
+  line-height: 1.4;
+}
+
+.cf-field-error svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Mandatory star */
+.cf-required-star {
+  color: #e53e3e;
+}
+
+/* ── INFO CARDS ───────────────────────────────────────────────────────────── */
+.contact-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.contact-info-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  transition: all var(--duration-slow);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  /* Prevent card from overflowing its column */
+  min-width: 0;
+  overflow: hidden;
+}
+.contact-info-card:hover {
+  border-color: var(--mid);
+  transform: translateY(-2px);
+}
+
+.contact-info-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(51, 87, 101, 0.08);
+  flex-shrink: 0;
+}
+
+.contact-info-card__value {
+  font-size: 13px;
+  color: var(--dark);
+  line-height: 1.55;
+  margin: 0;
+  /* Allow long strings (email, phone) to wrap cleanly */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  width: 100%;
+}
+
+/* ── HERO ─────────────────────────────────────────────────────────────────── */
+.page-hero {
+  padding: 40px 0;
+  background: var(--deep);
+  /* Pull flush against header — cancels app-main padding-top: 72px */
+  margin-top: -72px;
+  padding-top: calc(72px + 40px);
+}
+.page-hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 5vw, 62px);
+  font-weight: 300;
+  color: var(--white);
+  margin-top: 12px;
+}
+.page-hero__sub {
+  font-size: 17px;
+  color: rgba(219, 226, 220, 0.8);
+  max-width: 520px;
+  line-height: 1.75;
+  margin-top: 14px;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .contact-grid { grid-template-columns: 1fr; }
+
+  /* When info panel goes full-width, allow 2-col cards again */
+  .contact-info-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .contact-form-card { padding: 20px; }
+  .contact-name-row  { grid-template-columns: 1fr; }
+  .contact-info-grid { grid-template-columns: 1fr; }
+  /* Mobile header is 64px */
+  .page-hero {
+    margin-top: -64px;
+    padding-top: calc(64px + 40px);
+  }
+}

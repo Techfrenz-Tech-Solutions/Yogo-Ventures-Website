@@ -1,0 +1,66 @@
+/* src/components/common/CookieConsent.css */
+
+.cookie-banner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  max-width: 340px;
+  z-index: var(--z-toast);
+  box-shadow: var(--shadow-lg);
+  animation: fadeUp 0.5s 1.2s var(--ease) both;
+}
+
+/* 🔥 ICON FIX (FINAL) */
+.cookie-banner__icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+  display: block;
+
+  /* This controls the icon color */
+  color: var(--footer-accent, #000) !important;
+}
+
+/* Force SVG to inherit color */
+.cookie-banner__icon svg {
+  width: 32px;
+  height: 32px;
+  fill: currentColor !important;
+}
+
+.cookie-banner__title {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+
+.cookie-banner__text {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+
+.cookie-banner__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cookie-banner__actions .btn {
+  flex: 1;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .cookie-banner {
+    left: 16px;
+    right: 16px;
+    bottom: 80px;
+    max-width: none;
+  }
+}

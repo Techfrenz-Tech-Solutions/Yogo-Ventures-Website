@@ -1,0 +1,1017 @@
+/* src/pages/HomePage.css */
+
+/* ============================================================
+   FOOTER THEME COLOR VARIABLE
+   --deep is set by AppContext whenever the theme changes.
+   All theme-reactive elements below use var(--deep) directly.
+   ============================================================ */
+:root {
+  --footer-theme-primary: #1a5c38;
+  --footer-theme-primary-hover: #154d30;
+}
+
+/* ============================================================
+   HOME PRODUCT GRID
+   ============================================================ */
+.home-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 1060px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.home-products-grid--5 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  max-width: none;
+}
+
+/* ============================================================
+   HOME PRODUCT CARD  (hpc)
+   ============================================================ */
+.hpc {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all 0.35s var(--ease);
+  position: relative;
+}
+.hpc:hover {
+  border-color: var(--mid);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-5px);
+}
+
+.hpc__img-wrap {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--off-white);
+  overflow: hidden;
+}
+.hpc__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+.hpc:hover .hpc__img {
+  transform: scale(1.07);
+}
+
+/* ── Best Seller badge — uses var(--deep), updates with theme ── */
+.hpc__badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--deep);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.3px;
+  z-index: 2;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── "New" badge — also follows theme colour ── */
+.hpc__badge--new {
+  background: var(--deep) !important;
+}
+
+.hpc__wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  /* No box, no border, no background */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  overflow: visible;
+}
+.hpc__wishlist-btn:hover {
+  transform: scale(1.2);
+  background: transparent;
+  border: none;
+}
+.hpc__wishlist-btn.active {
+  animation: wishlistBurst 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  background: transparent;
+  border: none;
+}
+
+/* ── Twitter-style mini heart particles ── */
+.heart-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: #ef4444;
+  pointer-events: none;
+  line-height: 1;
+  transform-origin: center;
+  animation: heartFly 0.65s ease-out forwards;
+  z-index: 10;
+}
+@keyframes heartFly {
+  0%   { opacity: 1;   transform: translate(-50%, -50%) translate(0, 0) scale(1.2); }
+  50%  { opacity: 0.9; }
+  100% { opacity: 0;   transform: translate(-50%, -50%) translate(var(--tx, 20px), var(--ty, -20px)) scale(0.3); }
+}
+
+.hpc__oos {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  z-index: 3;
+}
+
+.hpc__info {
+  padding: 0;
+  background: var(--deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  transition: background 0.3s;
+}
+.hpc__name {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--white) !important;
+  text-decoration: none;
+  text-align: center;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: opacity 0.2s;
+}
+.hpc__name:hover {
+  opacity: 0.82;
+  color: var(--white) !important;
+}
+
+/* ============================================================
+   CTA ROW  —  View All Products
+   ============================================================ */
+.home-products__cta {
+  text-align: center;
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .home-products-grid,
+  .home-products-grid--5 {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .home-products-grid,
+  .home-products-grid--5 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   NEW ARRIVALS CTA
+   ============================================================ */
+.new-arrivals__cta {
+  text-align: center;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.new-arrivals__cta-title {
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 400;
+  color: var(--dark);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.new-arrivals__cta-text {
+  max-width: 680px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* ── "View All Products" button — uses var(--deep) directly ── */
+.btn--footer-theme {
+  background:   var(--deep) !important;
+  color:        var(--white) !important;
+  border:       2px solid var(--deep) !important;
+  transition:   background 0.25s, border-color 0.25s, filter 0.25s !important;
+}
+.btn--footer-theme:hover {
+  background:   var(--deep) !important;
+  border-color: var(--deep) !important;
+  filter:       brightness(0.84) !important;
+  opacity: 1 !important;
+}
+
+.btn--get-quote {
+  cursor: pointer;
+}
+
+/* ── Legacy .btn--theme kept in sync ── */
+.btn--theme {
+  background:   var(--deep) !important;
+  color:        var(--white) !important;
+  border:       2px solid var(--deep) !important;
+  transition:   background 0.25s, border-color 0.25s, filter 0.25s !important;
+}
+.btn--theme:hover {
+  background:   var(--deep) !important;
+  border-color: var(--deep) !important;
+  filter:       brightness(0.84) !important;
+}
+
+/* ============================================================
+   ABOUT SECTION — "Since 2019 · Chennai" badge
+   ============================================================ */
+.about__badge,  .about-badge,
+.about__tag,    .about-tag,
+.about__since,  .about-since,
+.about__year,   .about-year,
+[class*="about"][class*="badge"],
+[class*="about"][class*="tag"],
+[class*="about"][class*="since"] {
+  background:   var(--deep) !important;
+  color:        var(--white) !important;
+  border-color: var(--deep) !important;
+}
+
+/* ============================================================
+   ABOUT SECTION — "Discover Our Story" button
+   ============================================================ */
+.about__cta,
+.about-cta,
+.about__btn,
+.about-btn,
+.about__story-btn,
+.about-story-btn,
+.about__discover-btn,
+.about-discover-btn,
+.about__link,
+.about-link,
+.about__action,
+.about-action {
+  background:   var(--deep) !important;
+  color:        var(--white) !important;
+  border-color: var(--deep) !important;
+  transition:   opacity 0.25s !important;
+}
+.about__cta:hover,
+.about-cta:hover,
+.about__btn:hover,
+.about-btn:hover,
+.about__story-btn:hover,
+.about-story-btn:hover,
+.about__discover-btn:hover,
+.about-discover-btn:hover {
+  opacity: 0.87;
+}
+
+[class*="about"][class*="cta"],
+[class*="about"][class*="btn"],
+[class*="about"][class*="story"],
+[class*="about"][class*="discover"],
+[class*="about"][class*="action"],
+[class*="about"][class*="link"] {
+  background:   var(--deep) !important;
+  color:        var(--white) !important;
+  border-color: var(--deep) !important;
+  transition:   opacity 0.25s !important;
+}
+[class*="about"][class*="cta"]:hover,
+[class*="about"][class*="btn"]:hover,
+[class*="about"][class*="story"]:hover,
+[class*="about"][class*="discover"]:hover {
+  opacity: 0.87;
+}
+
+[class*="about"] .btn,
+[class*="about"] .btn-primary,
+[class*="about"] .btn-secondary,
+[class*="about"] .btn-outline,
+[class*="about"] .btn-dark,
+[class*="about"] .btn-solid,
+[class*="about"] button:not(.hpc__wishlist-btn):not([class*="qty"]):not([class*="filter"]):not([class*="pill"]) {
+  background:   var(--deep) !important;
+  color:        var(--white) !important;
+  border-color: var(--deep) !important;
+  transition:   opacity 0.25s !important;
+}
+[class*="about"] .btn:hover,
+[class*="about"] .btn-primary:hover,
+[class*="about"] .btn-secondary:hover,
+[class*="about"] .btn-outline:hover,
+[class*="about"] button:not(.hpc__wishlist-btn):hover {
+  opacity: 0.87;
+}
+
+/* ============================================================
+   IMAGE BADGE RESET
+   ============================================================ */
+.about__img-wrap   [class*="badge"],
+.about__img-wrap   [class*="since"],
+.about__img-wrap   [class*="tag"],
+.about__img-wrap   [class*="year"],
+.about-img-wrap    [class*="badge"],
+.about-img-wrap    [class*="since"],
+.about-img-wrap    [class*="tag"],
+.about-img-wrap    [class*="year"],
+.about__visual     [class*="badge"],
+.about__visual     [class*="since"],
+.about__visual     [class*="tag"],
+.about__visual     [class*="year"],
+.about-visual      [class*="badge"],
+.about-visual      [class*="since"],
+.about-visual      [class*="tag"],
+.about-visual      [class*="year"],
+.about__media      [class*="badge"],
+.about__media      [class*="since"],
+.about__media      [class*="tag"],
+.about__media      [class*="year"],
+.about-media       [class*="badge"],
+.about-media       [class*="since"],
+.about-media       [class*="tag"],
+.about-media       [class*="year"],
+.about__photo      [class*="badge"],
+.about__photo      [class*="since"],
+.about__photo      [class*="tag"],
+.about__photo      [class*="year"],
+.about-photo       [class*="badge"],
+.about-photo       [class*="since"],
+.about-photo       [class*="tag"],
+.about-photo       [class*="year"],
+.about__figure     [class*="badge"],
+.about__figure     [class*="since"],
+.about__figure     [class*="tag"],
+.about__figure     [class*="year"],
+.about-figure      [class*="badge"],
+.about-figure      [class*="since"],
+.about-figure      [class*="tag"],
+.about-figure      [class*="year"],
+[class*="about"][class*="img"]    [class*="badge"],
+[class*="about"][class*="img"]    [class*="since"],
+[class*="about"][class*="img"]    [class*="tag"],
+[class*="about"][class*="img"]    [class*="year"],
+[class*="about"][class*="visual"] [class*="badge"],
+[class*="about"][class*="visual"] [class*="since"],
+[class*="about"][class*="visual"] [class*="tag"],
+[class*="about"][class*="visual"] [class*="year"],
+[class*="about"][class*="media"]  [class*="badge"],
+[class*="about"][class*="media"]  [class*="since"],
+[class*="about"][class*="media"]  [class*="tag"],
+[class*="about"][class*="media"]  [class*="year"],
+[class*="about"][class*="photo"]  [class*="badge"],
+[class*="about"][class*="photo"]  [class*="since"],
+[class*="about"][class*="photo"]  [class*="tag"],
+[class*="about"][class*="photo"]  [class*="year"],
+[class*="about"][class*="figure"] [class*="badge"],
+[class*="about"][class*="figure"] [class*="since"],
+[class*="about"][class*="figure"] [class*="tag"],
+[class*="about"][class*="figure"] [class*="year"] {
+  background:   revert !important;
+  color:        revert !important;
+  border-color: revert !important;
+}
+
+/* ============================================================
+   WHY CHOOSE YOGO VENTURES
+   ============================================================ */
+.why-section .section-tag,
+.why-section .section-subtitle,
+.why-section .section-header > p,
+.why-section .section-header > span,
+.why-section .why__tag,       .why-section .why-tag,
+.why-section .why__tagline,   .why-section .why-tagline,
+.why-section .why__subtitle,  .why-section .why-subtitle,
+.why-us-section .section-tag,
+.why-us-section .section-subtitle,
+[class*="why-us"] .section-tag,
+[class*="why-us"] .section-subtitle,
+[class*="why"][class*="tag"],
+[class*="why"][class*="tagline"],
+[class*="why"][class*="subtitle"],
+[class*="why"][class*="label"] {
+  display: none !important;
+}
+
+/* ── Spacer between Sourcing CTA and Why section ── */
+.section-spacer {
+  height: 80px;
+  background: transparent;
+}
+
+.why-section,
+.why-us-section,
+[class*="why-us"],
+[class*="whyus"] {
+  padding-block: 110px !important;
+}
+
+.why-section .section-title,
+.why-section h2,
+.why-us-section .section-title,
+.why-us-section h2,
+[class*="why-us"] h2 {
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.5px !important;
+}
+
+.why-card { padding: 40px 32px !important; }
+.why-card__icon,
+.why-card .icon,
+.why-card svg:first-child {
+  width: 20px !important;
+  height: 20px !important;
+  font-size: 2.4rem !important;
+  margin-bottom: 22px !important;
+}
+.why-card__title, .why-card h3, .why-card h4 {
+  font-size: 1.18rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 10px !important;
+}
+.why-card__body, .why-card p {
+  font-size: 0.96rem !important;
+  line-height: 1.65 !important;
+}
+
+/* ============================================================
+   TESTIMONIALS — hide all star / rating icons
+   ============================================================ */
+[class*="testimonial"] [class*="star"],
+[class*="testimonial"] [class*="rating"],
+[class*="testimonial"] [class*="stars"],
+[class*="testimonial"] [class*="rate"],
+[class*="testimonial"] [class*="review-score"],
+[class*="testimonial"] [class*="score"],
+[class*="testimonials"] [class*="star"],
+[class*="testimonials"] [class*="rating"],
+[class*="testimonials"] [class*="stars"],
+[class*="testimonials"] [class*="rate"],
+.testimonial__stars,
+.testimonial__rating,
+.testimonial__star,
+.testimonial-stars,
+.testimonial-rating,
+.review__stars,
+.review__rating,
+.review-stars,
+.review-rating,
+.rating-stars,
+.star-rating,
+.stars,
+[class*="testimonial"] svg[class*="star"],
+[class*="testimonial"] svg[class*="rating"],
+[class*="star-wrap"],
+[class*="stars-wrap"],
+[class*="rating-wrap"],
+[class*="star-row"],
+[class*="stars-row"] {
+  display: none !important;
+}
+
+/* ============================================================
+   BEST SELLERS SECTION — warm parchment / cream
+   ============================================================ */
+section[aria-labelledby="bestsellers-heading"] {
+  background: #fdf6ee !important;
+  position: relative;
+  padding-bottom: 64px;
+}
+section[aria-labelledby="bestsellers-heading"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 5%  10%, rgba(139, 90, 43, 0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 95% 90%, rgba(26,  92, 56, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+section[aria-labelledby="bestsellers-heading"] > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   NEW ARRIVALS SECTION — soft sage green tint
+   ============================================================ */
+section[aria-labelledby="new-arrivals-heading"] {
+  background: #eef5f0 !important;
+  position: relative;
+}
+section[aria-labelledby="new-arrivals-heading"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 55% at 90% 10%, rgba(26, 92, 56, 0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 45% at 10% 90%, rgba(26, 92, 56, 0.04) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+section[aria-labelledby="new-arrivals-heading"] > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   SOURCING CTA SECTION
+   Increased padding-bottom to create clear visual gap
+   before the Why Choose Yogo Ventures section.
+   ============================================================ */
+.sourcing-cta-section {
+  background: linear-gradient(135deg, #fdf0e8 0%, #f5e6d8 100%);
+  position: relative;
+  padding: 80px 0 100px;   /* restored to sensible value; gap comes from Why margin-top */
+  overflow: hidden;
+}
+.sourcing-cta-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 70% at 5% 50%, rgba(127, 84, 61, 0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 60% at 95% 50%, rgba(51, 87, 101, 0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.sourcing-cta-block {
+  position: relative;
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.sourcing-cta-block__title {
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 3.5vw, 42px);
+  font-weight: 800;
+  color: var(--dark);
+  line-height: 1.2;
+  margin: 0;
+}
+.sourcing-cta-block__body {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--muted);
+  line-height: 1.8;
+  margin: 0;
+  max-width: 640px;
+}
+
+@media (max-width: 768px) {
+  .sourcing-cta-section { padding: 64px 0 80px; }
+  .section-spacer { height: 56px; }
+}
+
+@media (max-width: 640px) {
+  .sourcing-cta-section { padding: 56px 0 64px; }
+  .sourcing-cta-block__title { font-size: clamp(22px, 5vw, 30px); }
+  .section-spacer { height: 40px; }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1280px) {
+  .home-products-grid    { grid-template-columns: repeat(4, 1fr); }
+  .home-products-grid--5 { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 1024px) {
+  .home-products-grid    { grid-template-columns: repeat(3, 1fr); }
+  .home-products-grid--5 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 640px) {
+  .home-products-grid    { grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: none; }
+  .home-products-grid--5 { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .home-products__cta    { flex-direction: column; gap: 12px; }
+  .why-section,
+  .why-us-section        { padding-block: 70px !important; }
+}
+
+
+/* ============================================================
+   NEWSLETTER SECTION
+   ============================================================ */
+.newsletter-section {
+  position: relative;
+  overflow: hidden;
+  padding-block: 90px;
+  background: var(--deep);
+  color: var(--white);
+}
+
+/* ── Animated background blobs ── */
+.newsletter-section__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.nl-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.15;
+}
+.nl-blob--1 {
+  width: 420px;
+  height: 420px;
+  background: #ffffff;
+  top: -120px;
+  left: -100px;
+  animation: nl-float 9s ease-in-out infinite alternate;
+}
+.nl-blob--2 {
+  width: 300px;
+  height: 300px;
+  background: rgba(255,255,255,0.6);
+  bottom: -80px;
+  right: 5%;
+  animation: nl-float 12s ease-in-out infinite alternate-reverse;
+}
+.nl-blob--3 {
+  width: 200px;
+  height: 200px;
+  background: rgba(255,255,255,0.4);
+  top: 40%;
+  left: 45%;
+  animation: nl-float 7s ease-in-out infinite alternate;
+}
+@keyframes nl-float {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, 20px) scale(1.08); }
+}
+
+/* ── Three-column inner layout ── */
+.newsletter-section__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 100px 1fr 140px;
+  gap: 48px;
+  align-items: center;
+}
+
+/* ── Left icons column ── */
+.nl-icons-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.nl-icon-ring {
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.7);
+  flex-shrink: 0;
+  transition: background 0.3s, border-color 0.3s;
+}
+.nl-icon-ring:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.5);
+}
+.nl-icon-ring--lg { width: 60px; height: 60px; }
+.nl-icon-ring--md { width: 44px; height: 44px; }
+.nl-icon-ring--sm { width: 32px; height: 32px; }
+
+/* ── Centre content ── */
+.nl-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.nl-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+}
+.nl-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 1.5px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 2px;
+}
+
+.nl-heading {
+  font-size: clamp(1.75rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  color: var(--white);
+  margin: 0;
+}
+.nl-heading em {
+  font-style: normal;
+  position: relative;
+  display: inline-block;
+}
+.nl-heading em::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.45);
+  border-radius: 2px;
+}
+
+.nl-subtext {
+  font-size: 0.93rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.72);
+  max-width: 480px;
+  margin: 0;
+}
+
+/* Feature pills */
+.nl-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.nl-feature {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.2px;
+}
+.nl-feature svg {
+  flex-shrink: 0;
+  color: rgba(255,255,255,0.55);
+}
+
+/* Email input row */
+.nl-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.nl-input-wrap {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.nl-input-icon {
+  position: absolute;
+  left: 14px;
+  color: rgba(255,255,255,0.45);
+  flex-shrink: 0;
+  pointer-events: none;
+}
+.nl-input {
+  width: 100%;
+  height: 50px;
+  padding: 0 16px 0 40px;
+  font-size: 13.5px;
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.22);
+  border-radius: 10px;
+  color: var(--white);
+  outline: none;
+  transition: background 0.25s, border-color 0.25s;
+}
+.nl-input::placeholder {
+  color: rgba(255,255,255,0.4);
+}
+.nl-input:focus {
+  background: rgba(255,255,255,0.16);
+  border-color: rgba(255,255,255,0.5);
+}
+.nl-subscribe-btn {
+  height: 50px;
+  padding: 0 26px;
+  background: var(--white);
+  color: var(--deep);
+  border: none;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  transition: opacity 0.22s, transform 0.18s;
+  flex-shrink: 0;
+}
+.nl-subscribe-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+.nl-subscribe-btn:active {
+  transform: translateY(0);
+}
+
+/* Divider */
+.nl-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nl-divider__line {
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 1px;
+}
+.nl-divider__text {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* Enquiry row */
+.nl-enquiry-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.nl-enquiry-text {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.68);
+  margin: 0;
+  flex: 1;
+  min-width: 180px;
+}
+.nl-enquiry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.55);
+  border-radius: 10px;
+  color: var(--white);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.25s, border-color 0.25s, transform 0.18s;
+  flex-shrink: 0;
+}
+.nl-enquiry-btn:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.85);
+  transform: translateY(-1px);
+}
+.nl-enquiry-btn:active {
+  transform: translateY(0);
+}
+
+/* Right motif column */
+.nl-motif-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255,255,255,0.5);
+}
+.nl-motif {
+  color: rgba(255,255,255,0.65);
+  animation: nl-spin-slow 30s linear infinite;
+}
+@keyframes nl-spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.nl-motif-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+}
+.nl-motif-sub {
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.38);
+  text-align: center;
+}
+
+/* ============================================================
+   NEWSLETTER — RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  .newsletter-section__inner {
+    grid-template-columns: 80px 1fr;
+    grid-template-rows: auto auto;
+  }
+  .nl-motif-col {
+    display: none;
+  }
+}
+@media (max-width: 768px) {
+  .newsletter-section {
+    padding-block: 64px;
+  }
+  .newsletter-section__inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .nl-icons-col {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .nl-heading {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+  .nl-input-row {
+    flex-direction: column;
+  }
+  .nl-subscribe-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .nl-enquiry-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .nl-enquiry-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+@media (max-width: 480px) {
+  .newsletter-section {
+    padding-block: 48px;
+  }
+  .nl-icons-col {
+    display: none;
+  }
+}

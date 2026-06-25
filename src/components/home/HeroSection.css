@@ -1,0 +1,448 @@
+/* ═══════════════════════════════════════════
+   HeroSection.css — Full Responsive Fix
+   ═══════════════════════════════════════════ */
+
+/* ── Hero wrapper ───────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  width: 100%;
+  height: calc(90vh + 72px);
+  min-height: 572px;
+  margin-top: -72px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Slide background wrapper ───────────────────────────────────────────── */
+.hero__slide-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0s 0.8s;
+  z-index: 0;
+  will-change: opacity;
+  backface-visibility: hidden;
+}
+
+.hero__slide-bg.active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.8s ease, visibility 0s 0s;
+}
+
+/* ── The actual image ── */
+.hero__slide-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* ── Dark overlay ── */
+.hero__overlay {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.30) 0%,
+    rgba(0, 0, 0, 0.15) 60%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  z-index: 1;
+}
+
+/* ── Content ────────────────────────────────────────────────────────────── */
+.hero__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 24px;
+}
+
+/* ── Top-left heading and buttons ────────────────────────────────────────── */
+.hero__top-left {
+  position: absolute;
+  top: calc(72px + 24px);
+  left: 24px;
+  right: auto;
+  bottom: auto;
+  max-width: calc(100% - 48px);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  transition: opacity 0.34s ease, transform 0.34s ease;
+}
+
+.hero__top-left.leaving {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.hero__info {
+  max-width: 640px;
+  transition: opacity 0.34s ease, transform 0.34s ease;
+}
+.hero__info.leaving {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* ── Heading ────────────────────────────────────────────────────────────── */
+.hero__product-name {
+  font-size: clamp(1.2rem, 3.5vw, 2.4rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 10px 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+/* ── Slogans ────────────────────────────────────────────────────────────── */
+.hero__slogan {
+  font-size: clamp(0.75rem, 1.4vw, 0.9rem);
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 6px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* ── CTA row ────────────────────────────────────────────────────────────── */
+.hero__ctas {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+.btn,
+.btn-lg {
+  padding: 6px 14px !important;
+  font-size: 0.75rem !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  border-radius: 5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.btn span { line-height: 1; }
+
+.btn-primary {
+  background: var(--deep) !important;
+  color: #fff !important;
+  border: none;
+}
+
+.btn-primary:hover {
+  filter: brightness(0.85);
+  transform: translateY(-1px);
+}
+
+/* ── Prev / Next arrow buttons ──────────────────────────────────────────── */
+.hero__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  background: rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.22s, border-color 0.22s, transform 0.22s;
+  will-change: transform;
+}
+
+.hero__nav--prev { left: 20px; }
+.hero__nav--next { right: 20px; }
+
+.hero__nav:hover {
+  background: rgba(0, 0, 0, 0.58);
+  border-color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-50%) scale(1.08);
+}
+
+/* ── Dot pagination ─────────────────────────────────────────────────────── */
+.hero__dots {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero__dot {
+  height: 8px;
+  width: 8px;
+  border-radius: 999px;
+  border: none;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: width 0.3s ease, background 0.3s ease, transform 0.2s ease;
+  will-change: width, background;
+}
+
+.hero__dot:hover {
+  background: rgba(255, 255, 255, 0.75);
+  transform: scale(1.15);
+}
+
+.hero__dot.active {
+  width: 28px;
+  background: #fff;
+  transform: scale(1);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TABLET  (769px – 1024px)
+   ══════════════════════════════════════════════════════════════════ */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero {
+    height: calc(75vh + 72px);
+    min-height: 492px;
+  }
+
+  .hero__top-left {
+    top: calc(72px + 20px);
+    left: 20px;
+    right: auto;
+    bottom: auto;
+    max-width: calc(100% - 40px);
+  }
+
+  .hero__product-name { font-size: clamp(1.35rem, 3vw, 2rem); }
+
+  .btn,
+  .btn-lg {
+    height: 36px !important;
+    min-height: 36px !important;
+    font-size: 0.72rem !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MOBILE  (≤ 768px)
+   ══════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* Default: height based on apparel image ratio (1024×717 = 1.4282) */
+  .hero {
+    height: auto;
+    min-height: calc(100vw / 1.4282 + 64px);
+    margin-top: -64px;
+    overflow: hidden;
+    transition: min-height 0.35s ease;
+  }
+
+  /* ── HANDICRAFT ACTIVE on mobile ────────────────────────────────────
+     Hero4.png = 1705×759px, ratio = 2.2464
+     When JS adds .hero--handicraft to <section>, the container height
+     becomes exactly 100vw / 2.2464 + 64px — the image then fills
+     the full width at its natural ratio with ZERO cropping and ZERO
+     letterbox bars. This matches what you see on desktop. */
+  .hero--handicraft {
+    min-height: calc(100vw / 1.4282 + 64px);
+  }
+
+  .hero__content { padding: 0 16px; }
+
+  .hero__top-left {
+    top: calc(64px + 20px);
+    left: 16px;
+    right: auto;
+    bottom: auto;
+    max-width: calc(100% - 40px);
+  }
+
+  .hero__info { max-width: 100%; }
+
+  .hero__product-name {
+    font-size: clamp(1rem, 5vw, 1.5rem);
+    margin-bottom: 8px;
+    line-height: 1.2;
+    word-break: keep-all;
+  }
+
+  .hero__ctas { margin-top: 12px; }
+
+  .btn,
+  .btn-lg {
+    padding: 5px 12px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .hero__nav { width: 38px; height: 38px; }
+  .hero__nav--prev { left: 12px; }
+  .hero__nav--next { right: 12px; }
+
+  .hero__dots { bottom: 18px; gap: 7px; }
+  .hero__dot  { height: 7px; width: 7px; }
+  .hero__dot.active { width: 22px; }
+
+  /* SLIDE 1 — APPAREL (1024×717, ratio 1.4282)
+     contain = all 3 men fully visible, bg fills any side gaps */
+  .hero__slide-bg:nth-child(1) {
+    background-color: #c9c8c6;
+  }
+  .hero__slide-bg:nth-child(1) .hero__slide-img {
+    object-fit: contain;
+    object-position: center bottom;
+  }
+
+  /* SLIDE 2 — MEMORY FOAM
+     Shift image down so product clears the heading + button */
+  .hero__slide-bg:nth-child(2) .hero__slide-img {
+    object-position: center 30%;
+  }
+
+  /* SLIDE 4 — HANDICRAFT (1705×759, ratio 2.2464)
+     cover ensures the image fills the mobile hero frame without leaving gaps.
+     Background color remains to hide any tiny edges during load. */
+  .hero__slide-bg:nth-child(4) {
+    background-color: #d4c9b8;
+  }
+  .hero__slide-bg:nth-child(4) .hero__slide-img {
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SMALL MOBILE  (≤ 480px)
+   ══════════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .hero        { min-height: calc(100vw / 1.4282 + 64px); }
+  .hero--handicraft { min-height: calc(100vw / 1.4282 + 64px); }
+
+  .hero__top-left {
+    top: calc(64px + 14px);
+    left: 14px;
+    right: auto;
+    bottom: auto;
+    max-width: calc(100% - 36px);
+  }
+
+  .hero__product-name { font-size: clamp(0.95rem, 4.5vw, 1.3rem); }
+
+  .btn,
+  .btn-lg {
+    padding: 4px 11px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    font-size: 0.68rem !important;
+  }
+
+  .hero__nav { width: 34px; height: 34px; }
+  .hero__nav--prev { left: 10px; }
+  .hero__nav--next { right: 10px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   VERY SMALL MOBILE  (≤ 400px)
+   ══════════════════════════════════════════════════════════════════ */
+@media (max-width: 400px) {
+  .hero        { min-height: calc(100vw / 1.4282 + 64px); }
+  .hero--handicraft { min-height: calc(100vw / 1.4282 + 64px); }
+
+  .hero__top-left {
+    top: calc(64px + 14px);
+    left: clamp(8px, 3%, 16px);
+    max-width: calc(100% - 68px);
+  }
+
+  .hero__product-name { font-size: clamp(0.9rem, 4vw, 1.2rem); }
+
+  .btn,
+  .btn-lg {
+    padding: 4px 10px !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    font-size: 0.65rem !important;
+  }
+
+  .hero__nav { width: 32px; height: 32px; }
+  .hero__nav--prev { left: 8px; }
+  .hero__nav--next { right: 8px; }
+
+  .hero__dots { bottom: 14px; gap: 6px; }
+  .hero__dot  { height: 6px; width: 6px; }
+  .hero__dot.active { width: 18px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LANDSCAPE PHONES
+   ══════════════════════════════════════════════════════════════════ */
+@media (orientation: landscape) and (max-height: 500px) {
+  .hero {
+    height: calc(100dvh + 56px);
+    min-height: 316px;
+    margin-top: -56px;
+  }
+
+  .hero__top-left { top: calc(56px + 16px); }
+
+  .hero__product-name {
+    font-size: clamp(0.9rem, 3.5vw, 1.4rem);
+    margin-bottom: 4px;
+  }
+
+  .hero__slogan { display: none; }
+
+  .btn,
+  .btn-lg {
+    height: 30px !important;
+    min-height: 30px !important;
+    font-size: 0.68rem !important;
+  }
+
+  /* Landscape is wide — apparel reverts to cover; handicraft stays contain */
+  .hero__slide-bg:nth-child(1) .hero__slide-img {
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+/* ── Light slide overlay variant ── */
+.hero--light-slide .hero__overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.18) 60%,
+    rgba(0, 0, 0, 0.08) 100%
+  );
+}

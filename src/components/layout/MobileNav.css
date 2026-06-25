@@ -1,0 +1,63 @@
+/* src/components/layout/MobileNav.css */
+
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border-top: 1.5px solid var(--border);
+  z-index: var(--z-sticky);
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+}
+
+.mobile-nav__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color var(--duration-base);
+  font-family: var(--font-sans);
+}
+.mobile-nav__item.active,
+.mobile-nav__item:hover { color: var(--deep); }
+
+.mobile-nav__icon {
+  font-size: 22px;
+  position: relative;
+  display: block;
+  line-height: 1;
+}
+
+.mobile-nav__badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  background: var(--terra);
+  color: var(--white);
+  border-radius: var(--radius-full);
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--white);
+}
+
+.mobile-nav__label { font-size: 10px; }
+
+@media (max-width: 1024px) {
+  .mobile-nav { display: flex; }
+}

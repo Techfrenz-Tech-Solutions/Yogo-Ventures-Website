@@ -1,0 +1,266 @@
+/* ═══════════════════════════════════════════════
+   BottomNav.css — 3D Mobile Bottom Navigation
+   Only visible on ≤ 768 px
+   ═══════════════════════════════════════════════ */
+
+/* ── CSS Variables ── */
+:root {
+  --bn-height: 70px;
+  --bn-bg: rgba(12, 14, 22, 0.92);
+  --bn-border: rgba(255, 255, 255, 0.08);
+
+  /* ── Active colour — overridden at runtime via inline style on <nav> ── */
+  --bn-active:                #38BDF8;
+  --bn-active-glow:           rgba(56, 189, 248, 0.50);
+  --bn-active-glow-faint:     rgba(56, 189, 248, 0.20);
+  --bn-active-border:         rgba(56, 189, 248, 0.35);
+  --bn-active-bg-start:       rgba(56, 189, 248, 0.22);
+  --bn-active-bg-end:         rgba(56, 189, 248, 0.08);
+  --bn-hover-bg:              rgba(56, 189, 248, 0.10);
+  --bn-hover-glow:            rgba(56, 189, 248, 0.20);
+  --bn-hover-border:          rgba(56, 189, 248, 0.18);
+  --bn-hover-icon:            #7DD3FC;
+  --bn-icon-drop-shadow:      rgba(56, 189, 248, 0.75);
+  --bn-icon-drop-shadow-hover:rgba(56, 189, 248, 0.40);
+
+  --bn-icon-idle:   rgba(255, 255, 255, 0.45);
+  --bn-label-idle:  rgba(255, 255, 255, 0.38);
+  --bn-radius: 20px 20px 0 0;
+  --bn-font: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ══════════════════════════════════════════════
+   Container
+   ══════════════════════════════════════════════ */
+.bottom-nav {
+  display: none;            /* hidden on desktop */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bn-height);
+  z-index: 9999;
+
+  /* Glassmorphism base */
+  background: var(--bn-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+  border-top: 1px solid var(--bn-border);
+  border-radius: var(--bn-radius);
+
+  /* 3-D raised shelf look */
+  box-shadow:
+    0 -4px 24px rgba(0, 0, 0, 0.55),
+    0 -1px 0   rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Safe-area support (iPhone notch/home indicator) */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .bottom-nav {
+    height: calc(var(--bn-height) + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ── Inner track ── */
+.bottom-nav__track {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  height: var(--bn-height);
+  padding: 0 4px;
+}
+
+/* ══════════════════════════════════════════════
+   Each nav item
+   ══════════════════════════════════════════════ */
+.bottom-nav__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  position: relative;
+  padding: 6px 2px 4px;
+
+  /* 3-D press-down transition */
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Active / hover 3-D press */
+.bottom-nav__item:active {
+  transform: scale(0.88) translateY(3px);
+}
+
+/* ══════════════════════════════════════════════
+   Icon wrapper — the 3-D "chip"
+   ══════════════════════════════════════════════ */
+.bottom-nav__icon-wrap {
+  position: relative;
+  width: 40px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  transition:
+    background   0.25s ease,
+    box-shadow   0.25s ease,
+    transform    0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* subtle 3-D depth for idle */
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* ── Actual SVG icon ── */
+.bottom-nav__icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bn-icon-idle);
+  transition: color 0.22s ease, transform 0.22s ease;
+  position: relative;
+  z-index: 1;
+}
+.bottom-nav__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Glow blob behind icon (hidden until active/hover) ── */
+.bottom-nav__glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse at 50% 60%,
+    var(--bn-active-glow) 0%,
+    transparent 70%
+  );
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* ── Label ── */
+.bottom-nav__label {
+  font-family: var(--bn-font);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: var(--bn-label-idle);
+  transition: color 0.22s ease;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════
+   ACTIVE state  — full 3-D treatment
+   ══════════════════════════════════════════════ */
+.bottom-nav__item--active .bottom-nav__icon-wrap {
+  background: linear-gradient(
+    145deg,
+    var(--bn-active-bg-start) 0%,
+    var(--bn-active-bg-end)   100%
+  );
+  box-shadow:
+    0 4px 16px var(--bn-active-glow),
+    0 2px 4px  rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    /* 3-D bottom bevel */
+    inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+
+  /* lift it off the bar */
+  transform: translateY(-6px) scale(1.08);
+  border: 1px solid var(--bn-active-border);
+}
+
+.bottom-nav__item--active .bottom-nav__icon {
+  color: var(--bn-active);
+  transform: scale(1.1);
+  /* subtle inner glow on icon strokes */
+  filter: drop-shadow(0 0 4px var(--bn-icon-drop-shadow));
+}
+
+.bottom-nav__item--active .bottom-nav__glow {
+  opacity: 1;
+}
+
+.bottom-nav__item--active .bottom-nav__label {
+  color: var(--bn-active);
+  font-weight: 700;
+}
+
+/* Active item top indicator bar */
+.bottom-nav__item--active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: var(--bn-active);
+  box-shadow: 0 2px 8px var(--bn-active-glow);
+}
+
+/* ══════════════════════════════════════════════
+   Hover (non-active items, touch-free devices)
+   Tint uses the current theme colour
+   ══════════════════════════════════════════════ */
+@media (hover: hover) {
+  .bottom-nav__item:not(.bottom-nav__item--active):hover .bottom-nav__icon-wrap {
+    background: var(--bn-hover-bg);
+    transform: translateY(-3px);
+    box-shadow:
+      0 4px 14px var(--bn-hover-glow),
+      0 2px 4px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+    border: 1px solid var(--bn-hover-border);
+  }
+
+  .bottom-nav__item:not(.bottom-nav__item--active):hover .bottom-nav__icon {
+    color: var(--bn-hover-icon);
+    filter: drop-shadow(0 0 3px var(--bn-icon-drop-shadow-hover));
+  }
+
+  .bottom-nav__item:not(.bottom-nav__item--active):hover .bottom-nav__label {
+    color: var(--bn-hover-icon);
+  }
+
+  /* Show a faint glow on hover too */
+  .bottom-nav__item:not(.bottom-nav__item--active):hover .bottom-nav__glow {
+    opacity: 0.45;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   Entry animation — slides up when first mounted
+   ══════════════════════════════════════════════ */
+@keyframes bn-slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+
+/* ══════════════════════════════════════════════
+   SHOW only on mobile
+   ══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .bottom-nav {
+    display: block;
+    animation: bn-slide-up 0.4s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+  }
+}

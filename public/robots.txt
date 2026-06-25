@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Disallow admin/private paths
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://www.coastalretreat.in/sitemap.xml

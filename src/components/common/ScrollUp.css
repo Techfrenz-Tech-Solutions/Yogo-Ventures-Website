@@ -1,0 +1,69 @@
+/* ScrollUp.css — 3D animated */
+
+.scroll-up-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: var(--z-toast);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--deep);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 3D */
+  transform-style: preserve-3d;
+  box-shadow:
+    0 8px 20px rgba(51,87,101,0.4),
+    0 4px 8px rgba(0,0,0,0.2),
+    inset 0 -4px 8px rgba(0,0,0,0.2),
+    inset 0 4px 8px rgba(255,255,255,0.1);
+  /* Hidden by default */
+  opacity: 0;
+  transform: translateY(20px) scale(0.8) rotateX(-15deg);
+  pointer-events: none;
+  transition:
+    opacity 0.4s cubic-bezier(0.34,1.56,0.64,1),
+    transform 0.4s cubic-bezier(0.34,1.56,0.64,1),
+    box-shadow 0.3s;
+}
+.scroll-up-btn.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1) rotateX(0deg);
+  pointer-events: auto;
+}
+.scroll-up-btn:hover {
+  transform: translateY(-6px) scale(1.12) rotateX(-10deg);
+  box-shadow:
+    0 16px 36px rgba(51,87,101,0.5),
+    0 6px 12px rgba(0,0,0,0.25),
+    inset 0 -4px 8px rgba(0,0,0,0.2);
+  background: var(--terra);
+}
+.scroll-up-btn:active {
+  transform: translateY(-2px) scale(0.96) rotateX(5deg);
+}
+
+/* Animated ring */
+.scroll-up-btn__ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid var(--mid);
+  opacity: 0;
+  animation: ringPulse 2.5s ease-in-out infinite;
+}
+.scroll-up-btn.visible .scroll-up-btn__ring { opacity: 1; }
+@keyframes ringPulse {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  70%  { transform: scale(1.4); opacity: 0; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+@media (max-width: 640px) {
+  .scroll-up-btn { bottom: 80px; right: 16px; width: 44px; height: 44px; }
+}

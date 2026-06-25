@@ -1,0 +1,67 @@
+/* src/pages/WishlistPage.css
+   Wishlist-specific layout.
+   ShopPage.css owns the card grid (.sp-*).
+   ContactPage.css owns .page-hero and .page-hero__title / __sub.
+   This file owns only wishlist-page chrome and the body gap.
+   ============================================================ */
+
+/* ── HERO — no extra background/color rules needed here.
+   .page-hero        → padding + margin-top flush trick  (ContactPage.css)
+   .section--dark    → background: var(--deep)           (global / ContactPage.css)
+   .wishlist-hero    → only overrides that are wishlist-specific
+   ── */
+.wishlist-hero {
+  /* Identical flush behaviour to ContactPage .page-hero — already defined
+     in ContactPage.css via .page-hero. This class exists so we can add
+     wishlist-only tweaks in future without touching shared styles. */
+}
+
+/* Reduce vertical height slightly vs full contact hero */
+.wishlist-hero.page-hero {
+  padding-bottom: 36px;
+}
+
+/* ── Gap wrapper between hero and card grid ── */
+.wishlist-body {
+  padding-top: 48px;
+  padding-bottom: 72px;
+}
+
+@media (max-width: 768px) {
+  .wishlist-body {
+    padding-top: 32px;
+    padding-bottom: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wishlist-body {
+    padding-top: 24px;
+    padding-bottom: 40px;
+  }
+}
+
+/* ── Empty state ── */
+.wishlist-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.wishlist-empty h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--dark);
+  margin: 0;
+}
+
+.wishlist-empty p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+  max-width: 280px;
+}

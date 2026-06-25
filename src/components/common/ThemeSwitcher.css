@@ -1,0 +1,88 @@
+/* src/components/common/ThemeSwitcher.css — 3D individual color dots */
+
+.theme-switcher {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Toggle button */
+.theme-toggle-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--dot-color, var(--deep));
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25), 0 2px 6px rgba(0,0,0,0.15);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+  transform-style: preserve-3d;
+}
+.theme-toggle-btn:hover {
+  transform: scale(1.15) rotate(15deg);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+}
+
+/* Dots container */
+.theme-dots-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  /* Hide initially */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px) scale(0.8);
+  transition: opacity 0.35s var(--ease), transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.theme-dots-wrap.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+/* Individual dot buttons — NO container, bare circles */
+.theme-dot-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--dot-color);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+    box-shadow 0.3s,
+    border-color 0.2s;
+  /* 3D effect */
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.25),
+    inset 0 -3px 6px rgba(0,0,0,0.2),
+    inset 0 3px 6px rgba(255,255,255,0.25);
+  animation: dotAppear 0.4s calc(var(--dot-delay,0s)) both;
+  transform-style: preserve-3d;
+}
+@keyframes dotAppear {
+  from { opacity:0; transform: scale(0) rotateY(-90deg); }
+  to   { opacity:1; transform: scale(1) rotateY(0deg); }
+}
+.theme-dot-btn:hover {
+  transform: scale(1.35) rotateY(20deg);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35), inset 0 -3px 6px rgba(0,0,0,0.2);
+  border-color: rgba(255,255,255,0.6);
+}
+.theme-dot-btn.active {
+  border-color: rgba(255,255,255,0.8);
+  border-width: 3px;
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.35), 0 6px 16px rgba(0,0,0,0.3);
+  transform: scale(1.1) rotateY(10deg);
+}
+
+@media (max-width: 640px) { .theme-switcher { bottom: 80px; } }

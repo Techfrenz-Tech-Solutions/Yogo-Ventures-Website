@@ -1,0 +1,273 @@
+/* ============================================================
+   ENQUIRY SECTION
+   ============================================================ */
+
+.enquiry-section {
+  padding-bottom: 100px;
+}
+
+/* CENTER FORM CARD */
+.enquiry-wrapper {
+  max-width: 520px;
+  margin: 40px auto 0;
+  background: #f8f9fa;
+  border-radius: 14px;
+  padding: 30px 28px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+/* LOGO CENTER */
+.enquiry-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+.enquiry-logo img {
+  max-width: 90px;
+}
+
+/* FORM TITLE */
+.enquiry-form-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--deep);
+  margin-bottom: 28px; /* increased from 20px for spacing below title */
+  text-align: center;
+}
+
+/* FORM */
+.enquiry-form {
+  text-align: left;
+}
+
+/* ROW */
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+  width: 100%;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #374151;
+}
+
+/* Mandatory star */
+.required-star {
+  color: red;
+}
+
+/* INPUTS */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: #fff;
+  transition: border-color 0.2s;
+  color: #111827;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--deep);
+}
+
+/* Placeholder styling for country text input */
+.form-group input::placeholder {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* ============================================================
+   PHONE INPUT — ISD CODE + NUMBER COMBINED
+   ============================================================ */
+.phone-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.phone-input-wrapper:focus-within {
+  border-color: var(--deep);
+}
+
+/* Override the generic .form-group input rule for the inner phone input */
+.phone-input-wrapper input,
+.phone-input-wrapper select {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.isd-select {
+  padding: 10px 4px 10px 10px !important;
+  font-size: 13px !important;
+  background: transparent !important;
+  cursor: pointer;
+  min-width: 84px;
+  max-width: 94px;
+  flex-shrink: 0;
+  appearance: auto;
+  color: #111827;
+  font-family: inherit;
+}
+
+.isd-divider {
+  width: 1px;
+  height: 22px;
+  background: #d1d5db;
+  flex-shrink: 0;
+}
+
+.phone-number-input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px !important;
+  font-size: 14px !important;
+  background: transparent !important;
+}
+
+/* ============================================================
+   VALIDATION — ERROR STATES
+   ============================================================ */
+
+/* Red border — plain inputs & selects */
+input.input-error-border,
+select.input-error-border {
+  border-color: #e53e3e !important;
+}
+
+/* Red border — phone wrapper */
+.phone-input-wrapper.input-error-border {
+  border-color: #e53e3e !important;
+}
+
+/* Error message text */
+.field-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #e53e3e;
+  line-height: 1.4;
+}
+
+.field-error svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ============================================================
+   BUTTON — THEME LINKED
+   ============================================================ */
+.enquiry-submit {
+  width: 100%;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ============================================================
+   TOAST NOTIFICATION
+   ============================================================ */
+.enquiry-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--deep);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 24px;
+  border-radius: 50px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  white-space: nowrap;
+  animation: enquiry-toast-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+             enquiry-toast-out 0.3s ease 3.1s forwards;
+  pointer-events: none;
+}
+
+@keyframes enquiry-toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(18px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0);    }
+}
+
+@keyframes enquiry-toast-out {
+  from { opacity: 1; transform: translateX(-50%) translateY(0);    }
+  to   { opacity: 0; transform: translateX(-50%) translateY(12px); }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .enquiry-wrapper {
+    max-width: 100%;
+    margin: 24px 0 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+  }
+  .enquiry-wrapper {
+    padding: 24px 16px;
+    margin: 24px auto 0;
+    border-radius: 10px;
+  }
+  .enquiry-form-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  .enquiry-toast {
+    bottom: 20px;
+    font-size: 13px;
+    padding: 12px 18px;
+    max-width: calc(100vw - 40px);
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .enquiry-wrapper {
+    padding: 18px 12px;
+  }
+  .enquiry-form-title {
+    font-size: 20px;
+  }
+  .isd-select {
+    min-width: 72px !important;
+    max-width: 80px !important;
+    font-size: 12px !important;
+  }
+}

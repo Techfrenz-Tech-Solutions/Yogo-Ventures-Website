@@ -1,0 +1,444 @@
+/* src/pages/TermOfuse.css */
+
+/* ─── CSS Variable defaults (overridden by AppContext theme) ─── */
+:root {
+  --primary:      #c8833b;
+  --dark:         #1a2e2a;
+  --off-white:    #f9f6f2;
+  --mid:          #4a4a45;
+  --muted:        #8a8880;
+  --border:       #e8e2da;
+  --white:        #ffffff;
+
+  /* Illustration palette — derived from theme */
+  --illus-bg:     #f0ede8;
+  --illus-border: #d6cfc6;
+}
+
+/* ─── Page Shell ─────────────────────────────────────────────── */
+.tnc-page {
+  min-height: 100vh;
+  background: var(--off-white);
+  font-family: var(--font-sans, Georgia, serif);
+}
+
+/* ─── Hero Banner ────────────────────────────────────────────── */
+.tnc-hero {
+  position: relative;
+  background: var(--dark);
+  color: #fff;
+  padding: 80px 48px 72px;
+  /* Pull flush against header — cancels app-main padding-top: 72px */
+  margin-top: -72px;
+  padding-top: calc(72px + 80px);
+  overflow: hidden;
+}
+
+.tnc-hero__bg-circle {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  border: 60px solid rgba(255, 255, 255, 0.04);
+  top: -120px;
+  right: -100px;
+  pointer-events: none;
+}
+.tnc-hero__bg-circle--2 {
+  width: 200px;
+  height: 200px;
+  border-width: 30px;
+  top: auto;
+  bottom: -60px;
+  right: 200px;
+}
+
+.tnc-hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.tnc-hero__eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  /* Uses --primary so it shifts when theme changes */
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.tnc-hero__title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(44px, 7vw, 80px);
+  font-weight: 400;
+  line-height: 1.02;
+  margin-bottom: 14px;
+  letter-spacing: -1.5px;
+}
+
+.tnc-hero__date {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 20px;
+}
+
+.tnc-hero__sub {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.8;
+  max-width: 620px;
+  margin-bottom: 36px;
+}
+
+.tnc-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50px;
+  padding: 8px 20px;
+}
+.tnc-hero__badge-num {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 22px;
+  font-weight: 400;
+  /* Badge number uses --primary */
+  color: var(--primary);
+}
+.tnc-hero__badge-label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ─── Sections container ─────────────────────────────────────── */
+.tnc-sections {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ─── Alternating row ────────────────────────────────────────── */
+.tnc-row {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 40px;
+  align-items: center;
+  padding: 48px 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.tnc-row:last-child { border-bottom: none; }
+
+.tnc-row--reverse {
+  grid-template-columns: 280px 1fr;
+}
+.tnc-row--reverse .tnc-row__text        { order: 2; }
+.tnc-row--reverse .tnc-row__illustration { order: 1; }
+
+.tnc-row--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Text side ──────────────────────────────────────────────── */
+.tnc-row__text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Section number — uses --primary */
+.tnc-row__num {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 20px;
+  color: var(--primary);
+  letter-spacing: 2px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* Section heading — uses --dark */
+.tnc-row__title {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(20px, 2.5vw, 26px);
+  font-weight: 400;
+  color: var(--dark);
+  letter-spacing: -0.3px;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.tnc-row__body {
+  font-size: 14.5px;
+  color: var(--mid);
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* Footer note — accent border uses --primary */
+.tnc-row__footer-note {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-style: italic;
+  border-left: 3px solid var(--primary);
+  padding-left: 12px;
+  margin: 0;
+}
+
+/* ─── Illustration side ──────────────────────────────────────── */
+.tnc-row__illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tnc-illus-wrap {
+  width: 240px;
+  height: 164px;
+  background: var(--white);
+  border-radius: 16px;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(26, 46, 42, 0.06);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.tnc-illus-wrap:hover {
+  box-shadow: 0 8px 32px rgba(26, 46, 42, 0.1);
+  transform: translateY(-2px);
+}
+.tnc-illus-wrap svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── Two-column bullets ─────────────────────────────────────── */
+.tnc-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.tnc-col { padding: 14px; border-radius: 10px; }
+.tnc-col--yes { background: #f0fdf4; }
+.tnc-col--no  { background: #fff5f5; }
+.tnc-col__label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.tnc-col--yes .tnc-col__label { color: #16a34a; }
+.tnc-col--no  .tnc-col__label { color: #dc2626; }
+
+.tnc-bullet {
+  display: flex;
+  gap: 8px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--mid);
+  margin-bottom: 5px;
+  align-items: flex-start;
+}
+.tnc-bullet__icon {
+  display: flex;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+/* ─── Plain list — dot uses --primary ───────────────────────── */
+.tnc-list {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tnc-list__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--mid);
+  line-height: 1.7;
+}
+/* Bullet dot reads --primary */
+.tnc-list__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+/* ─── Numbered steps — circle bg uses --primary ─────────────── */
+.tnc-steps {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  border-left: 2px solid var(--border);
+  margin-left: 10px;
+}
+.tnc-steps__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13.5px;
+  color: var(--mid);
+  line-height: 1.6;
+  padding: 8px 0 8px 18px;
+  position: relative;
+}
+/* Timeline dot border uses --primary */
+.tnc-steps__item::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid var(--primary);
+}
+/* Step number badge bg uses --primary */
+.tnc-steps__num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── Info note — border & icon use --primary ────────────────── */
+.tnc-note {
+  display: flex;
+  gap: 10px;
+  /* Background tinted from --primary at low opacity */
+  background: color-mix(in srgb, var(--primary) 8%, #fff);
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  border-radius: 8px;
+  padding: 12px 14px;
+  align-items: flex-start;
+}
+.tnc-note__icon {
+  display: flex;
+  align-items: flex-start;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+/* Note text color uses a dark tint of --primary */
+.tnc-note p {
+  font-size: 12.5px;
+  color: var(--mid);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ─── Contact — icon & link colors use --primary ─────────────── */
+.tnc-contact { display: flex; flex-direction: column; gap: 10px; }
+.tnc-contact__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--mid);
+}
+.tnc-contact__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+/* Link color uses --primary */
+.tnc-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+.tnc-link:hover { text-decoration: underline; }
+
+/* ─── Page footer ────────────────────────────────────────────── */
+.tnc-page-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 32px 64px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+.tnc-page-footer p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 6px;
+}
+.tnc-page-footer__copy {
+  font-size: 12px !important;
+  color: var(--border) !important;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Mobile header is 64px */
+  .tnc-hero {
+    padding: 52px 24px 52px;
+    margin-top: -64px;
+    padding-top: calc(64px + 52px);
+  }
+
+  .tnc-sections { padding: 32px 20px 16px; }
+
+  .tnc-row,
+  .tnc-row--reverse {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 36px 0;
+  }
+  .tnc-row--reverse .tnc-row__text        { order: 1; }
+  .tnc-row--reverse .tnc-row__illustration { order: 2; }
+
+  .tnc-illus-wrap {
+    width: 100%;
+    height: 140px;
+  }
+
+  .tnc-two-col { grid-template-columns: 1fr; }
+
+  .tnc-page-footer { padding: 24px 20px 48px; }
+}
+
+@media (max-width: 480px) {
+  .tnc-hero {
+    padding: 40px 16px 40px;
+    padding-top: calc(64px + 40px);
+  }
+  .tnc-hero__title { font-size: clamp(32px, 8vw, 48px); letter-spacing: -0.5px; }
+  .tnc-sections { padding: 24px 16px 12px; }
+  .tnc-row, .tnc-row--reverse { padding: 28px 0; gap: 18px; }
+  .tnc-illus-wrap { height: 110px; }
+  .tnc-two-col { grid-template-columns: 1fr; }
+  .tnc-page-footer { padding: 20px 16px 40px; }
+}

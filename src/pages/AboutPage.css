@@ -1,0 +1,457 @@
+/* src/pages/AboutPage.css */
+
+/* ─────────────────────────────────────────────
+   PAGE BASE
+───────────────────────────────────────────── */
+.about-page {
+  background: var(--white);
+}
+
+/* ─────────────────────────────────────────────
+   HERO — full image, no transparency, quotes
+───────────────────────────────────────────── */
+.about-hero {
+  position: relative;
+  width: 100%;
+  height: 88vh;
+  min-height: 520px;
+  max-height: 780px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Full-bleed image — object-fit cover, full opacity */
+.about-hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  /* No opacity reduction — image shows at full strength */
+}
+
+/* Gradient overlay — dark at bottom for text legibility */
+.about-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(15, 28, 35, 0.92) 0%,
+    rgba(15, 28, 35, 0.55) 45%,
+    rgba(15, 28, 35, 0.18) 100%
+  );
+  pointer-events: none;
+}
+
+.about-hero__content {
+  position: relative;
+  z-index: 2;
+  padding-bottom: 64px;
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.about-hero__eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--light, #b6d9e0);
+  border: 1px solid rgba(182, 217, 224, 0.4);
+  border-radius: var(--radius-full, 999px);
+  padding: 5px 16px;
+  margin-bottom: 20px;
+}
+
+.about-hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(38px, 5.5vw, 76px);
+  font-weight: 300;
+  color: var(--white, #ffffff);
+  line-height: 1.08;
+  margin: 0 0 36px;
+}
+.about-hero__title em {
+  font-style: italic;
+  color: var(--light, #b6d9e0);
+}
+
+/* ── Quotes row ── */
+.about-hero__quotes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  max-width: 860px;
+}
+
+.about-hero__quote {
+  flex: 1 1 220px;
+  margin: 0;
+  padding: 16px 20px;
+  border-left: 3px solid rgba(182, 217, 224, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(6px);
+  border-radius: 0 var(--radius-sm, 6px) var(--radius-sm, 6px) 0;
+}
+
+.about-hero__quote-text {
+  font-size: clamp(12px, 1.3vw, 14px);
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.6;
+  margin: 0 0 6px;
+  font-style: italic;
+}
+
+.about-hero__quote-attr {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--light, #b6d9e0);
+  font-style: normal;
+}
+
+/* ─────────────────────────────────────────────
+   SPLIT SECTIONS — shared layout
+───────────────────────────────────────────── */
+.about-split__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 52px;
+  align-items: stretch;
+}
+
+/* Section B — same equal columns, just reversed via order */
+.about-split--alt .about-split__inner {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Image column — stretches to match text column height */
+.about-split__img-col {
+  display: flex;
+  align-items: stretch;
+}
+
+.about-split__img {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  object-fit: cover;
+  border-radius: var(--radius-md, 12px);
+  display: block;
+}
+
+/* Text column */
+.about-split__text-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-split__heading {
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.about-split__para {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.9;
+  margin: 0 0 16px;
+}
+
+/* ── Stat row (Section A) ── */
+.about-split__stat-row {
+  display: flex;
+  gap: 36px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.about-split__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.about-split__stat-val {
+  font-family: var(--font-serif);
+  font-size: 38px;
+  font-weight: 300;
+  color: var(--deep);
+  line-height: 1;
+}
+
+.about-split__stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── Pillar list (Section B) ── */
+.about-split__pillars {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-split__pillar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.4;
+}
+
+.about-split__pillar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--deep);
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+
+/* ─────────────────────────────────────────────
+   TEAM
+───────────────────────────────────────────── */
+.about-team__subhead {
+  font-size: 15px;
+  color: var(--muted);
+  margin: 8px auto 0;
+  text-align: center;
+  max-width: 480px;
+}
+
+.about-team__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-top: 48px;
+}
+
+/* Card */
+.about-team__card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md, 12px);
+  overflow: hidden;
+  transition: transform 0.28s var(--ease), box-shadow 0.28s var(--ease), border-color 0.28s;
+}
+
+.about-team__card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--mid);
+}
+
+/* Image wrapper — larger height */
+.about-team__card-img-wrap {
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+  background: var(--off-white);
+}
+
+.about-team__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.4s var(--ease);
+}
+
+.about-team__card:hover .about-team__card-img {
+  transform: scale(1.04);
+}
+
+/* Card body */
+.about-team__card-body {
+  padding: 20px 22px 24px;
+}
+
+.about-team__card-name {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--dark);
+  margin: 0 0 4px;
+  line-height: 1.3;
+}
+
+.about-team__card-role {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--mid);
+  text-transform: uppercase;
+  margin: 0 0 12px;
+}
+
+/* Exactly 2 lines via line-clamp */
+.about-team__card-bio {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────
+   SECTION UTILITY — shared across pages
+───────────────────────────────────────────── */
+.section {
+  padding: 88px 0;
+}
+
+.section--alt {
+  background: var(--off-white, #f8f7f4);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 300;
+  color: var(--deep);
+  line-height: 1.14;
+  margin: 0;
+  text-align: center;
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE — TABLET (≤ 1024px)
+───────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .about-split__inner,
+  .about-split--alt .about-split__inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  /* Section B: on tablet, reorder so image still appears below text */
+  .about-split--alt .about-split__img-col {
+    order: 2;
+  }
+  .about-split--alt .about-split__text-col {
+    order: 1;
+  }
+
+  .about-split__img {
+    aspect-ratio: 16 / 9;
+  }
+
+  .about-team__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .about-hero {
+    height: 75vh;
+    align-items: flex-end;
+  }
+
+  .about-split__stat-row {
+    gap: 24px;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE — MOBILE (≤ 768px)
+───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .about-hero {
+    height: 70vh;
+    min-height: 460px;
+  }
+
+  .about-hero__content {
+    padding-bottom: 44px;
+  }
+
+  .about-hero__quotes {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .about-hero__quote {
+    flex: none;
+  }
+
+  .section {
+    padding: 56px 0;
+  }
+
+  .about-split__img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .about-split__stat-row {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .about-team__grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .about-team__card-bio {
+    -webkit-line-clamp: unset;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE — SMALL MOBILE (≤ 480px)
+───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .about-hero {
+    height: 80vh;
+    min-height: 400px;
+  }
+
+  .about-hero__title {
+    font-size: 32px;
+  }
+
+  .about-split__para {
+    font-size: 14px;
+  }
+
+  .about-split__stat-val {
+    font-size: 30px;
+  }
+}

@@ -1,0 +1,380 @@
+/* src/components/cart/MiniCart.css */
+
+.mini-cart {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 420px;
+  background: var(--white);
+  z-index: calc(var(--z-overlay) + 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -20px 0 60px rgba(51, 87, 101, 0.15);
+  animation: slideFromRight 0.38s var(--ease-out);
+  overflow: hidden;
+}
+
+.mini-cart__header {
+  padding: 24px;
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.mini-cart__title {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 400;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.mini-cart__count {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* Body scrolls — min-height:0 stops it from eating the footer */
+.mini-cart__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 24px;
+  min-height: 0;
+}
+
+/* EMPTY STATE */
+.mini-cart__empty {
+  text-align: center;
+  padding: 60px 16px;
+}
+.mini-cart__empty-icon { font-size: 52px; margin-bottom: 16px; }
+.mini-cart__empty-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.mini-cart__empty-text {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ITEMS */
+.mini-cart__items {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cart-item {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.cart-item__img {
+  width: 74px;
+  height: 74px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* Placeholder shown when no image URL resolves for a cart item */
+.cart-item__img--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--off-white);
+  /* width/height/border/border-radius inherited from .cart-item__img */
+}
+
+.cart-item__details { flex: 1; min-width: 0; }
+
+.cart-item__name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dark);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-item__variant {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ── Color customization display ────────────────────────────────────────────*/
+.cart-item__colors {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cart-color-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.cart-color-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.cart-color-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--dark);
+  font-weight: 500;
+}
+
+.cart-color-hex {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+/* Per-color qty input wrapper */
+.cart-color-qty-wrap {
+  flex-shrink: 0;
+  margin-left: 2px;
+}
+
+/* Per-color remove button */
+.cart-color-remove {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: var(--off-white);
+  border-radius: var(--radius-full);
+  font-size: 9px;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-base);
+  padding: 0;
+  line-height: 1;
+}
+.cart-color-remove:hover { background: #fee2e2; color: #ef4444; }
+
+/* Total qty row — read-only, auto-summed */
+.cart-color-total {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 5px;
+  border-top: 1px dashed var(--border);
+}
+
+.cart-color-total__label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.cart-color-total__value {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--deep);
+  background: rgba(var(--deep-rgb, 30, 58, 80), 0.07);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+.cart-item__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+/* ── Quantity inputs ──────────────────────────────────────────────────────*/
+.cart-item__qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* Per-color qty input — compact */
+.cart-item__qty-input {
+  width: 48px;
+  height: 24px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dark);
+  background: var(--off-white);
+  border: none;
+  padding: 0 4px;
+  font-family: var(--font-sans);
+  -moz-appearance: textfield;
+}
+
+/* Non-apparel qty input — original larger size */
+.cart-item__qty-input--normal {
+  width: 64px;
+  height: 28px;
+  font-size: 14px;
+  padding: 0 6px;
+}
+
+.cart-item__qty-input::-webkit-outer-spin-button,
+.cart-item__qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.cart-item__qty-input:focus {
+  outline: none;
+  background: var(--light);
+}
+
+/* Keep the old .cart-item__qty-val class harmless */
+.cart-item__qty-val {
+  width: 32px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cart-item__price {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--terra);
+}
+
+.cart-item__remove {
+  position: absolute;
+  top: 14px;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: var(--off-white);
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-base);
+}
+.cart-item__remove:hover { background: #fee2e2; color: #ef4444; }
+
+/* FOOTER — pinned, never shrinks */
+.mini-cart__footer {
+  padding: 20px 24px;
+  border-top: 1.5px solid var(--border);
+  flex-shrink: 0;
+  background: var(--white);
+}
+
+.mini-cart__subtotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.mini-cart__total-price {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: var(--terra);
+}
+
+.mini-cart__note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+/*
+ * Enquiry button
+ * background-color applied via style={{ backgroundColor: themeColor }} in JSX.
+ */
+.mini-cart__enquiry-btn {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 20px;
+  border-radius: 50px;
+  color: #ffffff;
+  border: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+.mini-cart__enquiry-btn:hover  { opacity: 0.88; transform: translateY(-1px); }
+.mini-cart__enquiry-btn:active { opacity: 1;    transform: translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  .mini-cart { width: 100%; }
+}
+
+/* On mobile the BottomNav (70px, z-index 9999) sits fixed at the bottom.
+   Lift the cart panel so its footer / enquiry button is never hidden under it. */
+@media (max-width: 768px) {
+  .mini-cart {
+    bottom: 70px; /* matches --bn-height in BottomNav.css */
+    z-index: 10000; /* above BottomNav z-index: 9999 */
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+/* Safe-area support (notched phones) — add inset on top of the 70px offset */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  @media (max-width: 768px) {
+    .mini-cart {
+      bottom: calc(70px + env(safe-area-inset-bottom));
+    }
+  }
+}

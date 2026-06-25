@@ -1,0 +1,494 @@
+/* ═══════════════════════════════════════════════════════════
+   BlogPage.css — YoGo Ventures
+   ═══════════════════════════════════════════════════════════ */
+
+.blog-page { padding-bottom: 0; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   3-D / SCROLL-REVEAL ANIMATION SYSTEM
+   .sr          = base hidden state (opacity 0 + transform)
+   .sr-up       = slides up  + fades in when .sr-visible added
+   .sr-fade     = fades in only
+   .sr-d1–4     = stagger delays for the 4 shop cards
+   .sr-visible  = triggered by IntersectionObserver in JSX
+   ───────────────────────────────────────────────────────────── */
+
+/* Shared starting state */
+.sr { will-change: opacity, transform; }
+
+.sr.sr-up {
+  opacity: 0;
+  transform: translateY(40px) scale(0.97);
+  transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1),
+              transform 0.65s cubic-bezier(0.22,1,0.36,1);
+}
+.sr.sr-fade {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+/* Revealed */
+.sr.sr-up.sr-visible   { opacity: 1; transform: translateY(0) scale(1); }
+.sr.sr-fade.sr-visible { opacity: 1; }
+
+/* Stagger delays for shop category cards */
+.sr-d1 { transition-delay: 0.05s; }
+.sr-d2 { transition-delay: 0.15s; }
+.sr-d3 { transition-delay: 0.25s; }
+.sr-d4 { transition-delay: 0.35s; }
+
+/* ─────────────────────────────────────────────────────────────
+   HERO — auto-play 3-D entrance on page load
+   ───────────────────────────────────────────────────────────── */
+.blog-hero {
+  padding: 40px 0;
+  background: var(--deep);
+  margin-top: -72px;
+  padding-top: calc(72px + 40px);
+  overflow: hidden;
+}
+
+/* Floating particles behind hero text */
+.blog-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(182,217,224,0.07) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(182,217,224,0.05) 0%, transparent 40%);
+  pointer-events: none;
+}
+.blog-hero { position: relative; }
+
+/* Hero children animate in sequence on load */
+.blog-hero .hero-tag {
+  opacity: 0;
+  transform: translateY(20px) perspective(400px) rotateX(15deg);
+  animation: heroItem 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
+}
+.blog-hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 300;
+  color: var(--white);
+  margin-top: 12px;
+  line-height: 1.1;
+  opacity: 0;
+  transform: translateY(24px) perspective(400px) rotateX(12deg);
+  animation: heroItem 0.75s cubic-bezier(0.22,1,0.36,1) 0.25s forwards;
+}
+.blog-hero__sub {
+  font-size: 17px;
+  color: rgba(219, 226, 220, 0.8);
+  max-width: 520px;
+  line-height: 1.75;
+  margin-top: 14px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroItem 0.7s cubic-bezier(0.22,1,0.36,1) 0.4s forwards;
+}
+
+@keyframes heroItem {
+  to { opacity: 1; transform: translateY(0) perspective(400px) rotateX(0deg); }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   SHOP CATEGORY CARDS
+   ───────────────────────────────────────────────────────────── */
+.blog-cat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.blog-cat-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  /* 3-D hover lift */
+  transition: transform 0.4s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.4s ease,
+              border-color 0.3s ease;
+  transform-style: preserve-3d;
+}
+.blog-cat-card:hover {
+  border-color: var(--mid);
+  box-shadow: 0 20px 48px rgba(0,0,0,0.13), 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-8px) rotateX(3deg) scale(1.02);
+}
+.blog-cat-card__img-wrap {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: var(--off-white);
+}
+.blog-cat-card__img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.55s cubic-bezier(0.22,1,0.36,1);
+}
+.blog-cat-card:hover .blog-cat-card__img { transform: scale(1.09); }
+.blog-cat-card__overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%);
+  transition: opacity 0.3s ease;
+}
+.blog-cat-card:hover .blog-cat-card__overlay { opacity: 0.7; }
+.blog-cat-card__body { padding: 14px; }
+.blog-cat-card__name {
+  font-family: var(--font-serif);
+  font-size: 16px; font-weight: 500;
+  color: var(--dark); margin-bottom: 5px;
+}
+.blog-cat-card__desc {
+  font-size: 12px; color: var(--muted); line-height: 1.55; margin-bottom: 8px;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.blog-cat-card__link { font-size: 12px; font-weight: 700; color: var(--deep); text-decoration: none; }
+.blog-cat-card:hover .blog-cat-card__link { color: var(--terra); }
+
+@media (max-width: 1024px) { .blog-cat-cards { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px)  { .blog-cat-cards { grid-template-columns: 1fr 1fr; gap: 10px; } }
+
+
+/* ─────────────────────────────────────────────────────────────
+   BLOG INTRO TEXT
+   ───────────────────────────────────────────────────────────── */
+.blog-intro {
+  margin-top: 56px;
+  margin-bottom: 0;
+  text-align: center;
+}
+.blog-intro__text {
+  font-size: 15px; color: var(--muted);
+  line-height: 1.85; margin: 0 auto; max-width: 760px;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   ARTICLES SECTION
+   ───────────────────────────────────────────────────────────── */
+.section--alt { padding-top: 0 !important; }
+
+/* Filter tabs — centered, flush under intro */
+.blog-filter-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 0;
+  margin-bottom: 40px;
+  padding-top: 0;
+  flex-wrap: wrap;
+}
+.blog-cats { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.blog-cat-btn {
+  padding: 7px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  background: var(--white); color: var(--muted);
+  font-family: var(--font-sans);
+  transition: all 0.25s ease;
+}
+.blog-cat-btn.active,
+.blog-cat-btn:hover {
+  background: var(--deep); border-color: var(--deep); color: var(--white);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   READ ARTICLE BUTTON
+   ───────────────────────────────────────────────────────────── */
+.blog-read-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border: none;
+  border-radius: var(--radius-full);
+  color: #fff;
+  font-size: 11px; font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 8px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+.blog-read-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ALTERNATING ARTICLE CARDS
+   ═══════════════════════════════════════════════════════════════
+
+   --img-right (even 0,2,4…):  [BODY — left]  [IMAGE — right]
+     flex-direction: row   → body (first in DOM) = left, img (last) = right
+
+   --img-left  (odd  1,3,5…):  [IMAGE — left]  [BODY — right]
+     flex-direction: row-reverse → img (last in DOM) flips to left
+
+   ═══════════════════════════════════════════════════════════════ */
+
+.blog-alt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Card shell — no card, just layout rows */
+.blog-alt-card {
+  display: flex;
+  align-items: stretch;           /* FIX: stretch so img-wrap fills card height */
+  gap: 48px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  min-height: 260px;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--border);
+  transition: none;
+  transform-style: flat;
+}
+.blog-alt-card:last-child { border-bottom: none; }
+.blog-alt-card:hover {
+  box-shadow: none;
+  border-color: var(--border);
+  transform: none;
+}
+
+/* Direction classes */
+.blog-alt-card--img-right { flex-direction: row; }
+.blog-alt-card--img-left  { flex-direction: row-reverse; }
+
+/* ── Image wrapper ── FIX: use relative + aspect-ratio instead of absolute children ── */
+.blog-alt-card__img-wrap {
+  flex: 0 0 300px;
+  width: 300px;
+  min-height: 220px;              /* FIX: guarantees a rendered height */
+  position: relative;             /* FIX: keeps position:relative so absolute child fills it */
+  overflow: hidden;
+  border-radius: var(--radius-md); /* subtle rounding on article images */
+  align-self: stretch;            /* FIX: stretches to match body height */
+}
+
+/* FIX: img stays absolute but now has a real parent height to fill */
+.blog-alt-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
+}
+.blog-alt-card:hover .blog-alt-card__img { transform: scale(1.07); }
+
+/* Category badge on image */
+.blog-alt-card__cat-badge {
+  position: absolute;
+  top: 12px; left: 12px;
+  background: var(--deep);
+  color: var(--white);
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  z-index: 1;
+}
+
+/* ── Content half ── */
+.blog-alt-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px 36px;
+}
+.blog-alt-card__cat-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--mid); margin-bottom: 8px; display: block;
+}
+.blog-alt-card__title {
+  font-family: var(--font-serif);
+  font-size: 22px; font-weight: 400;
+  line-height: 1.25; color: var(--dark); margin-bottom: 10px;
+}
+.blog-alt-card__excerpt {
+  font-size: 13px; color: var(--muted);
+  line-height: 1.75; margin-bottom: 12px;
+}
+.blog-alt-card__meta {
+  display: flex; gap: 8px;
+  font-size: 12px; color: var(--muted); margin-bottom: 4px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   3-D SCROLL-TRIGGERED ANIMATIONS FOR ARTICLE CARDS
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes slide3dLeft {
+  from { opacity: 0; transform: translateX(-56px) perspective(600px) rotateY(12deg); }
+  to   { opacity: 1; transform: translateX(0)     perspective(600px) rotateY(0deg);  }
+}
+@keyframes slide3dRight {
+  from { opacity: 0; transform: translateX(56px)  perspective(600px) rotateY(-12deg); }
+  to   { opacity: 1; transform: translateX(0)     perspective(600px) rotateY(0deg);   }
+}
+@keyframes fadeUp3d {
+  from { opacity: 0; transform: translateY(36px) perspective(500px) rotateX(8deg); }
+  to   { opacity: 1; transform: translateY(0)    perspective(500px) rotateX(0deg); }
+}
+
+/* ── Hidden state before scroll reveal ── */
+
+/* --img-right card: body enters from left, image from right */
+.blog-alt-card--img-right .blog-alt-card__body     { opacity: 0; transform: translateX(-56px) perspective(600px) rotateY(12deg); }
+.blog-alt-card--img-right .blog-alt-card__img-wrap { opacity: 0; transform: translateX(56px)  perspective(600px) rotateY(-12deg); }
+
+/* --img-left card: image enters from left, body from right */
+.blog-alt-card--img-left .blog-alt-card__img-wrap  { opacity: 0; transform: translateX(-56px) perspective(600px) rotateY(12deg); }
+.blog-alt-card--img-left .blog-alt-card__body      { opacity: 0; transform: translateX(56px)  perspective(600px) rotateY(-12deg); }
+
+/* ── Revealed state (.alt-visible added by useAltReveal) ── */
+
+/* --img-right */
+.blog-alt-card--img-right.alt-visible .blog-alt-card__body {
+  animation: slide3dLeft  0.75s cubic-bezier(0.22,1,0.36,1) 0s      forwards;
+}
+.blog-alt-card--img-right.alt-visible .blog-alt-card__img-wrap {
+  animation: slide3dRight 0.75s cubic-bezier(0.22,1,0.36,1) 0.15s   forwards;
+}
+
+/* --img-left */
+.blog-alt-card--img-left.alt-visible .blog-alt-card__img-wrap {
+  animation: slide3dLeft  0.75s cubic-bezier(0.22,1,0.36,1) 0s      forwards;
+}
+.blog-alt-card--img-left.alt-visible .blog-alt-card__body {
+  animation: slide3dRight 0.75s cubic-bezier(0.22,1,0.36,1) 0.15s   forwards;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   FEATURED (kept for compatibility)
+   ───────────────────────────────────────────────────────────── */
+.blog-featured-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.blog-featured-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--radius-md); overflow: hidden; cursor: pointer;
+  transition: all var(--duration-slow) var(--ease);
+}
+.blog-featured-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--mid); }
+.blog-featured-card__img-wrap { position: relative; aspect-ratio: 16/9; overflow: hidden; }
+.blog-featured-card__img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
+.blog-featured-card:hover .blog-featured-card__img { transform: scale(1.05); }
+.blog-featured-card__cat { position: absolute; top: 14px; left: 14px; }
+.blog-featured-card__body { padding: 24px; }
+.blog-featured-card__title { font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: 1.25; margin-bottom: 10px; }
+.blog-featured-card__excerpt { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+.blog-featured-card__meta { display: flex; gap: 8px; font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE
+   ───────────────────────────────────────────────────────────── */
+
+/* ── Tablet (≤ 1024px) — slightly narrower image ── */
+@media (max-width: 1024px) {
+  .blog-alt-card {
+    gap: 32px;
+  }
+  .blog-alt-card__img-wrap {
+    flex: 0 0 240px;
+    width: 240px;
+  }
+  .blog-alt-card__body {
+    padding: 20px 24px;
+  }
+}
+
+/* ── Mobile (≤ 768px) — stack vertically ── */
+@media (max-width: 768px) {
+  .blog-hero { margin-top: -64px; padding-top: calc(64px + 40px); }
+  .blog-featured-grid { grid-template-columns: 1fr; }
+  .blog-filter-row { flex-direction: column; align-items: center; }
+  .blog-cat-cards { grid-template-columns: 1fr 1fr; }
+
+  /* Stack: image on top, content below */
+  .blog-alt-card--img-right,
+  .blog-alt-card--img-left {
+    flex-direction: column !important;
+    transform: none !important;
+    gap: 0;
+    padding: 24px 0;
+  }
+  .blog-alt-card:hover {
+    transform: none !important;
+  }
+
+  /* FIX for mobile: img-wrap no longer uses position:absolute child trick —
+     give it an explicit height and let the img fill via inset:0 */
+  .blog-alt-card__img-wrap {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    height: 220px;           /* explicit pixel height ensures image renders */
+    min-height: unset;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* img stays absolute, fills the 220px parent */
+  .blog-alt-card__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .blog-alt-card__body {
+    padding: 16px 4px 8px;
+  }
+  .blog-alt-card__title { font-size: 20px; }
+
+  /* Reset 3-D transforms → simple fade-up for mobile */
+  .blog-alt-card--img-right .blog-alt-card__body,
+  .blog-alt-card--img-right .blog-alt-card__img-wrap,
+  .blog-alt-card--img-left  .blog-alt-card__body,
+  .blog-alt-card--img-left  .blog-alt-card__img-wrap {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .blog-alt-card--img-right.alt-visible .blog-alt-card__body,
+  .blog-alt-card--img-right.alt-visible .blog-alt-card__img-wrap,
+  .blog-alt-card--img-left.alt-visible  .blog-alt-card__body,
+  .blog-alt-card--img-left.alt-visible  .blog-alt-card__img-wrap {
+    animation: fadeUp3d 0.65s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+  .blog-alt-card--img-right.alt-visible .blog-alt-card__body,
+  .blog-alt-card--img-left.alt-visible  .blog-alt-card__body {
+    animation-delay: 0.12s;
+  }
+
+  .blog-cat-card:hover { transform: translateY(-4px) !important; }
+}
+
+@media (max-width: 400px) {
+  .blog-cat-cards { grid-template-columns: 1fr; }
+  .blog-alt-card__img-wrap { height: 180px; }
+}

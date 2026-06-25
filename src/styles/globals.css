@@ -1,0 +1,737 @@
+/* ============================================================
+   COASTAL RETREAT — Global Design System
+   Palette: #335765 | #74A8A4 | #B6D9E0 | #DBE2DC | #7F543D
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+/* ── CSS VARIABLES ── */
+:root {
+  /* Brand Colors */
+  --deep:       #335765;
+  --mid:        #74A8A4;
+  --light:      #B6D9E0;
+  --sage:       #DBE2DC;
+  --terra:      #7F543D;
+
+  /* Neutral Scale */
+  --white:      #FFFFFF;
+  --off-white:  #F4F8F8;
+  --dark:       #1A2E35;
+  --muted:      #5A7A82;
+  --border:     #DBE2DC;
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans:  'DM Sans', system-ui, sans-serif;
+
+  /* Spacing */
+  --space-xs:   4px;
+  --space-sm:   8px;
+  --space-md:   16px;
+  --space-lg:   24px;
+  --space-xl:   40px;
+  --space-2xl:  64px;
+  --space-3xl:  100px;
+
+  /* Border Radius */
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --radius-xl:  28px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm:  0 2px 8px rgba(51, 87, 101, 0.08);
+  --shadow-md:  0 8px 24px rgba(51, 87, 101, 0.12);
+  --shadow-lg:  0 20px 50px rgba(51, 87, 101, 0.15);
+  --shadow-xl:  0 32px 80px rgba(51, 87, 101, 0.20);
+
+  /* Transitions */
+  --ease:       cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:   cubic-bezier(0, 0, 0.2, 1);
+  --ease-in:    cubic-bezier(0.4, 0, 1, 1);
+  --duration-fast:   150ms;
+  --duration-base:   250ms;
+  --duration-slow:   400ms;
+  --duration-xslow:  700ms;
+
+  /* Z-Index Scale */
+  --z-base:     1;
+  --z-raised:   10;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  500;
+  --z-modal:    600;
+  --z-toast:    700;
+  --z-cursor:   9999;
+}
+
+/* ── RESET ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* Prevent any element from overflowing its container horizontally */
+  min-width: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  /* FIX: Never set overflow on html — it breaks sticky + backdrop-filter */
+  overflow: visible;
+  /* Prevent horizontal scroll on all screen sizes */
+  overflow-x: clip;
+}
+
+body {
+  cursor: auto;
+  font-family: var(--font-sans);
+  background-color: var(--off-white);
+  color: var(--dark);
+  line-height: 1.6;
+  /* FIX: overflow-x:hidden on body kills position:sticky and backdrop-filter.
+     Use overflow-x:clip instead — it hides horizontal overflow WITHOUT
+     creating a scroll container, so sticky + blur still work correctly. */
+  overflow-x: clip;
+  overflow-y: visible; /* MUST be visible — never hidden/auto/scroll */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar         { width: 5px; height: 5px; }
+::-webkit-scrollbar-track   { background: var(--sage); }
+::-webkit-scrollbar-thumb   { background: var(--mid); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--deep); }
+
+/* ── TYPOGRAPHY BASE ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--dark);
+}
+
+p { line-height: 1.75; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img, video, svg, canvas, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+input, textarea, select {
+  font-family: var(--font-sans);
+}
+
+ul, ol { list-style: none; }
+
+/* ── UTILITY CLASSES ── */
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 60px;
+}
+
+.section {
+  padding: var(--space-3xl) 0;
+}
+
+.section--alt {
+  background-color: var(--off-white);
+}
+
+.section--dark {
+  background-color: var(--deep);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-tag {
+  display: inline-block;
+  background: var(--light);
+  color: var(--deep);
+  padding: 4px 16px;
+  border-radius: var(--radius-full);
+  font-size: 15px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.section-subtitle {
+  margin-top: 12px;
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.75;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideFromRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes slideFromLeft {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmerMove {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(116, 168, 164, 0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(116, 168, 164, 0); }
+}
+
+/* ── NEW RICH ANIMATIONS ── */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(116, 168, 164, 0); }
+  50%       { box-shadow: 0 0 20px 4px rgba(116, 168, 164, 0.18); }
+}
+@keyframes shimmerSweep {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+@keyframes borderGlow {
+  0%, 100% { border-color: var(--border); }
+  50%       { border-color: var(--mid); }
+}
+@keyframes tagPop {
+  0%   { opacity: 0; transform: scale(0.7) translateY(10px); }
+  70%  { transform: scale(1.08) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes titleSlideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes subtitleFade {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(-40px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes orbFloat {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(12px, -16px) scale(1.04); }
+  66%  { transform: translate(-8px, 8px) scale(0.97); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+/* Wishlist heart burst animation */
+@keyframes wishlistBurst {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(0.75); }
+  60%  { transform: scale(1.35); }
+  80%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+@keyframes heartRing {
+  0%   { opacity: 0.9; transform: scale(0.6); }
+  100% { opacity: 0;   transform: scale(1.8); }
+}
+
+/* ── CARD HOVER EFFECTS — applied globally to all product/info cards ── */
+
+/* Floating lift on hover */
+.hpc,
+.sp-card,
+.ymal-card,
+.contact-info-card,
+.why-card,
+.cat-card-4,
+.blog-card,
+.blog-featured-card {
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease !important;
+}
+
+.hpc:hover,
+.sp-card:hover,
+.ymal-card:hover,
+.contact-info-card:hover,
+.why-card:hover,
+.cat-card-4:hover,
+.blog-card:hover,
+.blog-featured-card:hover {
+  transform: translateY(-6px) scale(1.015) !important;
+  box-shadow: 0 16px 40px rgba(51, 87, 101, 0.18), 0 0 0 1.5px var(--mid) !important;
+}
+
+/* Shimmer sweep on card hover */
+.hpc::before,
+.sp-card::before,
+.cat-card-4::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 70%
+  );
+  background-size: 400px 100%;
+  background-position: -400px 0;
+  pointer-events: none;
+  z-index: 5;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.hpc:hover::before,
+.sp-card:hover::before,
+.cat-card-4:hover::before {
+  opacity: 1;
+  animation: shimmerSweep 0.65s ease forwards;
+}
+
+/* ── SECTION TAG animation ── */
+.section-tag {
+  animation: tagPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-play-state: paused;
+}
+.section-header.is-visible .section-tag {
+  animation-play-state: running;
+}
+
+/* ── SECTION TITLE animation ── */
+.section-title {
+  animation: titleSlideUp 0.6s ease both;
+  animation-delay: 0.1s;
+  animation-play-state: paused;
+}
+.section-header.is-visible .section-title {
+  animation-play-state: running;
+}
+
+/* ── SECTION SUBTITLE animation ── */
+.section-subtitle {
+  animation: subtitleFade 0.6s ease both;
+  animation-delay: 0.2s;
+  animation-play-state: paused;
+}
+.section-header.is-visible .section-subtitle {
+  animation-play-state: running;
+}
+
+/* ── INFO / STAT cards — gentle float ── */
+.contact-info-card,
+.why-card {
+  animation: floatY 5s ease-in-out infinite;
+}
+.contact-info-card:nth-child(2),
+.why-card:nth-child(2) { animation-delay: 0.8s; }
+.contact-info-card:nth-child(3),
+.why-card:nth-child(3) { animation-delay: 1.6s; }
+.contact-info-card:nth-child(4),
+.why-card:nth-child(4) { animation-delay: 2.4s; }
+
+/* Pause float on hover so it doesn't fight the lift */
+.contact-info-card:hover,
+.why-card:hover {
+  animation: none;
+}
+
+/* ── Glow pulse on active/focused buttons ── */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn--footer-theme:focus-visible {
+  animation: glowPulse 1.5s ease infinite;
+}
+
+/* ── Animated border on form inputs focus ── */
+.form-input:focus {
+  animation: borderGlow 2s ease infinite;
+}
+
+/* ── Reduced motion — respect user preference ── */
+@media (prefers-reduced-motion: reduce) {
+  .hpc::before,
+  .sp-card::before,
+  .cat-card-4::before,
+  .contact-info-card,
+  .why-card {
+    animation: none !important;
+  }
+}
+
+/* Reveal on scroll */
+.reveal {
+  /* GSAP handles animation via ScrollTrigger in App.jsx */
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 100ms; }
+.reveal-delay-2 { transition-delay: 200ms; }
+.reveal-delay-3 { transition-delay: 300ms; }
+.reveal-delay-4 { transition-delay: 400ms; }
+.reveal-delay-5 { transition-delay: 500ms; }
+
+/* Page entrance */
+.page-enter {
+  animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 32px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: all var(--duration-slow) var(--ease);
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--terra);
+  color: var(--white);
+}
+.btn-primary:hover {
+  background: #6a4432;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(127, 84, 61, 0.38);
+}
+
+.btn-secondary {
+  background: var(--deep);
+  color: var(--white);
+}
+.btn-secondary:hover {
+  background: #274a57;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(51, 87, 101, 0.35);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+}
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--white);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--deep);
+  border: 1.5px solid var(--border);
+}
+.btn-ghost:hover {
+  background: var(--sage);
+  border-color: var(--mid);
+}
+
+.btn-sm {
+  padding: 9px 20px;
+  font-size: 13px;
+}
+
+.btn-lg {
+  padding: 18px 44px;
+  font-size: 16px;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* ── FORM ELEMENTS ── */
+.form-group {
+  margin-bottom: 16px;
+}
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 6px;
+  letter-spacing: 0.2px;
+}
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--dark);
+  background: var(--white);
+  outline: none;
+  transition: border-color var(--duration-base) var(--ease),
+              box-shadow var(--duration-base) var(--ease);
+}
+.form-input:focus {
+  border-color: var(--mid);
+  box-shadow: 0 0 0 3px rgba(116, 168, 164, 0.18);
+}
+.form-input::placeholder {
+  color: var(--muted);
+  font-size: 13px;
+}
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ── STAR RATING ── */
+.stars {
+  color: #F59E0B;
+  letter-spacing: 1px;
+}
+
+/* ── BADGES ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge-seller  { background: var(--terra); color: var(--white); }
+.badge-new     { background: var(--deep);  color: var(--white); }
+.badge-premium { background: #9B6B4A;      color: var(--white); }
+
+/* ── CLOSE BUTTON ── */
+.close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--border);
+  background: var(--off-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--dark);
+  transition: all var(--duration-base);
+  flex-shrink: 0;
+}
+.close-btn:hover {
+  background: var(--sage);
+  border-color: var(--mid);
+}
+
+/* ── TOAST ── */
+.toast-container {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-toast);
+  pointer-events: none;
+}
+.toast {
+  background: var(--footer-theme-primary);
+  color: var(--white);
+  padding: 12px 28px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: var(--shadow-lg);
+  animation: fadeUp 0.35s var(--ease);
+}
+
+/* ── OVERLAY ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: var(--z-overlay);
+  animation: fadeIn 0.25s var(--ease);
+  backdrop-filter: blur(2px);
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* ── RESPONSIVE CONTAINER ── */
+@media (max-width: 1280px) {
+  .container { padding: 0 40px; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .section   { padding: 60px 0; }
+  .section-header { margin-bottom: 40px; }
+  .section-title  { font-size: clamp(28px, 6vw, 42px); }
+}
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+  .section   { padding: 48px 0; }
+  .section-title  { font-size: clamp(24px, 7vw, 36px); }
+  .btn-lg    { padding: 14px 28px; font-size: 14px; }
+}
+
+/* ── GLOBAL OVERFLOW GUARD ──
+   Prevents any element from causing horizontal scroll on mobile.
+   Applied as a safety net — individual pages still control their own layout.
+── */
+@media (max-width: 768px) {
+  /* Tables */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Images always fit */
+  img { max-width: 100%; height: auto; }
+
+  /* Prevent fixed-width elements from overflowing */
+  .checkout-layout,
+  .contact-grid,
+  .pdp-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Sourcing CTA section */
+  .sourcing-cta-block { padding: 0 4px; }
+  .sourcing-cta-block__title { font-size: clamp(20px, 5vw, 28px); }
+
+  /* PDP extra content */
+  .pdp-extra-content { padding: 0 !important; margin-top: 24px !important; }
+
+  /* Blog alt card image */
+  .blog-alt-card__img-wrap { min-height: unset !important; }
+
+  /* Enquiry form */
+  .enquiry-wrapper { padding: 20px 16px; }
+  .row { flex-direction: column; }
+
+  /* Checkout form grid */
+  .checkout-form-grid { grid-template-columns: 1fr !important; }
+
+  /* Contact grid */
+  .contact-info-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Sourcing page */
+  .sourcing-container { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Terms / Privacy */
+  .tnc-row, .tnc-row--reverse { grid-template-columns: 1fr !important; }
+  .pp-section { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 480px) {
+  /* Contact info grid single column on very small screens */
+  .contact-info-grid { grid-template-columns: 1fr !important; }
+
+  /* Wishlist header */
+  .wishlist-title { font-size: clamp(24px, 7vw, 36px); }
+
+  /* Shop hero */
+  .shop-page__hero-title { font-size: clamp(22px, 6vw, 32px); }
+
+  /* Footer contact items wrap */
+  .footer__contact-item { flex-wrap: wrap; }
+
+  /* Buttons full width on tiny screens */
+  .btn-block-xs { width: 100%; }
+
+  /* Sourcing CTA */
+  .sourcing-cta-section { padding: 40px 0; }
+}
+
+/* ── SEARCH ICON ANIMATION ── */
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.search-icon-ring {
+  transform-origin: 22px 22px;
+  animation: spinSlow 12s linear infinite;
+}
+
+/* Hide watermark corner in product images — crop bottom 5% */
+.product-card__img,
+.sp-card__img,
+.hpc__img,
+.pdp-gallery__main-img,
+.qv-modal__img,
+.about-collage__img,
+.blog-featured-card__img,
+.blog-card__img {
+  object-position: center 10% !important;
+}
+
+/* FIX: #root must NOT set z-index — doing so creates a stacking context
+   that fights with the header (which lives outside #root in the DOM).
+   position:relative is fine for the particle background layering,
+   but z-index must be removed so the header's z-index:200 works freely. */
+#root {
+  position: relative;
+  /* z-index: 1; ← REMOVED — was trapping header behind root's stacking context */
+}

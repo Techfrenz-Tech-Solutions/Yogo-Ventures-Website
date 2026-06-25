@@ -1,0 +1,43 @@
+/* Custom cursor disabled - use system cursor */
+.cursor-svg, .cursor-ring, .cursor-trail { display: none !important; }
+
+.cursor-svg, .cursor-ring, .cursor-trail {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 99999;
+}
+
+/* Main cursor — diamond shape */
+.cursor-svg {
+  width: 20px; height: 20px;
+  margin-left: -10px; margin-top: -10px;
+}
+.cursor-svg svg { width: 100%; height: 100%; display: block; transition: transform 0.2s cubic-bezier(0.4,0,0.2,1); }
+.cursor-svg.cursor--hover svg { transform: scale(1.6) rotate(45deg); }
+.cursor-svg.cursor--click svg { transform: scale(0.7); transition: transform 0.1s; }
+
+/* Spinning ring */
+.cursor-ring {
+  width: 38px; height: 38px;
+  margin-left: -19px; margin-top: -19px;
+}
+.cursor-ring svg { width: 100%; height: 100%; display: block; }
+.cursor-ring__dash {
+  animation: ringRotate 5s linear infinite;
+  transform-origin: center;
+}
+@keyframes ringRotate { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+.cursor-ring.cursor--hover .cursor-ring__dash { animation-duration:1.2s; stroke: var(--terra); stroke-width:2.5; }
+
+/* Glow trail */
+.cursor-trail {
+  width: 52px; height: 52px;
+  margin-left: -26px; margin-top: -26px;
+  background: radial-gradient(circle at center, rgba(51,87,101,0.18) 0%, rgba(116,168,164,0.08) 50%, transparent 70%);
+  border-radius: 50%;
+}
+.cursor-trail.cursor--hover {
+  background: radial-gradient(circle at center, rgba(127,84,61,0.18) 0%, rgba(127,84,61,0.06) 50%, transparent 70%);
+}

@@ -1,0 +1,485 @@
+/* src/components/home/HomeSections.css — Yogo Ventures Home Sections */
+
+/* ── STATS ── */
+.stats-section { background: var(--deep); padding: 80px 0; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 40px;
+  text-align: center;
+}
+.stat-item__value {
+  display: block;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 58px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--light);
+  line-height: 1;
+}
+.stat-item__label {
+  display: block;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(219,226,220,0.75);
+  margin-top: 6px;
+  letter-spacing: 0.3px;
+}
+
+/* ── BRANDS MARQUEE ── */
+.brands-section { overflow: hidden; }
+.brands-marquee-wrap {
+  overflow: hidden;
+  padding: 20px 0;
+  background: var(--off-white);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-top: 10px;
+}
+.brands-marquee-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: marqueeScroll 30s linear infinite;
+}
+.brands-marquee-track:hover { animation-play-state: paused; }
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.brand-marquee-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 22px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  transition: all 0.25s;
+  cursor: default;
+  flex-shrink: 0;
+}
+.brand-marquee-pill:hover {
+  border-color: var(--mid);
+  background: var(--light);
+  transform: translateY(-2px);
+}
+.brand-marquee-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--terra);
+  flex-shrink: 0;
+}
+.brand-marquee-name {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--dark);
+}
+
+
+
+
+
+/* ───────── ABOUT SECTION ───────── */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* Image stack */
+.about-img-stack {
+  position: relative;
+  width: 100%;
+  padding-bottom: 40px;
+  padding-right: 40px;
+}
+
+/* Force single image layout */
+.about-collage {
+  width: 100%;
+  display: block !important;
+}
+
+.about-collage__img {
+  width: 100% !important;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: block;
+}
+
+/* Prevent old collage grid styles */
+.about-collage img {
+  width: 100% !important;
+  max-width: 100%;
+  flex: none;
+}
+
+/* Logo badge */
+.about-logo-box {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: var(--white);
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 5;
+}
+
+.about-logo-box__img {
+  width: 80px;
+  height: auto;
+  object-fit: contain;
+}
+
+.about-logo-box__tagline {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--terra);
+}
+
+/* Badge */
+.about-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--terra);
+  color: var(--white);
+  padding: 7px 18px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Description */
+.about-desc {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-top: 14px;
+}
+
+/* ───────── TABLET ───────── */
+
+@media (max-width: 1024px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .about-img-stack {
+    padding-right: 0;
+    padding-bottom: 20px;
+  }
+
+  .about-logo-box {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .about-logo-box__img {
+    width: 70px;
+  }
+}
+
+/* ───────── MOBILE ───────── */
+
+@media (max-width: 768px) {
+  .about-grid {
+    gap: 40px;
+  }
+
+  .about-logo-box {
+    bottom: 14px;
+    right: 14px;
+    padding: 10px 12px;
+  }
+
+  .about-logo-box__img {
+    width: 60px;
+  }
+
+  .about-logo-box__tagline {
+    font-size: 10px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .about-logo-box {
+    bottom: 10px;
+    right: 10px;
+    padding: 8px 10px;
+  }
+
+  .about-logo-box__img {
+    width: 50px;
+  }
+
+  .about-logo-box__tagline {
+    font-size: 9px;
+  }
+
+  .about-desc {
+    font-size: 14px;
+  }
+}
+
+
+/* ── WHY US ── */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 24px;
+}
+.why-card {
+  position: relative;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 28px 28px 24px;
+  transition: all 0.32s var(--ease);
+  overflow: hidden;
+}
+.why-card:hover {
+  border-color: var(--why-accent, var(--mid));
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(51,87,101,0.12);
+}
+/* Coloured accent bar at top of card — uses theme-aware accent */
+.why-card__accent-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--why-accent, var(--deep));
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  transition: height 0.3s var(--ease);
+}
+.why-card:hover .why-card__accent-bar { height: 5px; }
+.why-card__icon {
+  width: 54px;
+  height: 54px;
+  background: color-mix(in srgb, var(--why-accent, var(--deep)) 12%, transparent);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  margin-top: 8px;
+  color: var(--why-accent, var(--deep));
+  transition: background 0.25s;
+}
+.why-card:hover .why-card__icon {
+  background: color-mix(in srgb, var(--why-accent, var(--deep)) 18%, transparent);
+}
+.why-card__title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--dark);
+  font-family: var(--font-sans);
+  line-height: 1.35;
+}
+.why-card__desc { font-size: 13.5px; color: var(--muted); line-height: 1.75; }
+
+/* ── TESTIMONIALS MARQUEE ── */
+.testimonials-marquee-wrap {
+  overflow: hidden;
+  padding: 8px 0 16px;
+}
+.testimonials-marquee-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: testimonialMarquee 40s linear infinite;
+}
+.testimonials-marquee-track:hover { animation-play-state: paused; }
+@keyframes testimonialMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.testimonial-marquee-card {
+  flex-shrink: 0;
+  width: 360px;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.testimonial-marquee-card:hover {
+  border-color: var(--mid);
+  box-shadow: var(--shadow-md);
+}
+.testimonial-marquee-card__stars {
+  color: #F59E0B;
+  font-size: 16px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.testimonial-marquee-card__text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--dark);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.testimonial-marquee-card__footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.testimonial-marquee-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--deep);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.testimonial-marquee-card__name { font-size: 14px; font-weight: 700; color: var(--dark); }
+.testimonial-marquee-card__role { font-size: 12px; color: var(--muted); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .why-grid   { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); gap: 32px; }
+  .about-img-stack { padding-bottom: 30px; padding-right: 30px; }
+}
+@media (max-width: 768px) {
+  .why-grid { grid-template-columns: 1fr; }
+  .stats-section { padding: 60px 0; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); gap: 24px; }
+  .stat-item__value { font-size: 44px; }
+  .testimonial-marquee-card { width: 300px; }
+}
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: repeat(2,1fr); gap: 16px; }
+  .stat-item__value { font-size: 36px; }
+  .testimonial-marquee-card { width: 260px; padding: 18px; }
+}
+
+/* ── TESTIMONIAL UPDATES ── */
+.testimonial-marquee-card {
+  position: relative;
+  overflow: hidden; /* clip the big quote */
+}
+
+/* Transparent big quote top-right */
+.testimonial-marquee-card__big-quote {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 120px;
+  line-height: 1;
+  color: var(--deep);
+  opacity: 0.07;
+  pointer-events: none;
+  user-select: none;
+  font-weight: 700;
+}
+
+/* Footer: avatar | name+role | stars (pushed right) */
+.testimonial-marquee-card__footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.testimonial-marquee-card__author-info { flex: 1; min-width: 0; }
+/* Stars on right */
+.testimonial-marquee-card__stars {
+  color: #F59E0B;
+  font-size: 15px;
+  letter-spacing: 2px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ── ABOUT COLLAGE ── */
+.about-collage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+.about-collage__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease);
+}
+.about-collage__img:hover { transform: scale(1.08); }
+
+/* Small logo box overlay */
+.about-logo-box {
+  position: absolute;
+  bottom: -24px;
+  right: -24px;
+  width: 130px;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  border: 3px solid var(--white);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  gap: 6px;
+}
+.about-logo-box__img {
+  width: 90px;
+  height: auto;
+  object-fit: contain;
+  /* PNG transparent bg — natural on white card */
+  mix-blend-mode: normal;
+  filter: none;
+  background: transparent;
+}
+.about-logo-box__tagline {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Badge without emoji */
+.about-badge--yogo {
+  background: var(--terra);
+  color: var(--white);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+}

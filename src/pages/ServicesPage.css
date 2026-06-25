@@ -1,0 +1,326 @@
+/* src/pages/ServicesPage.css
+   All styles mirror the original Tailwind design exactly.
+   CTA button uses var(--deep) so it automatically inherits
+   any global footer/theme colour changes.
+   Breakpoint: 768px (md in Tailwind) */
+
+/* ── BASE ─────────────────────────────────────────────────────────────────── */
+.sourcing-page {
+  background: transparent;   /* ← lets canvas show through the page wrapper */
+  color: #1f2937;
+  font-family: inherit;
+  position: relative;
+  isolation: isolate;         /* ← creates stacking context without z-index */
+  margin-top: -72px;          /* Pull the page flush under the fixed header */
+}
+
+
+/* Shared container widths */
+.sourcing-container {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+.sourcing-container--narrow {
+  max-width: 64rem;
+}
+.sourcing-text-center { text-align: center; }
+
+/* Shared section title */
+.sourcing-section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #1f2937;
+}
+
+/* ── HERO ─────────────────────────────────────────────────────────────────── */
+.sourcing-hero {
+  background: #f3f4f6;
+  padding-top: 0;
+  margin-top: 0;
+}
+@media (max-width: 640px) {
+  .sourcing-page {
+    margin-top: -64px;
+  }
+  .sourcing-hero {
+    margin-top: 0;
+    padding-top: 0;
+  }
+}
+.sourcing-hero__banner {
+  width: 100%;
+}
+.sourcing-hero__banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.sourcing-hero__text {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  text-align: center;
+}
+.sourcing-hero__title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+.sourcing-hero__sub {
+  font-size: 1.125rem;
+  color: #4b5563;
+}
+
+/* ── INTRO ────────────────────────────────────────────────────────────────── */
+.sourcing-intro {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+.sourcing-intro__text {
+  color: #4b5563;
+  line-height: 1.625;
+  font-size: 1rem;
+}
+
+/* ── SERVICES ─────────────────────────────────────────────────────────────── */
+.sourcing-services {
+  background: #f9fafb;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+.sourcing-services .sourcing-section-title {
+  margin-bottom: 2.5rem;
+}
+.sourcing-services__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .sourcing-services__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.sourcing-card {
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+.sourcing-card__img {
+  width: 100%;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  height: auto;
+  display: block; 
+}
+.sourcing-card__title {
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+.sourcing-card__desc {
+  color: #4b5563;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ── AUDIENCE ─────────────────────────────────────────────────────────────── */
+.sourcing-audience {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  background: #f9fafb;
+}
+.sourcing-audience__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .sourcing-audience__inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+  }
+}
+
+.sourcing-audience__img-wrap {
+  flex-shrink: 0;
+}
+@media (min-width: 768px) {
+  .sourcing-audience__img-wrap { width: 50%; }
+}
+.sourcing-audience__img {
+  border-radius: 1rem;
+  width: 100%;
+  height: auto;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  display: block;
+}
+
+.sourcing-audience__content {
+  color: #4b5563;
+}
+@media (min-width: 768px) {
+  .sourcing-audience__content { width: 50%; }
+}
+.sourcing-audience__content .sourcing-section-title {
+  margin-bottom: 1.5rem;
+  color: #1f2937;
+}
+.sourcing-audience__list {
+  list-style: disc;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #4b5563;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ── HOW TO USE ───────────────────────────────────────────────────────────── */
+.sourcing-steps {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  background: #ffffff;
+}
+.sourcing-steps__title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #1f2937;
+}
+.sourcing-steps__sub {
+  color: #4b5563;
+  margin-bottom: 3rem;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.sourcing-steps__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  text-align: left;
+}
+@media (min-width: 768px) {
+  .sourcing-steps__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.sourcing-step-card {
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  transition: box-shadow 0.3s;
+}
+.sourcing-step-card:hover {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+.sourcing-step-card__num {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+.sourcing-step-card__title {
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+.sourcing-step-card__desc {
+  color: #4b5563;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ── WHY CHOOSE ───────────────────────────────────────────────────────────── */
+.sourcing-why {
+  background: #f9fafb;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+.sourcing-why .sourcing-section-title {
+  margin-bottom: 1.5rem;
+}
+.sourcing-why__grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  color: #4b5563;
+  font-size: 1rem;
+}
+@media (min-width: 768px) {
+  .sourcing-why__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.sourcing-why__item {
+  color: #4b5563;
+}
+
+/* ── CTA ──────────────────────────────────────────────────────────────────── */
+.sourcing-cta {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  text-align: center;
+  background: #ffffff; 
+}
+.sourcing-cta__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+.sourcing-cta__sub {
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+/* ── CTA BUTTON ───────────────────────────────────────────────────────────────
+   Uses var(--deep) — the same CSS variable your footer and global theme use.
+   Change --deep in your root/global CSS and this button updates automatically.
+   Falls back to #1f2937 (dark gray) if the variable is not defined.          */
+.sourcing-cta__btn {
+  background: var(--deep, #1f2937);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.25s, opacity 0.2s;
+  font-family: inherit;
+}
+.sourcing-cta__btn:hover {
+  /* Slightly lightens --deep on hover by overlaying a semi-transparent white */
+  background: var(--deep, #1f2937);
+  opacity: 0.85;
+}
+
+/* Mobile header is 64px — adjust hero flush offset */
+@media (max-width: 640px) {
+  .sourcing-hero {
+    margin-top: -64px;
+    padding-top: calc(64px + 1rem);
+  }
+}
