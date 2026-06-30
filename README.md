@@ -1,4 +1,4 @@
-# 🌊 Coastal Retreat — Premium eCommerce Platform v2.0 (Vite)
+# YoGo Ventures — Premium eCommerce Platform v2.0 (Vite)
 
 React 18 + Vite 5 eCommerce website with 100 products, aesthetic category cards, premium footer, and perfectly centered product popups.
 
@@ -31,7 +31,7 @@ npm run preview
 ## 📁 Folder Structure
 
 ```
-coastal-retreat/
+yogo-ventures/
 ├── index.html              ← Root HTML (Vite style, with SEO meta + Schema.org)
 ├── vite.config.js          ← Vite config with manual chunks
 ├── package.json            ← React 18 + Vite 5 deps
@@ -105,4 +105,4 @@ Replace `src/data/products.js` static array with a Sanity GROQ query.
 Replace `handleSubmit` in `CheckoutPage.js` with the Razorpay SDK order flow.
 
 ---
-*Made with 🌊 for the ocean · Coastal Retreat v2.0*
+*Made with passion for craftsmanship · YoGo Ventures v2.0*
