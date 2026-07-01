@@ -105,4 +105,53 @@ Replace `src/data/products.js` static array with a Sanity GROQ query.
 Replace `handleSubmit` in `CheckoutPage.js` with the Razorpay SDK order flow.
 
 ---
+
+## 🐳 Docker Deployment
+
+The website is containerised and served as a production nginx container. A multi-stage Dockerfile produces a static bundle via Vite and copies it into a minimal `nginx:alpine` image.
+
+### Files added
+
+| File | Purpose |
+|------|---------|
+| `Dockerfile` | Multi-stage build: `node:20-alpine` (build) → `nginx:alpine` (serve) |
+| `nginx.conf` | SPA routing (`try_files $uri /index.html`), gzip compression, long-term asset caching |
+| `.dockerignore` | Excludes `node_modules`, `dist`, `.git` from build context |
+
+### Build and run
+
+```bash
+# Build image
+docker build -t yogo-website .
+
+# Run container
+docker run -d \
+  --name yogo-website \
+  --restart unless-stopped \
+  -p 28096:80 \
+  yogo-website
+```
+
+### Live deployment
+
+| Environment | URL |
+|-------------|-----|
+| Production VM | `http://106.51.20.225:28096` |
+
+The container listens on port 80 internally and is exposed on host port **28096**.
+
+> **Note on env vars**: The `.env.example` lists `REACT_APP_*` keys for Sanity CMS, Razorpay, and Google Analytics. These are not yet wired into the source code — the site currently uses static data from `src/data/`. When integrating those services, add the corresponding `VITE_*` prefixed variables to a `.env` file (Vite ignores `REACT_APP_*`) and reference them via `import.meta.env.VITE_*`.
+
+---
+
+## 🔧 Recent Changes
+
+### Docker containerisation (2025-07-01)
+- Added `Dockerfile` — multi-stage production build using `node:20-alpine` and `nginx:alpine`
+- Added `nginx.conf` — SPA-friendly routing, gzip compression, and immutable asset caching headers
+- Added `.dockerignore` — keeps build context lean by excluding `node_modules`, `dist`, and `.git`
+- Deployed to VM at `http://106.51.20.225:28096` on port 28096
+- No source code changes required; entire site builds cleanly as a self-contained static bundle
+
+---
 *Made with 🌊 for the ocean · Coastal Retreat v2.0*
