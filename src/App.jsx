@@ -4,7 +4,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// gsap.registerPlugin(ScrollTrigger);
+// gsap.registerPlugin(ScrollTrigger);------------------------------
 
 // Layout
 import Header    from "./components/layout/Header";
