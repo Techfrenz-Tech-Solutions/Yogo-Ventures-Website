@@ -1,6 +1,6 @@
 // CategoriesSection — SVG icons, no emojis
 import { useNavigate } from "react-router-dom";
-import { PRODUCTS } from "../../data/products";
+import { useProducts } from "../../hooks/useProducts";
 import "./CategoriesSection.css";
 
 // ✅ Import category images (IMPORTANT FIX)
@@ -42,11 +42,12 @@ const FoamIcon = () => (
 
 export function CategoriesSection() {
   const navigate = useNavigate();
+  const { products } = useProducts();
 
-  const tshirtCount = PRODUCTS.filter(p => p.category === "Apparel").length;
-  const foamCount = PRODUCTS.filter(p => p.category === "Memory Foam Products").length;
-  const copperCount = PRODUCTS.filter(p => p.category === "Copper Utensils").length;
-  const craftCount = PRODUCTS.filter(p => p.category === "Handicraft Items").length;
+  const tshirtCount = products.filter(p => p.category === "Apparel").length;
+  const foamCount = products.filter(p => p.category === "Memory Foam Products").length;
+  const copperCount = products.filter(p => p.category === "Copper Utensils").length;
+  const craftCount = products.filter(p => p.category === "Handicraft Items").length;
 
   return (
     <section className="cats-section section" aria-labelledby="categories-heading">
@@ -78,7 +79,7 @@ export function CategoriesSection() {
               <span className="cat-card-4__icon"><ShirtIcon /></span>
               <h3 className="cat-card-4__name">Apparel</h3>
               <p className="cat-card-4__sub">Fashion</p>
-              <p className="cat-card-4__count">2+ products</p>
+              <p className="cat-card-4__count">{tshirtCount}+ products</p>
               <span className="cat-card-4__cta">Explore →</span>
             </div>
           </div>

@@ -9,7 +9,6 @@ import { CategoriesSection }   from "../components/home/CategoriesSection";
 import { WhyUsSection }        from "../components/home/WhyUsSection";
 import { TestimonialsSection } from "../components/home/TestimonialsSection";
 import { FAQSection }          from "../components/home/FAQSection";
-import { BEST_SELLERS, NEW_ARRIVALS } from "../data/products";
 import { useApp }              from "../context/AppContext";
 import EnquirySection           from "../components/home/EnquirySection";
 import Api                      from "../utils/Api";
@@ -171,26 +170,25 @@ function NewArrivalCard({ product }) {
 }
 
 export default function HomePage() {
-  const [bestSellers, setBestSellers] = useState(BEST_SELLERS);
-  const [newArrivals, setNewArrivals] = useState(NEW_ARRIVALS);
+  const [bestSellers, setBestSellers] = useState([]);
+  const [newArrivals, setNewArrivals] = useState([]);
   const navigate    = useNavigate();
 
-  // Pull admin-managed best-sellers / new-arrivals from the backend; keep the
-  // static catalog as a fallback if the backend has nothing yet (or is down).
+  // Best-sellers / new-arrivals come from the backend only — no static fallback.
   useEffect(() => {
     Api.get('/bestselling/best-sellinglist')
       .then(res => {
         const rows = Array.isArray(res.data) ? res.data : (res.data?.data ?? []);
-        if (rows.length > 0) setBestSellers(rows.map(r => fromBackend(r, 'bs')));
+        setBestSellers(rows.map(r => fromBackend(r, 'bs')));
       })
-      .catch(() => {});
+      .catch(() => setBestSellers([]));
 
     Api.get('/newarrival/new-arrivallist')
       .then(res => {
         const rows = Array.isArray(res.data) ? res.data : (res.data?.data ?? []);
-        if (rows.length > 0) setNewArrivals(rows.map(r => fromBackend(r, 'na')));
+        setNewArrivals(rows.map(r => fromBackend(r, 'na')));
       })
-      .catch(() => {});
+      .catch(() => setNewArrivals([]));
   }, []);
 
   useEffect(() => {
@@ -263,28 +261,30 @@ export default function HomePage() {
       <CategoriesSection />
 
       {/* 3. BEST SELLING PRODUCTS */}
-      <section className="section section--alt" aria-labelledby="bestsellers-heading">
-        <div className="container">
-          <header className="section-header reveal">
-            <span className="section-tag">Best Sellers</span>
-            <h2 className="section-title" id="bestsellers-heading">Best Selling Products</h2>
-          </header>
-          <div className="home-products-grid">
-            {bestSellers.map((p) =>
-              p ? <HomeProductCard key={p.id} product={p} /> : null
-            )}
+      {bestSellers.length > 0 && (
+        <section className="section section--alt" aria-labelledby="bestsellers-heading">
+          <div className="container">
+            <header className="section-header reveal">
+              <span className="section-tag">Best Sellers</span>
+              <h2 className="section-title" id="bestsellers-heading">Best Selling Products</h2>
+            </header>
+            <div className="home-products-grid">
+              {bestSellers.map((p) =>
+                p ? <HomeProductCard key={p.id} product={p} /> : null
+              )}
+            </div>
+            <div className="home-products__cta reveal">
+              <Link
+                to="/shop"
+                className="btn btn--footer-theme btn-lg"
+                style={{ textDecoration: "none" }}
+              >
+                View All Products →
+              </Link>
+            </div>
           </div>
-          <div className="home-products__cta reveal">
-            <Link
-              to="/shop"
-              className="btn btn--footer-theme btn-lg"
-              style={{ textDecoration: "none" }}
-            >
-              View All Products →
-            </Link>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 5. NEW ARRIVALS */}
       {newArrivals.length > 0 && (

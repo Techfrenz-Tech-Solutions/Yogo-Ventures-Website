@@ -1,64 +1,19 @@
-﻿// src/pages/ShopPage.jsx — Subcategory dropdowns for Apparel & Handicrafts
+// src/pages/ShopPage.jsx — real backend products/categories, no static catalog
 import React, { useState, useEffect, useMemo, useCallback, useRef, useTransition } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import { VALID_PRODUCTS, CATEGORIES } from "../data/products";
+import { useProducts } from "../hooks/useProducts";
+import { useCategories } from "../hooks/useCategories";
 import { useApp } from "../context/AppContext";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import "./ShopPage.css";
 
-// ── Apparel card image overrides ─────────────────────────────────────────────
-const APPAREL_CARD_IMAGES = {
-  "Polo":       "./Polo1.png",
-  "Round Neck": "./Round1.png",
-  "Hoodies":    "./Hoodie1.png",
-};
-
-// ── Subcategory definitions ──────────────────────────────────────────────────
-const SUBCATEGORY_MAP = [
-  {
-    match: (cat) => cat.toLowerCase().includes("handicraft"),
-    subs:  ["Blue Pottery", "Handmade Cotton Bags", "Wooden Handicrafts"],
-  },
-];
-
-function getSubsFor(catName) {
-  const entry = SUBCATEGORY_MAP.find(e => e.match(catName));
-  return entry ? entry.subs : null;
-}
-
-function isTShirtCategory(catName) {
-  return (
-    catName.toLowerCase().includes("apparel") ||
-    catName.toLowerCase().includes("t-shirt") ||
-    catName.toLowerCase().includes("tshirt")
-  );
-}
-
 const norm = (s) => (s ?? "").trim().toLowerCase();
-
-const displayCategoryLabel = (cat) => cat === "Apparel" ? "Apparels" : cat;
 
 const subCatMatch = (productSubCat, filterSubCat) => {
   const a = norm(productSubCat);
   const b = norm(filterSubCat);
   if (!a || !b) return false;
-  return a === b || a.includes(b) || b.includes(a);
-};
-
-const isFeaturedApparel = (product) => product.category === "Apparel" && (
-  (product.subCategory === "Polo"       && product.colorName === "Black")        ||
-  (product.subCategory === "Round Neck" && product.colorName === "Melange Grey") ||
-  (product.subCategory === "Hoodies"    && product.colorHex  === "#dfd6c1")
-);
-
-const actualProductCount = (catName) => {
-  if (catName === "All") {
-    return VALID_PRODUCTS.filter(p => p.category !== "Apparel" || isFeaturedApparel(p)).length;
-  }
-  if (catName === "Apparel") {
-    return 3;
-  }
-  return VALID_PRODUCTS.filter(p => p.category === catName).length;
+  return a === b;
 };
 
 // ── HeartIconBtn ─────────────────────────────────────────────────────────────
@@ -68,7 +23,7 @@ function HeartIconBtn({ filled, onClick, label }) {
     onClick(e);
     const burst = Array.from({ length: 8 }, (_, i) => {
       const angle = (i / 8) * 2 * Math.PI;
-      const dist  = 20 + Math.random() * 12;
+      const dist = 20 + Math.random() * 12;
       return { id: Date.now() + i, tx: Math.cos(angle) * dist, ty: Math.sin(angle) * dist, size: 7 + Math.random() * 5 };
     });
     setParticles(burst);
@@ -95,48 +50,21 @@ function HeartIconBtn({ filled, onClick, label }) {
 }
 
 // ── ShopProductCard ──────────────────────────────────────────────────────────
-// FIX: For Apparel products, wishlist state and toggle now mirror ProductDetailPage's
-// group behaviour — all variant IDs sharing the same subCategory are toggled/checked
-// together, so hearts stay in sync between ShopPage and ProductDetailPage.
 function ShopProductCard({ product }) {
   const { toggleWishlist, wishlist } = useApp();
+  const isWishlisted = wishlist.includes(product.id);
 
-  // Build the group of all variant IDs for the same Apparel subCategory.
-  // For non-Apparel products this is null and the original single-ID logic applies.
-  const apparelGroupIds = React.useMemo(() => {
-    if (product.category !== "Apparel") return null;
-    return VALID_PRODUCTS
-      .filter(p => p.subCategory === product.subCategory)
-      .map(p => p.id);
-  }, [product.category, product.subCategory]);
-
-  // isWishlisted: true if ANY variant in the group is in the wishlist (mirrors PDP).
-  const isWishlisted = apparelGroupIds
-    ? apparelGroupIds.some(id => wishlist.includes(id))
-    : wishlist.includes(product.id);
-
-  // Toggle: add/remove ALL variant IDs together (mirrors PDP handleToggleWishlist).
   const handleWishlistToggle = useCallback((e) => {
     e.preventDefault();
-    if (apparelGroupIds) {
-      apparelGroupIds.forEach(id => toggleWishlist(id));
-    } else {
-      toggleWishlist(product.id);
-    }
-  }, [apparelGroupIds, toggleWishlist, product.id]);
-
-  // For the three featured Apparel cards, use the /public path image.
-  const displayImage =
-    product.category === "Apparel" && APPAREL_CARD_IMAGES[product.subCategory]
-      ? APPAREL_CARD_IMAGES[product.subCategory]
-      : product.image;
+    toggleWishlist(product.id);
+  }, [toggleWishlist, product.id]);
 
   return (
     <article className="sp-card" aria-label={product.name}>
       <div className="sp-card__img-wrap">
         <Link to={`/product/${product.id}`} tabIndex={-1}>
           <img
-            src={displayImage}
+            src={product.image}
             alt={product.name}
             className="sp-card__img"
             loading="lazy"
@@ -156,20 +84,6 @@ function ShopProductCard({ product }) {
   );
 }
 
-// ── PlaceholderCard ───────────────────────────────────────────────────────────
-function PlaceholderCard() {
-  return (
-    <article className="sp-card sp-card--placeholder" aria-hidden="true">
-      <div className="sp-card__img-wrap sp-card__img-wrap--placeholder">
-        <div className="sp-card__placeholder-img" />
-      </div>
-      <div className="sp-card__info">
-        <span className="sp-card__name sp-card__name--placeholder">Coming Soon</span>
-      </div>
-    </article>
-  );
-}
-
 // ── ChevronIcon ───────────────────────────────────────────────────────────────
 function ChevronIcon() {
   return (
@@ -182,7 +96,11 @@ function ChevronIcon() {
 
 // ── ShopPage ──────────────────────────────────────────────────────────────────
 export default function ShopPage() {
-  const [searchParams]                    = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const { products, loading: productsLoading } = useProducts();
+  const { categories: realCategories, subCategoriesByCategory, loading: categoriesLoading } = useCategories();
+
+  const CATEGORIES = useMemo(() => ["All", ...realCategories], [realCategories]);
 
   // ── Filter state ──────────────────────────────────────────────────────────
   const [category,      setCategory]      = useState(searchParams.get("category") || "All");
@@ -214,7 +132,7 @@ export default function ShopPage() {
         setCategory(matched);
         setSubCategory(null);
 
-        const hasSubs = Boolean(getSubsFor(matched));
+        const hasSubs = Boolean(subCategoriesByCategory[matched]?.length);
         if (hasSubs) {
           setOpenDropdowns(prev => ({ ...prev, [matched]: true }));
         }
@@ -224,7 +142,7 @@ export default function ShopPage() {
         productSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
     }
-  }, [searchParams]);
+  }, [searchParams, CATEGORIES, subCategoriesByCategory]);
 
   // ── Debounced product search ──────────────────────────────────────────────
   const handleSearchChange = useCallback((e) => {
@@ -273,7 +191,7 @@ export default function ShopPage() {
     const autoOpen = {};
     const result = CATEGORIES.filter(c => {
       if (c.toLowerCase().includes(q)) return true;
-      const subs = getSubsFor(c);
+      const subs = subCategoriesByCategory[c];
       if (subs && subs.some(s => s.toLowerCase().includes(q))) {
         autoOpen[c] = true;
         return true;
@@ -281,7 +199,7 @@ export default function ShopPage() {
       return false;
     });
     return { filteredCategories: result, autoOpenFromSubSearch: autoOpen };
-  }, [catSearchQ]);
+  }, [catSearchQ, CATEGORIES, subCategoriesByCategory]);
 
   const effectiveOpenDropdowns = useMemo(
     () => ({ ...openDropdowns, ...autoOpenFromSubSearch }),
@@ -295,16 +213,20 @@ export default function ShopPage() {
     return allSubs.filter(s => s.toLowerCase().includes(q));
   }, [catSearchQ]);
 
+  const actualProductCount = useCallback((catName) => {
+    if (catName === "All") return products.length;
+    return products.filter(p => p.category === catName).length;
+  }, [products]);
+
   // ── Filtering ─────────────────────────────────────────────────────────────
   const filteredOnly = useMemo(() => {
-    return VALID_PRODUCTS.filter(p => {
+    return products.filter(p => {
       if (category !== "All" && p.category !== category) return false;
-      if (p.category === "Apparel" && !isFeaturedApparel(p)) return false;
       if (subCategory && !subCatMatch(p.subCategory, subCategory)) return false;
       if (searchQ && !p.name.toLowerCase().includes(searchQ.toLowerCase())) return false;
       return true;
     });
-  }, [category, subCategory, searchQ]);
+  }, [products, category, subCategory, searchQ]);
 
   const filtered = useMemo(() => {
     const arr = [...filteredOnly];
@@ -318,13 +240,7 @@ export default function ShopPage() {
     }
   }, [filteredOnly, sortBy]);
 
-  const isHoodies = norm(subCategory) === "hoodies";
-  const HOODIE_MIN = 8;
-  const placeholderCount = isHoodies && filtered.length < HOODIE_MIN
-    ? HOODIE_MIN - filtered.length
-    : 0;
-
-  const showTShirtNote = category !== "All" && isTShirtCategory(category);
+  const isLoading = productsLoading || categoriesLoading;
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
@@ -347,7 +263,7 @@ export default function ShopPage() {
               <button key={c}
                 className={`shop-cat-pill${category === c ? " active" : ""}`}
                 onClick={() => handleCategoryChange(c)}>
-                {displayCategoryLabel(c)}
+                {c}
               </button>
             ))}
           </nav>
@@ -405,8 +321,8 @@ export default function ShopPage() {
                   <p className="filter-cat-empty">No categories found.</p>
                 ) : (
                   filteredCategories.map(c => {
-                    const subs    = getSubsFor(c);
-                    const hasSubs = Boolean(subs);
+                    const subs    = subCategoriesByCategory[c];
+                    const hasSubs = Boolean(subs?.length);
                     const isOpen  = Boolean(effectiveOpenDropdowns[c]);
                     const visibleSubs = hasSubs ? getVisibleSubs(c, subs) : null;
 
@@ -422,7 +338,7 @@ export default function ShopPage() {
                               onChange={() => handleCategoryChange(c)}
                             />
                             <span className="filter-option__label">
-                              {displayCategoryLabel(c)}
+                              {c}
                               <span className="filter-option__count">
                                 ({actualProductCount(c)})
                               </span>
@@ -493,39 +409,16 @@ export default function ShopPage() {
               </label>
             </div>
 
-            {/* T-shirt note */}
-            {showTShirtNote && (
-              <div className="shop-tshirt-note" role="note" aria-label="Apparel customisation note">
-                <svg
-                  className="shop-tshirt-note__icon"
-                  viewBox="0 0 24 24" width="18" height="18"
-                  fill="none" stroke="currentColor" strokeWidth="2"
-                  strokeLinecap="round" strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="8" x2="12" y2="12"/>
-                  <line x1="12" y1="16" x2="12.01" y2="16"/>
-                </svg>
-                <p className="shop-tshirt-note__text">
-                  Colors shown are for reference — we provide complete flexibility
-                  across color selection, fabric composition, patterns, and designs, tailored to reflect your
-                  requirements.
-                </p>
-              </div>
-            )}
-
             {/* Product grid */}
-            {filtered.length > 0 || placeholderCount > 0 ? (
+            {isLoading ? (
+              <div className="shop-empty">
+                <p className="shop-empty__text">Loading products…</p>
+              </div>
+            ) : filtered.length > 0 ? (
               <div className="sp-products-grid">
                 {filtered.map(p => (
                   <div key={p.id} className="reveal">
                     <ShopProductCard product={p} />
-                  </div>
-                ))}
-                {Array.from({ length: placeholderCount }).map((_, i) => (
-                  <div key={`placeholder-${i}`} className="reveal">
-                    <PlaceholderCard />
                   </div>
                 ))}
               </div>

@@ -4,7 +4,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { useHeaderScroll } from "../../hooks/useHeaderScroll";
 import { NAV_LINKS } from "../../data/content";
-import { VALID_PRODUCTS, PRODUCTS } from "../../data/products";
+import { useProducts } from "../../hooks/useProducts";
 import "./Header.css";
 
 /* ── SVG Icons ── */
@@ -146,65 +146,9 @@ const MENU_ITEMS = [
   },
 ];
 
-/* ── Compute deduplicated wishlist count ──────────────────────────────────────
-   Apparel variants in the same subCategory are wishlisted as a group (all IDs
-   stored), but should count as ONE item in the badge — matching WishlistPage.
-   For every other category each ID counts as 1.
-   ──────────────────────────────────────────────────────────────────────────── */
-function useWishlistCount(wishlist) {
-  if (!wishlist || wishlist.length === 0) return 0;
-
-  // Look up full product data for every wishlisted id
-  const wishlistedProducts = (PRODUCTS || VALID_PRODUCTS || []).filter(
-    p => wishlist.includes(p.id)
-  );
-
-  const seenApparelGroups = new Set();
-  let count = 0;
-
-  for (const p of wishlistedProducts) {
-    if (p.category === "Apparel") {
-      const groupKey = `apparel|${p.subCategory}`;
-      if (!seenApparelGroups.has(groupKey)) {
-        seenApparelGroups.add(groupKey);
-        count += 1;
-      }
-      // subsequent variants in same subCategory → skip
-    } else {
-      count += 1;
-    }
-  }
-
-  return count;
-}
-
-/* ── Deduplicate search results ───────────────────────────────────────────────
-   For Apparel products, only keep the FIRST variant per subCategory so that
-   "Polo Apparel" shows once (with its main image) instead of 5 colour cards.
-   All other categories pass through unchanged.
-   ──────────────────────────────────────────────────────────────────────────── */
-function deduplicateSearchResults(results) {
-  const seenApparelSubs = new Set();
-  const deduped = [];
-
-  for (const p of results) {
-    if (p.category === "Apparel") {
-      const key = p.subCategory; // "Polo" | "Round Neck" | "Hoodies"
-      if (!seenApparelSubs.has(key)) {
-        seenApparelSubs.add(key);
-        deduped.push(p);
-      }
-      // skip subsequent colour variants of the same sub-type
-    } else {
-      deduped.push(p);
-    }
-  }
-
-  return deduped;
-}
-
 export default function Header() {
   const { wishlist, cartCount, setCartOpen } = useApp();
+  const { products } = useProducts();
   const scrolled  = useHeaderScroll(20);
   const location  = useLocation();
   const navigate  = useNavigate();
@@ -226,8 +170,7 @@ export default function Header() {
 
   const inputRef      = useRef(null);
 
-  /* ── FIX: deduplicated wishlist count (1 per apparel subCategory group) ── */
-  const wishlistCount = useWishlistCount(wishlist);
+  const wishlistCount = wishlist.length;
 
   /* ── Apply theme to <html> on mount + whenever isDark changes ── */
   useEffect(() => {
@@ -274,14 +217,10 @@ export default function Header() {
     setActiveSearchTab("Apparel");
   };
 
-  /* ── FIX: filter then deduplicate apparel variants ── */
   const searchResults = searchQuery.trim().length > 1
-    ? deduplicateSearchResults(
-        VALID_PRODUCTS.filter(p =>
-          p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          p.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          p.category.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+    ? products.filter(p =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.category.toLowerCase().includes(searchQuery.toLowerCase())
       ).slice(0, 8)
     : [];
 
@@ -306,15 +245,8 @@ export default function Header() {
     "Handicraft Items",
   ];
 
-  /* ── FIX: clicking an apparel result navigates to /shop?category=Apparel&sub=<subCategory>
-     so the shop page can pre-filter to show all colour variants of that type.
-     Non-apparel products go to their individual product page as before. ── */
   const handleResultClick = (p) => {
-    if (p.category === "Apparel") {
-      navigate(`/shop?category=Apparel&sub=${encodeURIComponent(p.subCategory)}`);
-    } else {
-      navigate(`/product/${p.id}`);
-    }
+    navigate(`/product/${p.id}`);
     closeSearch();
   };
 
@@ -547,10 +479,8 @@ export default function Header() {
                       onKeyDown={e => e.key === "Enter" && handleResultClick(p)}
                     >
                       <div className="search-result-item__img-wrap">
-                        {/* ── FIX: always use p.image (the main product image string),
-                            never p.images (the variants array) ── */}
                         <img
-                          src={typeof p.image === "string" ? p.image : p.images[0]}
+                          src={p.image}
                           alt={p.name}
                           className="search-result-item__img"
                           loading="lazy"
@@ -558,12 +488,7 @@ export default function Header() {
                       </div>
                       <div className="search-result-item__info">
                         <p className="search-result-item__cat">{p.category}</p>
-                        <p className="search-result-item__name">
-                          {/* ── FIX: for apparel show the subCategory label
-                              ("Polo", "Round Neck", "Hoodie") instead of
-                              the raw name which includes the colour variant ── */}
-                          {p.category === "Apparel" ? p.subCategory : p.name}
-                        </p>
+                        <p className="search-result-item__name">{p.name}</p>
                       </div>
                       <div className="search-result-item__arrow" aria-hidden="true">→</div>
                     </div>

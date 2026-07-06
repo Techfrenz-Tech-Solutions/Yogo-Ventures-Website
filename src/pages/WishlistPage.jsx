@@ -1,20 +1,6 @@
-// src/pages/WishlistPage.jsx
-//
-// FIX (apparel wishlist display):
-//   Apparel products share a subCategory (Polo / Round Neck / Hoodies).
-//   All colour variants are wishlisted together as a group (all IDs stored).
-//   This page deduplicates them: for each apparel subCategory that has ANY
-//   wishlisted variant, exactly ONE card is shown — using the lowest-ID
-//   product (= slides[0], the "main" image) as the representative.
-//   All other product types are unaffected and shown as before.
-//
-// FIX 2: Heart burst animation now fires on removal (unclick) as well.
-// FIX 3: Hero banner matches ContactPage — uses var(--deep) via section--dark,
-//         flush against header (margin-top: -72px), text white. Theme-reactive
-//         because it reads the same CSS variable the footer/contact page use.
-
+// src/pages/WishlistPage.jsx — resolves wishlisted ids against real backend products
 import React from "react";
-import { PRODUCTS } from "../data/products";
+import { useProducts } from "../hooks/useProducts";
 import { useApp } from "../context/AppContext";
 import { Link } from "react-router-dom";
 import { useScrollReveal } from "../hooks/useScrollReveal";
@@ -22,35 +8,10 @@ import "./ShopPage.css";
 import "./WishlistPage.css";
 
 /* ─────────────────────────────────────────────────────────────────
-   Deduplicate wishlisted products so apparel subcategory groups
-   appear as a single card (lowest-id variant = main/first image).
+   Heart button — removes the item from the wishlist. Burst animation
+   fires on every click.
    ──────────────────────────────────────────────────────────────── */
-function deduplicateWishlistProducts(wishlistedProducts) {
-  const seen   = new Set();
-  const result = [];
-
-  const sorted = [...wishlistedProducts].sort((a, b) => a.id - b.id);
-
-  for (const p of sorted) {
-    if (p.category === "Apparel") {
-      const groupKey = `apparel|${p.subCategory}`;
-      if (!seen.has(groupKey)) {
-        seen.add(groupKey);
-        result.push(p);
-      }
-    } else {
-      result.push(p);
-    }
-  }
-
-  return result;
-}
-
-/* ─────────────────────────────────────────────────────────────────
-   Heart button — removes the ENTIRE apparel group from the wishlist.
-   Burst animation fires on every click (add AND remove).
-   ──────────────────────────────────────────────────────────────── */
-function WishlistHeartBtn({ product, allWishlistedProducts, onToggle }) {
+function WishlistHeartBtn({ productId, onToggle }) {
   const [particles, setParticles] = React.useState([]);
   const [removing,  setRemoving]  = React.useState(false);
 
@@ -59,7 +20,7 @@ function WishlistHeartBtn({ product, allWishlistedProducts, onToggle }) {
 
     const burst = Array.from({ length: 8 }, (_, i) => {
       const angle = (i / 8) * 2 * Math.PI;
-      const dist  = 20 + Math.random() * 12;
+      const dist = 20 + Math.random() * 12;
       return {
         id:   Date.now() + i,
         tx:   Math.cos(angle) * dist,
@@ -71,14 +32,7 @@ function WishlistHeartBtn({ product, allWishlistedProducts, onToggle }) {
     setRemoving(true);
 
     setTimeout(() => {
-      if (product.category === "Apparel") {
-        const groupIds = allWishlistedProducts
-          .filter(p => p.category === "Apparel" && p.subCategory === product.subCategory)
-          .map(p => p.id);
-        groupIds.forEach(id => onToggle(id));
-      } else {
-        onToggle(product.id);
-      }
+      onToggle(productId);
       setParticles([]);
       setRemoving(false);
     }, 420);
@@ -119,15 +73,15 @@ function WishlistHeartBtn({ product, allWishlistedProducts, onToggle }) {
    ──────────────────────────────────────────────────────────────── */
 export default function WishlistPage() {
   const { wishlist, toggleWishlist } = useApp();
+  const { products, loading } = useProducts();
   useScrollReveal([wishlist.length]);
 
-  const allWishlistedProducts = PRODUCTS.filter(p => wishlist.includes(p.id));
-  const displayProducts       = deduplicateWishlistProducts(allWishlistedProducts);
+  const displayProducts = products.filter(p => wishlist.includes(p.id));
 
   return (
     <main className="page-enter wishlist-page" aria-label="Wishlist">
 
-      {/* ── HERO — mirrors ContactPage: section--dark + page-hero ── */}
+      {/* ── HERO ── */}
       <section className="page-hero section--dark wishlist-hero">
         <div className="container">
           <span
@@ -148,13 +102,12 @@ export default function WishlistPage() {
       {/* ── CARDS ── */}
       <div className="wishlist-body">
         <div className="container wishlist-container">
-          {displayProducts.length > 0 ? (
+          {loading ? (
+            <p style={{ textAlign: "center", padding: "40px 0" }}>Loading…</p>
+          ) : displayProducts.length > 0 ? (
             <div className="sp-products-grid">
               {displayProducts.map(p => (
-                <article
-                  key={p.category === "Apparel" ? `apparel|${p.subCategory}` : p.id}
-                  className="sp-card reveal"
-                >
+                <article key={p.id} className="sp-card reveal">
                   <div className="sp-card__img-wrap">
                     <Link to={`/product/${p.id}`} tabIndex={-1}>
                       <img
@@ -164,11 +117,7 @@ export default function WishlistPage() {
                         loading="lazy"
                       />
                     </Link>
-                    <WishlistHeartBtn
-                      product={p}
-                      allWishlistedProducts={allWishlistedProducts}
-                      onToggle={toggleWishlist}
-                    />
+                    <WishlistHeartBtn productId={p.id} onToggle={toggleWishlist} />
                     {!p.stock && <div className="sp-card__oos">Out of Stock</div>}
                   </div>
                   <div className="sp-card__info">

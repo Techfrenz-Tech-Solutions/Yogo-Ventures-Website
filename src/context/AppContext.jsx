@@ -1,6 +1,5 @@
 // src/context/AppContext.js
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
-import { VALID_PRODUCTS } from "../data/products";
 
 const AppContext = createContext(null);
 
@@ -16,9 +15,7 @@ export function AppProvider({ children }) {
     try {
       const stored = localStorage.getItem("yogo_recently_viewed");
       const parsed = stored ? JSON.parse(stored) : [];
-      return Array.isArray(parsed)
-        ? parsed.filter(p => p && p.id && VALID_PRODUCTS.some(vp => vp.id === p.id))
-        : [];
+      return Array.isArray(parsed) ? parsed.filter(p => p && p.id != null) : [];
     } catch {
       return [];
     }
@@ -219,7 +216,7 @@ export function AppProvider({ children }) {
     try {
       const stored = localStorage.getItem("yogo_wishlist");
       const parsed = stored ? JSON.parse(stored) : [];
-      return Array.isArray(parsed) ? parsed.filter(id => VALID_PRODUCTS.some(p => p.id === id)) : [];
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
       return [];
     }
