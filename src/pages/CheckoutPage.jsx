@@ -2,41 +2,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import { COUNTRY_LIST } from "../data/countries";
+import { ISD_CODES } from "../data/countries";
+import Api from "../utils/Api";
 import "./CheckoutPage.css";
-
-const ISD_CODES = [
-  { code: "+93",  label: "🇦🇫 +93",  country: "Afghanistan" },
-  { code: "+61",  label: "🇦🇺 +61",  country: "Australia" },
-  { code: "+973", label: "🇧🇭 +973", country: "Bahrain" },
-  { code: "+880", label: "🇧🇩 +880", country: "Bangladesh" },
-  { code: "+1",   label: "🇨🇦 +1",   country: "Canada" },
-  { code: "+86",  label: "🇨🇳 +86",  country: "China" },
-  { code: "+49",  label: "🇩🇪 +49",  country: "Germany" },
-  { code: "+33",  label: "🇫🇷 +33",  country: "France" },
-  { code: "+91",  label: "🇮🇳 +91",  country: "India" },
-  { code: "+62",  label: "🇮🇩 +62",  country: "Indonesia" },
-  { code: "+39",  label: "🇮🇹 +39",  country: "Italy" },
-  { code: "+81",  label: "🇯🇵 +81",  country: "Japan" },
-  { code: "+60",  label: "🇲🇾 +60",  country: "Malaysia" },
-  { code: "+960", label: "🇲🇻 +960", country: "Maldives" },
-  { code: "+977", label: "🇳🇵 +977", country: "Nepal" },
-  { code: "+64",  label: "🇳🇿 +64",  country: "New Zealand" },
-  { code: "+968", label: "🇴🇲 +968", country: "Oman" },
-  { code: "+92",  label: "🇵🇰 +92",  country: "Pakistan" },
-  { code: "+63",  label: "🇵🇭 +63",  country: "Philippines" },
-  { code: "+974", label: "🇶🇦 +974", country: "Qatar" },
-  { code: "+966", label: "🇸🇦 +966", country: "Saudi Arabia" },
-  { code: "+65",  label: "🇸🇬 +65",  country: "Singapore" },
-  { code: "+82",  label: "🇰🇷 +82",  country: "South Korea" },
-  { code: "+94",  label: "🇱🇰 +94",  country: "Sri Lanka" },
-  { code: "+66",  label: "🇹🇭 +66",  country: "Thailand" },
-  { code: "+971", label: "🇦🇪 +971", country: "United Arab Emirates" },
-  { code: "+44",  label: "🇬🇧 +44",  country: "United Kingdom" },
-  { code: "+1",   label: "🇺🇸 +1",   country: "United States" },
-  { code: "+84",  label: "🇻🇳 +84",  country: "Vietnam" },
-  { code: "+27",  label: "🇿🇦 +27",  country: "South Africa" },
-];
 
 const validatePhone = (v) => {
   if (!v || v.trim() === "") return "";
@@ -59,6 +27,26 @@ export default function CheckoutPage() {
   const [submitted, setSubmitted] = useState(false);
   const [showBlast, setShowBlast] = useState(false);
   const [orderId,   setOrderId]   = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  // ── Live country list — GET /country/countrylist ──────────────────────────
+  const [countryList,      setCountryList]      = useState([]);
+  const [countriesLoading, setCountriesLoading] = useState(true);
+  const [countriesError,   setCountriesError]   = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    Api.get("/country/countrylist")
+      .then((res) => {
+        if (cancelled) return;
+        // Shape: { status: 1, data: [{ id, country_code, country_name }] }
+        const list = Array.isArray(res.data?.data) ? res.data.data : [];
+        setCountryList([...list].sort((a, b) => a.id - b.id));
+      })
+      .catch(() => { if (!cancelled) setCountriesError(true); })
+      .finally(() => { if (!cancelled) setCountriesLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
 
   const getColorCustomizations = (item) =>
     item.colorCustomization?.length > 0
@@ -67,21 +55,6 @@ export default function CheckoutPage() {
 
   const formatColorLine = (color) =>
     `${color.name} (${color.hex.toUpperCase()}) ×${color.quantity}`;
-
-  // Build the read-only "Products Selected" textarea value
-  const productsSelectedText = cart.length > 0
-    ? cart.map(item => {
-        const colors = getColorCustomizations(item);
-        const header = `${item.name} × ${item.qty}`;
-        if (colors.length > 0) {
-          const colorLines = colors
-            .map(c => `  • ${c.name} | ${c.hex.toUpperCase()} × ${c.quantity}`)
-            .join("\n");
-          return `${header}\n${colorLines}`;
-        }
-        return header;
-      }).join("\n\n")
-    : "No products selected";
 
   const change = field => e => {
     const value = e.target.value;
@@ -92,7 +65,7 @@ export default function CheckoutPage() {
     }
     // Auto-load ISD code when country is selected
     if (field === "country") {
-      const selectedCountry = COUNTRY_LIST.find(item => item.country === value);
+      const selectedCountry = ISD_CODES.find(item => item.country === value);
       if (selectedCountry) {
         setIsdCode(selectedCountry.code);
       }
@@ -134,7 +107,7 @@ export default function CheckoutPage() {
     return e;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const e = validate();
     setErrors(e);
     const hasErrors = Object.values(e).some(Boolean);
@@ -146,12 +119,51 @@ export default function CheckoutPage() {
       }
       return;
     }
-    const nextOrderId = Math.random().toString(36).slice(2, 10).toUpperCase();
-    setOrderId(nextOrderId);
-    setShowBlast(true);
-    showToast(`Enquiry has been sent, we will reach you soon. Quote #${nextOrderId}`);
-    setSubmitted(true);
-    clearCart();
+
+    setSubmitting(true);
+    try {
+      // Build one product_name string from all cart items
+      const productNames = cart.length > 0
+        ? cart.map(item => {
+            const colors = getColorCustomizations(item);
+            const base = `${item.name} ×${item.qty}`;
+            if (colors.length > 0) {
+              const colorStr = colors
+                .map(c => `${c.name} (${c.hex.toUpperCase()}) ×${c.quantity}`)
+                .join(", ");
+              return `${base} [${colorStr}]`;
+            }
+            return base;
+          }).join("; ")
+        : "No products selected";
+
+      await Api.post("/quoteenquire/enquiry-quotecreate", {
+        product_name:  productNames,
+        qty:           cart.reduce((sum, item) => sum + item.qty, 0),
+        color:         cart.flatMap(item => getColorCustomizations(item)).map(c => c.name).join(", ") || "",
+        first_name:    form.firstName.trim(),
+        last_name:     form.lastName.trim(),
+        email_id:      form.email.trim(),
+        country:       form.country,
+        phone_number:  `${isdCode}${form.phone.trim()}`,
+        message:       form.message.trim(),
+      });
+
+      const nextOrderId = Math.random().toString(36).slice(2, 10).toUpperCase();
+      setOrderId(nextOrderId);
+      setShowBlast(true);
+      showToast(`Enquiry has been sent, we will reach you soon. Quote #${nextOrderId}`);
+      setSubmitted(true);
+      clearCart();
+    } catch (err) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        "Something went wrong. Please try again.";
+      showToast(msg);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -294,11 +306,14 @@ export default function CheckoutPage() {
                     onChange={change("country")}
                     onBlur={validateField("country")}
                     autoComplete="country-name"
+                    disabled={countriesLoading || countriesError}
                   >
-                    <option value="">Select Country</option>
-                    {COUNTRY_LIST.map((item, idx) => (
-                      <option key={`${item.code}-${idx}`} value={item.country}>
-                        {item.country}
+                    {countriesLoading && <option value="">Loading countries…</option>}
+                    {countriesError   && <option value="">Failed to load — please refresh</option>}
+                    {!countriesLoading && !countriesError && <option value="">Select Country</option>}
+                    {countryList.map((item) => (
+                      <option key={item.id} value={item.country_name}>
+                        {item.country_name}
                       </option>
                     ))}
                   </select>
@@ -317,7 +332,7 @@ export default function CheckoutPage() {
                       onChange={e => setIsdCode(e.target.value)}
                       aria-label="ISD country code"
                     >
-                      {COUNTRY_LIST.map((item, idx) => (
+                      {ISD_CODES.map((item, idx) => (
                         <option key={`${item.code}-${idx}`} value={item.code}>
                           {item.flag} {item.code} ({item.country})
                         </option>
@@ -440,9 +455,11 @@ export default function CheckoutPage() {
                 type="button"
                 className="btn btn-primary btn-block btn-lg"
                 onClick={handleSubmit}
+                disabled={submitting}
+                aria-busy={submitting}
                 aria-label="Send enquiry"
               >
-                Get Quote
+                {submitting ? "Sending…" : "Get Quote"}
               </button>
             </div>
           </aside>
