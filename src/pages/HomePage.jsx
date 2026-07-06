@@ -1,5 +1,5 @@
 ﻿// src/pages/HomePage.jsx — Yogo Ventures
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link }      from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { gsap }      from "gsap";
@@ -12,7 +12,20 @@ import { FAQSection }          from "../components/home/FAQSection";
 import { BEST_SELLERS, NEW_ARRIVALS } from "../data/products";
 import { useApp }              from "../context/AppContext";
 import EnquirySection           from "../components/home/EnquirySection";
+import Api                      from "../utils/Api";
+import { storageUrl }           from "../utils/imageUrl";
 import "./HomePage.css";
+
+// Admin-managed best-sellers/new-arrivals only carry a name + image (no
+// price/sizes/detail page), so they render as simple cards linking to the
+// shop rather than a product detail page.
+const fromBackend = (row, prefix) => ({
+  id: `${prefix}-${row.id}`,
+  name: row.product_name,
+  image: storageUrl(row.image),
+  stock: true,
+  _source: "backend",
+});
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -102,11 +115,12 @@ function HeartIconBtn({ filled, onClick, label }) {
 function HomeProductCard({ product }) {
   const { toggleWishlist, wishlist } = useApp();
   const isWishlisted = wishlist.includes(product.id);
+  const href = product._source === "backend" ? "/shop" : `/product/${product.id}`;
 
   return (
     <article className="hpc" aria-label={product.name}>
       <div className="hpc__img-wrap">
-        <Link to={`/product/${product.id}`} tabIndex={-1}>
+        <Link to={href} tabIndex={-1}>
           <img src={product.image} alt={product.name} className="hpc__img" loading="lazy" />
         </Link>
         <span className="hpc__badge">
@@ -121,7 +135,7 @@ function HomeProductCard({ product }) {
         {!product.stock && <div className="hpc__oos">Out of Stock</div>}
       </div>
       <div className="hpc__info">
-        <Link to={`/product/${product.id}`} className="hpc__name">{product.name}</Link>
+        <Link to={href} className="hpc__name">{product.name}</Link>
       </div>
     </article>
   );
@@ -130,11 +144,12 @@ function HomeProductCard({ product }) {
 function NewArrivalCard({ product }) {
   const { toggleWishlist, wishlist } = useApp();
   const isWishlisted = wishlist.includes(product.id);
+  const href = product._source === "backend" ? "/shop" : `/product/${product.id}`;
 
   return (
     <article className="hpc" aria-label={product.name}>
       <div className="hpc__img-wrap">
-        <Link to={`/product/${product.id}`} tabIndex={-1}>
+        <Link to={href} tabIndex={-1}>
           <img src={product.image} alt={product.name} className="hpc__img" loading="lazy" />
         </Link>
         <span className="hpc__badge hpc__badge--new">
@@ -149,16 +164,34 @@ function NewArrivalCard({ product }) {
         {!product.stock && <div className="hpc__oos">Out of Stock</div>}
       </div>
       <div className="hpc__info">
-        <Link to={`/product/${product.id}`} className="hpc__name">{product.name}</Link>
+        <Link to={href} className="hpc__name">{product.name}</Link>
       </div>
     </article>
   );
 }
 
 export default function HomePage() {
-  const bestSellers = BEST_SELLERS;
-  const newArrivals = NEW_ARRIVALS;
+  const [bestSellers, setBestSellers] = useState(BEST_SELLERS);
+  const [newArrivals, setNewArrivals] = useState(NEW_ARRIVALS);
   const navigate    = useNavigate();
+
+  // Pull admin-managed best-sellers / new-arrivals from the backend; keep the
+  // static catalog as a fallback if the backend has nothing yet (or is down).
+  useEffect(() => {
+    Api.get('/bestselling/best-sellinglist')
+      .then(res => {
+        const rows = Array.isArray(res.data) ? res.data : (res.data?.data ?? []);
+        if (rows.length > 0) setBestSellers(rows.map(r => fromBackend(r, 'bs')));
+      })
+      .catch(() => {});
+
+    Api.get('/newarrival/new-arrivallist')
+      .then(res => {
+        const rows = Array.isArray(res.data) ? res.data : (res.data?.data ?? []);
+        if (rows.length > 0) setNewArrivals(rows.map(r => fromBackend(r, 'na')));
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
