@@ -15,14 +15,16 @@
    ============================================================ */
 .home-products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
-  max-width: 1060px;
+  max-width: 1140px;
   margin-left: auto;
   margin-right: auto;
 }
 .home-products-grid--5 {
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
   max-width: none;
 }
 
@@ -32,7 +34,7 @@
 .hpc {
   background: var(--white);
   border: 1.5px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: 14px;
   overflow: hidden;
   transition: all 0.35s var(--ease);
   position: relative;
@@ -45,6 +47,7 @@
 
 .hpc__img-wrap {
   position: relative;
+  width: 100%;
   aspect-ratio: 1;
   background: var(--off-white);
   overflow: hidden;
@@ -186,19 +189,7 @@
   flex-wrap: wrap;
 }
 
-@media (max-width: 768px) {
-  .home-products-grid,
-  .home-products-grid--5 {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  }
-}
 
-@media (max-width: 480px) {
-  .home-products-grid,
-  .home-products-grid--5 {
-    grid-template-columns: 1fr;
-  }
-}
 
 /* ============================================================
    NEW ARRIVALS CTA
@@ -619,12 +610,16 @@ section[aria-labelledby="new-arrivals-heading"] > * {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1280px) {
-  .home-products-grid    { grid-template-columns: repeat(4, 1fr); }
+  .home-products-grid,
   .home-products-grid--5 { grid-template-columns: repeat(4, 1fr); }
 }
 @media (max-width: 1024px) {
-  .home-products-grid    { grid-template-columns: repeat(3, 1fr); }
+  .home-products-grid,
   .home-products-grid--5 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .home-products-grid,
+  .home-products-grid--5 { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
 }
 @media (max-width: 640px) {
   .home-products-grid    { grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: none; }
@@ -632,6 +627,10 @@ section[aria-labelledby="new-arrivals-heading"] > * {
   .home-products__cta    { flex-direction: column; gap: 12px; }
   .why-section,
   .why-us-section        { padding-block: 70px !important; }
+}
+@media (max-width: 480px) {
+  .home-products-grid,
+  .home-products-grid--5 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
 }
 
 

@@ -179,14 +179,18 @@ export default function HomePage() {
     Api.get('/bestselling/best-sellinglist')
       .then(res => {
         const rows = Array.isArray(res.data) ? res.data : (res.data?.data ?? []);
-        setBestSellers(rows.map(r => fromBackend(r, 'bs')));
+        // Sort by id ascending — first uploaded shows first
+        const sorted = [...rows].sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+        setBestSellers(sorted.map(r => fromBackend(r, 'bs')));
       })
       .catch(() => setBestSellers([]));
 
     Api.get('/newarrival/new-arrivallist')
       .then(res => {
         const rows = Array.isArray(res.data) ? res.data : (res.data?.data ?? []);
-        setNewArrivals(rows.map(r => fromBackend(r, 'na')));
+        // Sort by id ascending — first uploaded shows first
+        const sorted = [...rows].sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+        setNewArrivals(sorted.map(r => fromBackend(r, 'na')));
       })
       .catch(() => setNewArrivals([]));
   }, []);
@@ -261,50 +265,55 @@ export default function HomePage() {
       <CategoriesSection />
 
       {/* 3. BEST SELLING PRODUCTS */}
-      {bestSellers.length > 0 && (
-        <section className="section section--alt" aria-labelledby="bestsellers-heading">
-          <div className="container">
-            <header className="section-header reveal">
-              <span className="section-tag">Best Sellers</span>
-              <h2 className="section-title" id="bestsellers-heading">Best Selling Products</h2>
-            </header>
-            <div className="home-products-grid">
-              {bestSellers.map((p) =>
-                p ? <HomeProductCard key={p.id} product={p} /> : null
-              )}
-            </div>
-            <div className="home-products__cta reveal">
-              <Link
-                to="/shop"
-                className="btn btn--footer-theme btn-lg"
-                style={{ textDecoration: "none" }}
-              >
-                View All Products →
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
+      <section className="section section--alt" aria-labelledby="bestsellers-heading">
+        <div className="container">
+          <header className="section-header reveal">
+            <span className="section-tag">Best Sellers</span>
+            <h2 className="section-title" id="bestsellers-heading">Best Selling Products</h2>
+            <p className="section-subtitle">
+              Our most loved products — trusted by buyers across the globe for quality and craftsmanship.
+            </p>
+          </header>
+          {bestSellers.length > 0 && (
+            <>
+              <div className="home-products-grid">
+                {bestSellers.map((p) =>
+                  p ? <HomeProductCard key={p.id} product={p} /> : null
+                )}
+              </div>
+              <div className="home-products__cta reveal">
+                <Link
+                  to="/shop"
+                  className="btn btn--footer-theme btn-lg"
+                  style={{ textDecoration: "none" }}
+                >
+                  View All Products →
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
 
       {/* 5. NEW ARRIVALS */}
-      {newArrivals.length > 0 && (
-        <section className="section" aria-labelledby="new-arrivals-heading">
-          <div className="container">
-            <header className="section-header reveal">
-              <span className="section-tag">New Arrivals</span>
-              <h2 className="section-title" id="new-arrivals-heading">New Arrivals</h2>
-              <p className="section-subtitle">
-                Fresh additions — be the first to discover our latest products.
-              </p>
-            </header>
+      <section className="section" aria-labelledby="new-arrivals-heading">
+        <div className="container">
+          <header className="section-header reveal">
+            <span className="section-tag">New Arrivals</span>
+            <h2 className="section-title" id="new-arrivals-heading">New Arrivals</h2>
+            <p className="section-subtitle">
+              Fresh additions — be the first to discover our latest products.
+            </p>
+          </header>
+          {newArrivals.length > 0 && (
             <div className="home-products-grid home-products-grid--5">
               {newArrivals.map((p) =>
                 p ? <NewArrivalCard key={p.id} product={p} /> : null
               )}
             </div>
-          </div>
-        </section>
-      )}
+          )}
+        </div>
+      </section>
 
       {/* 5b. SOURCING CTA */}
       <section className="sourcing-cta-section" aria-labelledby="sourcing-heading">

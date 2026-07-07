@@ -2,25 +2,27 @@ import { useState, useEffect } from "react";
 import Api from "../utils/Api";
 
 // Fetches real categories + sub-categories from the backend.
-// Returns categories as plain name strings, and subCategoriesByCategory as
-// { [categoryName]: string[] } for building a dependent filter tree.
+// Returns categories as plain name strings sorted by DB id (ascending),
+// and subCategoriesByCategory as { [categoryName]: string[] }.
 export function useCategories() {
-  const [categories, setCategories]     = useState([]);
+  const [categories, setCategories]                       = useState([]);
   const [subCategoriesByCategory, setSubCategoriesByCategory] = useState({});
-  const [loading, setLoading]           = useState(true);
+  const [loading, setLoading]                             = useState(true);
 
   useEffect(() => {
     let cancelled = false;
 
     Promise.all([
-      Api.get('/category/categorydropdown'),
+      Api.get('/country/categorydropdown'),
       Api.get('/subcategory/sub-categorylist'),
     ])
       .then(([catRes, subRes]) => {
         if (cancelled) return;
 
         const catRows = Array.isArray(catRes.data) ? catRes.data : (catRes.data?.data ?? []);
-        setCategories(catRows.map(c => c.category_name).filter(Boolean));
+        // Sort by id ascending — matches DB insertion order (ids 8,9,10,11…)
+        const sorted = [...catRows].sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+        setCategories(sorted.map(c => c.category_name).filter(Boolean));
 
         const subRows = Array.isArray(subRes.data) ? subRes.data : (subRes.data?.data ?? []);
         const grouped = {};
