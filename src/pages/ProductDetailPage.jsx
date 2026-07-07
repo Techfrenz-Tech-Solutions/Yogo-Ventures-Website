@@ -673,7 +673,10 @@ export default function ProductDetailPage() {
   const { products, loading } = useProducts();
 
   const product = useMemo(() => products.find(p => p.id === Number(id)), [products, id]);
-  const isApparel = product?.category === "Apparel";
+  // Backend category names are free text (admin-typed in Category Master, no
+  // enforced casing) — match loosely rather than requiring the exact literal
+  // "Apparel" the old static catalog always had.
+  const isApparel = Boolean(product?.category?.toLowerCase().includes("apparel"));
 
   const [qty,             setQty]             = useState("");
   const [qtyError,        setQtyError]        = useState(false);

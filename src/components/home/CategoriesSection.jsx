@@ -44,10 +44,13 @@ export function CategoriesSection() {
   const navigate = useNavigate();
   const { products } = useProducts();
 
-  const tshirtCount = products.filter(p => p.category === "Apparel").length;
-  const foamCount = products.filter(p => p.category === "Memory Foam Products").length;
-  const copperCount = products.filter(p => p.category === "Copper Utensils").length;
-  const craftCount = products.filter(p => p.category === "Handicraft Items").length;
+  // Backend category names are free text (admin-typed, no enforced casing),
+  // so match loosely instead of requiring an exact literal string.
+  const matchesCategory = (cat, needle) => (cat ?? "").toLowerCase().includes(needle);
+  const tshirtCount = products.filter(p => matchesCategory(p.category, "apparel")).length;
+  const foamCount = products.filter(p => matchesCategory(p.category, "memory foam")).length;
+  const copperCount = products.filter(p => matchesCategory(p.category, "copper")).length;
+  const craftCount = products.filter(p => matchesCategory(p.category, "handicraft")).length;
 
   return (
     <section className="cats-section section" aria-labelledby="categories-heading">
