@@ -52,7 +52,7 @@ const FieldError = ({ id, message }) =>
    COMPONENT
    ════════════════════════════════════════════ */
 export default function EnquirySection() {
-  // ── Live country list — GET /country/countrylist ────────────────────────
+  // ── Live country list — GET /country/countrydropdown (public) ───────────
   const [countryList,      setCountryList]      = useState([]);
   const [countriesLoading, setCountriesLoading] = useState(true);
   const [countriesError,   setCountriesError]   = useState(false);
@@ -66,7 +66,7 @@ export default function EnquirySection() {
     let cancelled = false;
 
     // Fetch countries
-    Api.get("/country/countrylist")
+    Api.get("/country/countrydropdown")
       .then((res) => {
         if (cancelled) return;
         // Shape: { status: 1, data: [{ id, country_code, country_name }] }
