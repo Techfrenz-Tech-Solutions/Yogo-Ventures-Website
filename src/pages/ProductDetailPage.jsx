@@ -30,6 +30,271 @@ import sublimationImg    from "../Assets/Fabrics/Sublimation.jpg";
 const ZOOM_FACTOR = 3;
 
 /* ─────────────────────────────────────────────────────────────────
+   COLOR HELPERS — for the standalone "Colour Customization" spectrum
+   picker (Apparel only). This is a free-form custom-color request tool,
+   not tied to any specific product's data.
+   ──────────────────────────────────────────────────────────────── */
+
+function hslToHex(h, s, l) {
+  s /= 100; l /= 100;
+  const a = s * Math.min(l, 1 - l);
+  const f = n => {
+    const k = (n + h / 30) % 12;
+    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color).toString(16).padStart(2, "0");
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return { r, g, b };
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s;
+  let l = (max + min) / 2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      default: h = ((r - g) / d + 4) / 6;
+    }
+  }
+  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+}
+
+const COLOR_NAMES = [
+  { name: "Black",        h: 0,   s: 0,   l: 0   },
+  { name: "White",        h: 0,   s: 0,   l: 100 },
+  { name: "Charcoal",     h: 210, s: 10,  l: 20  },
+  { name: "Dark Grey",    h: 0,   s: 0,   l: 30  },
+  { name: "Grey",         h: 0,   s: 0,   l: 50  },
+  { name: "Light Grey",   h: 0,   s: 0,   l: 75  },
+  { name: "Navy Blue",    h: 222, s: 100, l: 18  },
+  { name: "Royal Blue",   h: 211, s: 100, l: 36  },
+  { name: "Sky Blue",     h: 203, s: 90,  l: 64  },
+  { name: "Cobalt Blue",  h: 215, s: 100, l: 45  },
+  { name: "Powder Blue",  h: 207, s: 52,  l: 76  },
+  { name: "Teal",         h: 180, s: 100, l: 25  },
+  { name: "Cyan",         h: 180, s: 100, l: 50  },
+  { name: "Forest Green", h: 120, s: 61,  l: 25  },
+  { name: "Sage Green",   h: 143, s: 22,  l: 58  },
+  { name: "Olive",        h: 80,  s: 40,  l: 33  },
+  { name: "Mint",         h: 160, s: 60,  l: 73  },
+  { name: "Lime",         h: 83,  s: 80,  l: 50  },
+  { name: "Yellow",       h: 53,  s: 95,  l: 62  },
+  { name: "Mustard",      h: 42,  s: 80,  l: 45  },
+  { name: "Gold",         h: 43,  s: 100, l: 50  },
+  { name: "Orange",       h: 30,  s: 100, l: 50  },
+  { name: "Rust",         h: 18,  s: 70,  l: 40  },
+  { name: "Red",          h: 0,   s: 100, l: 40  },
+  { name: "Crimson",      h: 348, s: 94,  l: 36  },
+  { name: "Maroon",       h: 0,   s: 100, l: 25  },
+  { name: "Pink",         h: 350, s: 100, l: 75  },
+  { name: "Hot Pink",     h: 330, s: 100, l: 60  },
+  { name: "Rose",         h: 350, s: 75,  l: 60  },
+  { name: "Blush",        h: 345, s: 55,  l: 82  },
+  { name: "Lavender",     h: 270, s: 50,  l: 75  },
+  { name: "Purple",       h: 270, s: 70,  l: 40  },
+  { name: "Indigo",       h: 245, s: 100, l: 35  },
+  { name: "Brown",        h: 20,  s: 55,  l: 30  },
+  { name: "Tan",          h: 30,  s: 50,  l: 60  },
+  { name: "Beige",        h: 35,  s: 40,  l: 78  },
+  { name: "Ivory",        h: 55,  s: 50,  l: 90  },
+  { name: "Cream",        h: 47,  s: 60,  l: 92  },
+  { name: "Off-White",    h: 30,  s: 20,  l: 95  },
+];
+
+function getColorName(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  const { h, s, l } = rgbToHsl(r, g, b);
+  let best = COLOR_NAMES[0], bestDist = Infinity;
+  for (const c of COLOR_NAMES) {
+    const dh = Math.min(Math.abs(h - c.h), 360 - Math.abs(h - c.h));
+    const dist = dh * 1.5 + Math.abs(s - c.s) + Math.abs(l - c.l) * 1.2;
+    if (dist < bestDist) { bestDist = dist; best = c; }
+  }
+  return best.name;
+}
+
+function getContrastColor(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.55 ? "#335765" : "#ffffff";
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   SPECTRUM COLOR PICKER
+   ──────────────────────────────────────────────────────────────── */
+
+const SPECTRUM_GRADIENT = [
+  "#000000 0%",
+  "#3b3b3b 6%",
+  "#001f5c 12%",
+  "#0057b8 18%",
+  "#4fc3f7 24%",
+  "#008080 30%",
+  "#2e7d32 36%",
+  "#6b8e23 42%",
+  "#f4d03f 48%",
+  "#f39c12 54%",
+  "#d62828 60%",
+  "#800020 66%",
+  "#ff6fa3 72%",
+  "#6a0dad 78%",
+  "#c8a2c8 84%",
+  "#d9b99b 90%",
+  "#ffffff 100%",
+];
+
+function sampleSpectrum(xRatio, shadeRatio) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 200; canvas.height = 1;
+  const ctx = canvas.getContext("2d");
+  const grad = ctx.createLinearGradient(0, 0, 200, 0);
+  SPECTRUM_GRADIENT.forEach(stop => {
+    const parts = stop.split(" ");
+    grad.addColorStop(parseFloat(parts[1]) / 100, parts[0]);
+  });
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 200, 1);
+  const px = Math.round(xRatio * 199);
+  const [r, g, b] = ctx.getImageData(px, 0, 1, 1).data;
+
+  let fr, fg, fb;
+  if (shadeRatio <= 0.5) {
+    const t = shadeRatio / 0.5;
+    fr = Math.round(255 + (r - 255) * t);
+    fg = Math.round(255 + (g - 255) * t);
+    fb = Math.round(255 + (b - 255) * t);
+  } else {
+    const t = (shadeRatio - 0.5) / 0.5;
+    fr = Math.round(r * (1 - t));
+    fg = Math.round(g * (1 - t));
+    fb = Math.round(b * (1 - t));
+  }
+  const toHex = v => v.toString(16).padStart(2, "0");
+  return `#${toHex(fr)}${toHex(fg)}${toHex(fb)}`;
+}
+
+const SpectrumColorPicker = memo(function SpectrumColorPicker({ onColorChange }) {
+  const spectrumRef  = useRef(null);
+  const shadeRef     = useRef(null);
+  const draggingSpec = useRef(false);
+  const draggingShade = useRef(false);
+
+  const [xRatio,     setXRatio]     = useState(0.18);
+  const [shadeRatio, setShadeRatio] = useState(0.45);
+  const [cursorX,    setCursorX]    = useState(null);
+
+  const pureHex = useMemo(() => sampleSpectrum(xRatio, 0.5), [xRatio]);
+  const pickedHex = useMemo(() => sampleSpectrum(xRatio, shadeRatio), [xRatio, shadeRatio]);
+
+  useEffect(() => {
+    onColorChange({ hex: pickedHex, name: getColorName(pickedHex) });
+  }, [pickedHex, onColorChange]);
+
+  const updateFromSpectrum = useCallback((clientX) => {
+    const strip = spectrumRef.current;
+    if (!strip) return;
+    const rect = strip.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    setXRatio(ratio);
+    setCursorX((clientX - rect.left));
+  }, []);
+
+  const updateFromShade = useCallback((clientX) => {
+    const slider = shadeRef.current;
+    if (!slider) return;
+    const rect = slider.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    setShadeRatio(ratio);
+  }, []);
+
+  useEffect(() => {
+    const onMove = (e) => {
+      if (draggingSpec.current)  updateFromSpectrum(e.clientX);
+      if (draggingShade.current) updateFromShade(e.clientX);
+    };
+    const onUp = () => { draggingSpec.current = false; draggingShade.current = false; };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup",   onUp);
+    return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
+  }, [updateFromSpectrum, updateFromShade]);
+
+  useEffect(() => {
+    const onMove = (e) => {
+      if (draggingSpec.current)  { e.preventDefault(); updateFromSpectrum(e.touches[0].clientX); }
+      if (draggingShade.current) { e.preventDefault(); updateFromShade(e.touches[0].clientX); }
+    };
+    const onEnd = () => { draggingSpec.current = false; draggingShade.current = false; };
+    window.addEventListener("touchmove", onMove, { passive: false });
+    window.addEventListener("touchend",  onEnd);
+    return () => { window.removeEventListener("touchmove", onMove); window.removeEventListener("touchend", onEnd); };
+  }, [updateFromSpectrum, updateFromShade]);
+
+  const spectrumGradientCSS = SPECTRUM_GRADIENT.map(s => {
+    const parts = s.split(" ");
+    return `${parts[0]} ${parts[1]}`;
+  }).join(", ");
+
+  const shadeGradientCSS = `linear-gradient(to right, #ffffff 0%, ${pureHex} 50%, #000000 100%)`;
+
+  const specCursorPct = `${(xRatio * 100).toFixed(1)}%`;
+  const shadeCursorPct = `${(shadeRatio * 100).toFixed(1)}%`;
+
+  return (
+    <div className="spectrum-picker">
+      <div className="spectrum-picker__label">Pick a colour</div>
+      <div
+        ref={spectrumRef}
+        className="spectrum-picker__strip"
+        style={{ background: `linear-gradient(to right, ${spectrumGradientCSS})` }}
+        onMouseDown={e => { draggingSpec.current = true; updateFromSpectrum(e.clientX); }}
+        onTouchStart={e => { e.preventDefault(); draggingSpec.current = true; updateFromSpectrum(e.touches[0].clientX); }}
+        aria-label="Colour spectrum — drag to pick a colour"
+        role="slider"
+        aria-valuenow={Math.round(xRatio * 100)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
+        <div
+          className="spectrum-picker__cursor"
+          style={{ left: specCursorPct, background: pickedHex, borderColor: getContrastColor(pickedHex) }}
+        />
+      </div>
+
+      <div className="spectrum-picker__label spectrum-picker__label--shade">Shade</div>
+      <div
+        ref={shadeRef}
+        className="spectrum-picker__shade-strip"
+        style={{ background: shadeGradientCSS }}
+        onMouseDown={e => { draggingShade.current = true; updateFromShade(e.clientX); }}
+        onTouchStart={e => { e.preventDefault(); draggingShade.current = true; updateFromShade(e.touches[0].clientX); }}
+        aria-label="Shade — drag to lighten or darken"
+        role="slider"
+        aria-valuenow={Math.round(shadeRatio * 100)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
+        <div
+          className="spectrum-picker__shade-cursor"
+          style={{ left: shadeCursorPct, background: pickedHex, borderColor: getContrastColor(pickedHex) }}
+        />
+      </div>
+    </div>
+  );
+});
+
+/* ─────────────────────────────────────────────────────────────────
    B2B CONTENT — generic capability marketing, shown for Apparel products
    ──────────────────────────────────────────────────────────────── */
 const LockSVG = () => (
@@ -403,16 +668,25 @@ const YmalCard = memo(function YmalCard({ product }) {
 export default function ProductDetailPage() {
   const { id }       = useParams();
   const navigate     = useNavigate();
-  const { addToCart, toggleWishlist, wishlist, addRecentlyViewed, setCartOpen } = useApp();
+  const { addToCart, toggleWishlist, wishlist, addRecentlyViewed, setCartOpen, mergeColorToCart } = useApp();
   const { toasts, showToast } = useToast();
   const { products, loading } = useProducts();
 
   const product = useMemo(() => products.find(p => p.id === Number(id)), [products, id]);
-  const isApparel = product?.category === "Apparel";
+  // Backend category names are free text (admin-typed in Category Master, no
+  // enforced casing) — match loosely rather than requiring the exact literal
+  // "Apparel" the old static catalog always had.
+  const isApparel = Boolean(product?.category?.toLowerCase().includes("apparel"));
 
   const [qty,             setQty]             = useState("");
   const [qtyError,        setQtyError]        = useState(false);
   const [innerImageIndex, setInnerImageIndex]  = useState(0);
+
+  // ── Color customization state (Apparel only) ─────────────────────────────
+  const [currentPickedColor, setCurrentPickedColor] = useState({ hex: "#0057b8", name: "Royal Blue" });
+  const [selectedColors,     setSelectedColors]     = useState([]);
+  const [colorQty,           setColorQty]           = useState("");
+  const [colorQtyError,      setColorQtyError]      = useState(false);
 
   const productImages = useMemo(() => {
     if (!product) return [];
@@ -431,6 +705,9 @@ export default function ProductDetailPage() {
     if (product) {
       setQty(""); setQtyError(false);
       setInnerImageIndex(0);
+      setSelectedColors([]);
+      setColorQty("");
+      setColorQtyError(false);
       addRecentlyViewed(product);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -463,6 +740,67 @@ export default function ProductDetailPage() {
   const handleToggleWishlist = useCallback(() => {
     toggleWishlist(product?.id);
   }, [toggleWishlist, product]);
+
+  // ── Color customization handlers (Apparel only) ──────────────────────────
+  const handleColorChange = useCallback((color) => {
+    setCurrentPickedColor({ hex: color.hex, name: color.name });
+  }, []);
+
+  const handleAddColor = useCallback(() => {
+    const parsedQty = parseInt(colorQty, 10);
+    if (isNaN(parsedQty) || parsedQty < 1) {
+      setColorQtyError(true);
+      showToast("Please enter a quantity before adding a colour", "warning", 2800, { position: "bottom-center" });
+      return;
+    }
+    setColorQtyError(false);
+
+    setCurrentPickedColor(prev => {
+      const snapshot = { hex: prev.hex, name: prev.name, quantity: parsedQty };
+      setSelectedColors(existing => {
+        const idx = existing.findIndex(c => c.hex === snapshot.hex);
+        if (idx !== -1) {
+          const updated = [...existing];
+          updated[idx] = snapshot;
+          return updated;
+        }
+        return [...existing, snapshot];
+      });
+      return prev;
+    });
+
+    setColorQty("");
+  }, [colorQty, showToast]);
+
+  const handleRemoveColor = useCallback((hex) => {
+    setSelectedColors(prev => prev.filter(c => c.hex !== hex));
+  }, []);
+
+  const handleColorAddToCart = useCallback(() => {
+    const stableKey = `apparel|${product.id}|colors`;
+
+    if (selectedColors.length === 0) {
+      const parsedQty = parseInt(colorQty, 10);
+      if (isNaN(parsedQty) || parsedQty < 1) {
+        setColorQtyError(true);
+        showToast("Please enter a quantity and add a colour first", "warning", 2800, { position: "bottom-center" });
+        return;
+      }
+      setColorQtyError(false);
+      const inlineColor = { hex: currentPickedColor.hex, name: currentPickedColor.name, quantity: parsedQty };
+      mergeColorToCart(product, [inlineColor], stableKey);
+      showToast("Product added to cart", "success", 2800, { position: "bottom-center", replace: true });
+      setCartOpen(true);
+      setColorQty("");
+      return;
+    }
+
+    mergeColorToCart(product, selectedColors, stableKey);
+    showToast("Product added to cart", "success", 2800, { position: "bottom-center", replace: true });
+    setCartOpen(true);
+    setSelectedColors([]);
+    setColorQty("");
+  }, [selectedColors, currentPickedColor, colorQty, product, mergeColorToCart, showToast, setCartOpen]);
 
   // ── Loading ──────────────────────────────────────────────────────────────
   if (loading) {
@@ -623,6 +961,97 @@ export default function ProductDetailPage() {
 
         {isApparel && (
           <div className="pdp-extra-content">
+            <div className="color-customization-page color-customization-page--inline">
+              <div className="section">
+                <div className="sec-eyebrow">Colours &amp; Shades</div>
+                <div className="sec-title">Colour Customization</div>
+                <p className="sec-sub">
+                  The shades in our product images are samples, not the full range. We source fabric
+                  across the complete colour spectrum to match your exact brief. Share a Pantone code,
+                  RAL reference, hex value, or physical swatch and we'll try to source the shade for
+                  your bulk order.
+                </p>
+
+                <SpectrumColorPicker onColorChange={handleColorChange} />
+
+                <div className="selected-color-display">
+                  <div
+                    className="color-swatch-lg"
+                    style={{ background: currentPickedColor.hex }}
+                  />
+                  <div className="color-info-text">
+                    <div className="color-label">{currentPickedColor.name}</div>
+                    <div className="color-hex">{currentPickedColor.hex.toUpperCase()}</div>
+                  </div>
+                </div>
+
+                <div className="quantity-wrap">
+                  <span className="quantity-label">
+                    Quantity (pcs)<span className="qty-required-mark" aria-hidden="true"> *</span>:
+                  </span>
+                  <input
+                    type="number"
+                    min="1"
+                    className={`qty-input${colorQtyError ? " qty-input--error" : ""}`}
+                    placeholder="e.g. 100"
+                    value={colorQty}
+                    aria-required="true"
+                    aria-invalid={colorQtyError}
+                    onChange={e => {
+                      setColorQty(e.target.value);
+                      if (colorQtyError && parseInt(e.target.value, 10) >= 1) setColorQtyError(false);
+                    }}
+                  />
+                  {colorQtyError && (
+                    <p className="qty-error-msg" role="alert">Please enter a quantity</p>
+                  )}
+                </div>
+
+                <div className="color-actions">
+                  <button className="btn-add-color" onClick={handleAddColor} type="button">
+                    <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2">
+                      <line x1="7" y1="2" x2="7" y2="12" />
+                      <line x1="2" y1="7" x2="12" y2="7" />
+                    </svg>
+                    Add Colour
+                  </button>
+
+                  <div className="btn-add-to-cart-wrap">
+                    <button className="btn-add-to-cart" onClick={handleColorAddToCart} type="button">
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8">
+                        <path d="M1 1h2l1.5 7h7l1.5-5H4" />
+                        <circle cx="6" cy="12" r="1" />
+                        <circle cx="11" cy="12" r="1" />
+                      </svg>
+                     Get Quote
+                    </button>
+                  </div>
+
+                </div>
+
+                {selectedColors.length > 0 && (
+                  <div className="selected-colors-list">
+                    <div className="selected-colors-title">
+                      Selected Colours ({selectedColors.length})
+                    </div>
+                    <div className="color-chips-row">
+                      {selectedColors.map((c, i) => (
+                        <div className="color-chip-item" key={`${c.hex}-${i}`}>
+                          <div className="chip-dot" style={{ background: c.hex }} />
+                          <span className="chip-label">
+                            {c.name}
+                            <span className="chip-hex"> · {c.hex.toUpperCase()}</span>
+                            {c.quantity && <span className="chip-qty"> ×{c.quantity}</span>}
+                          </span>
+                          <button className="chip-remove" onClick={() => handleRemoveColor(c.hex)} aria-label={`Remove ${c.name}`}>×</button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
             <YogoB2BContent />
           </div>
         )}
