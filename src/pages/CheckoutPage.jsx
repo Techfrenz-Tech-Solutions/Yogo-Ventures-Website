@@ -27,6 +27,7 @@ export default function CheckoutPage() {
   const [submitted, setSubmitted] = useState(false);
   const [showBlast, setShowBlast] = useState(false);
   const [orderId,   setOrderId]   = useState("");
+  const [emailSent, setEmailSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   // ── Live country list — GET /country/countrydropdown (public) ─────────────
@@ -137,7 +138,22 @@ export default function CheckoutPage() {
           }).join("; ")
         : "No products selected";
 
-      await Api.post("/quoteenquire/enquiry-quotecreate", {
+      // Structured line items (product id lets the backend re-validate/re-fetch
+      // canonical name + image rather than trusting the browser).
+      const items = cart.map(item => {
+        const colors = getColorCustomizations(item);
+        return {
+          product_id: item.id,
+          product_name: item.name,
+          quantity: item.qty,
+          variant: colors.length > 0 ? colors.map(c => c.name).join(", ") : "",
+          color: colors.length > 0 ? colors.map(c => c.name).join(", ") : "",
+          image: item.image || "",
+        };
+      });
+
+      const response = await Api.post("/quoteenquire/enquiry-quotecreate", {
+        // Legacy flattened fields — kept for the admin quote-enquiries list.
         product_name:  productNames,
         qty:           cart.reduce((sum, item) => sum + item.qty, 0),
         color:         cart.flatMap(item => getColorCustomizations(item)).map(c => c.name).join(", ") || "",
@@ -147,12 +163,22 @@ export default function CheckoutPage() {
         country:       form.country,
         phone_number:  `${isdCode}${form.phone.trim()}`,
         message:       form.message.trim(),
+        // Structured cart data for the confirmation email.
+        items,
       });
 
-      const nextOrderId = Math.random().toString(36).slice(2, 10).toUpperCase();
-      setOrderId(nextOrderId);
+      const data = response?.data || {};
+      const reference = data.quote_reference || "";
+      const wasEmailSent = data.email?.sent === true;
+
+      setOrderId(reference);
+      setEmailSent(wasEmailSent);
       setShowBlast(true);
-      showToast(`Enquiry has been sent, we will reach you soon. Quote #${nextOrderId}`);
+      showToast(
+        wasEmailSent
+          ? `Enquiry has been sent, we will reach you soon. Quote #${reference}`
+          : `Enquiry has been sent, we will reach you soon. Quote #${reference} (confirmation email pending)`
+      );
       setSubmitted(true);
       clearCart();
     } catch (err) {
@@ -192,11 +218,18 @@ export default function CheckoutPage() {
               )}
             </div>
             <h1 className="section-title">Quote Submitted!</h1>
-            <p className="checkout-success__msg">
-              Thank you for your enquiry. We've received your details and will
-              get back to you with pricing within 24 hours. A confirmation
-              will be sent to <strong>{form.email}</strong>.
-            </p>
+            {emailSent ? (
+              <p className="checkout-success__msg">
+                Thank you for your enquiry. We've received your details and will
+                get back to you with pricing within 24 hours. A confirmation
+                email has been sent to <strong>{form.email}</strong>.
+              </p>
+            ) : (
+              <p className="checkout-success__msg">
+                Your quote request was submitted successfully, but we could not
+                send the confirmation email. Our team still received your enquiry.
+              </p>
+            )}
             <div className="checkout-success__order-id">
               Quote #{orderId}
             </div>
