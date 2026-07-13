@@ -265,7 +265,6 @@ export default function EnquirySection() {
 
         {/* FORM CARD */}
         <div className="enquiry-wrapper">
-          <h2 className="enquiry-form-title">Contact us</h2>
 
           <form className="enquiry-form" onSubmit={handleSubmit} noValidate>
 

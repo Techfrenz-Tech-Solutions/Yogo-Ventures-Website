@@ -236,7 +236,7 @@ export default function ShopPage() {
       case "name-desc":
         return arr.sort((a, b) => b.name.localeCompare(a.name, undefined, { sensitivity: "base" }));
       default:
-        return arr;
+        return arr.reverse();
     }
   }, [filteredOnly, sortBy]);
 

@@ -685,8 +685,6 @@ export default function ProductDetailPage() {
   // ── Color customization state (Apparel only) ─────────────────────────────
   const [currentPickedColor, setCurrentPickedColor] = useState({ hex: "#0057b8", name: "Royal Blue" });
   const [selectedColors,     setSelectedColors]     = useState([]);
-  const [colorQty,           setColorQty]           = useState("");
-  const [colorQtyError,      setColorQtyError]      = useState(false);
 
   const productImages = useMemo(() => {
     if (!product) return [];
@@ -706,8 +704,6 @@ export default function ProductDetailPage() {
       setQty(""); setQtyError(false);
       setInnerImageIndex(0);
       setSelectedColors([]);
-      setColorQty("");
-      setColorQtyError(false);
       addRecentlyViewed(product);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -747,13 +743,13 @@ export default function ProductDetailPage() {
   }, []);
 
   const handleAddColor = useCallback(() => {
-    const parsedQty = parseInt(colorQty, 10);
+    const parsedQty = parseInt(qty, 10);
     if (isNaN(parsedQty) || parsedQty < 1) {
-      setColorQtyError(true);
+      setQtyError(true);
       showToast("Please enter a quantity before adding a colour", "warning", 2800, { position: "bottom-center" });
       return;
     }
-    setColorQtyError(false);
+    setQtyError(false);
 
     setCurrentPickedColor(prev => {
       const snapshot = { hex: prev.hex, name: prev.name, quantity: parsedQty };
@@ -769,8 +765,8 @@ export default function ProductDetailPage() {
       return prev;
     });
 
-    setColorQty("");
-  }, [colorQty, showToast]);
+    setQty("");
+  }, [qty, showToast]);
 
   const handleRemoveColor = useCallback((hex) => {
     setSelectedColors(prev => prev.filter(c => c.hex !== hex));
@@ -780,18 +776,18 @@ export default function ProductDetailPage() {
     const stableKey = `apparel|${product.id}|colors`;
 
     if (selectedColors.length === 0) {
-      const parsedQty = parseInt(colorQty, 10);
+      const parsedQty = parseInt(qty, 10);
       if (isNaN(parsedQty) || parsedQty < 1) {
-        setColorQtyError(true);
+        setQtyError(true);
         showToast("Please enter a quantity and add a colour first", "warning", 2800, { position: "bottom-center" });
         return;
       }
-      setColorQtyError(false);
+      setQtyError(false);
       const inlineColor = { hex: currentPickedColor.hex, name: currentPickedColor.name, quantity: parsedQty };
       mergeColorToCart(product, [inlineColor], stableKey);
       showToast("Product added to cart", "success", 2800, { position: "bottom-center", replace: true });
       setCartOpen(true);
-      setColorQty("");
+      setQty("");
       return;
     }
 
@@ -799,8 +795,8 @@ export default function ProductDetailPage() {
     showToast("Product added to cart", "success", 2800, { position: "bottom-center", replace: true });
     setCartOpen(true);
     setSelectedColors([]);
-    setColorQty("");
-  }, [selectedColors, currentPickedColor, colorQty, product, mergeColorToCart, showToast, setCartOpen]);
+    setQty("");
+  }, [selectedColors, currentPickedColor, qty, product, mergeColorToCart, showToast, setCartOpen]);
 
   // ── Loading ──────────────────────────────────────────────────────────────
   if (loading) {
@@ -905,39 +901,41 @@ export default function ProductDetailPage() {
               <p className="pdp-info__variant-label" style={{ marginBottom: 8 }}>{product.subCategory}</p>
             )}
 
-            <div className="pdp-info__qty-row">
-              <p className="pdp-info__variant-label">
-                Quantity
-                <span className="pdp-info__qty-required" aria-hidden="true"> *</span>
-              </p>
-              <div className={`qty-selector${qtyError ? " qty-selector--error" : ""}`}>
-                <input
-                  type="number"
-                  className="qty-selector__val"
-                  value={qty}
-                  min={1}
-                  placeholder="Enter qty"
-                  aria-label="Quantity"
-                  aria-required="true"
-                  aria-invalid={qtyError}
-                  onChange={(e) => {
-                    const raw = e.target.value;
-                    if (raw === "") { setQty(""); return; }
-                    const val = parseInt(raw, 10);
-                    if (!isNaN(val) && val >= 1) setQty(val);
-                  }}
-                  onBlur={(e) => {
-                    const val = parseInt(e.target.value, 10);
-                    if (!isNaN(val) && val < 1) setQty("");
-                  }}
-                />
-              </div>
-              {qtyError && (
-                <p className="pdp-info__qty-error" role="alert">
-                  Please enter a quantity before adding to cart
+            {!isApparel && (
+              <div className="pdp-info__qty-row">
+                <p className="pdp-info__variant-label">
+                  Quantity
+                  <span className="pdp-info__qty-required" aria-hidden="true"> *</span>
                 </p>
-              )}
-            </div>
+                <div className={`qty-selector${qtyError ? " qty-selector--error" : ""}`}>
+                  <input
+                    type="number"
+                    className="qty-selector__val"
+                    value={qty}
+                    min={1}
+                    placeholder="Enter qty"
+                    aria-label="Quantity"
+                    aria-required="true"
+                    aria-invalid={qtyError}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      if (raw === "") { setQty(""); return; }
+                      const val = parseInt(raw, 10);
+                      if (!isNaN(val) && val >= 1) setQty(val);
+                    }}
+                    onBlur={(e) => {
+                      const val = parseInt(e.target.value, 10);
+                      if (!isNaN(val) && val < 1) setQty("");
+                    }}
+                  />
+                </div>
+                {qtyError && (
+                  <p className="pdp-info__qty-error" role="alert">
+                    Please enter a quantity before adding to cart
+                  </p>
+                )}
+              </div>
+            )}
 
             <div className="pdp-info__ctas">
               {product.stock ? (
@@ -992,17 +990,20 @@ export default function ProductDetailPage() {
                   <input
                     type="number"
                     min="1"
-                    className={`qty-input${colorQtyError ? " qty-input--error" : ""}`}
+                    className={`qty-input${qtyError ? " qty-input--error" : ""}`}
                     placeholder="e.g. 100"
-                    value={colorQty}
+                    value={qty}
                     aria-required="true"
-                    aria-invalid={colorQtyError}
+                    aria-invalid={qtyError}
                     onChange={e => {
-                      setColorQty(e.target.value);
-                      if (colorQtyError && parseInt(e.target.value, 10) >= 1) setColorQtyError(false);
+                      const raw = e.target.value;
+                      if (raw === "") { setQty(""); return; }
+                      const val = parseInt(raw, 10);
+                      if (!isNaN(val) && val >= 1) setQty(val);
+                      if (qtyError && val >= 1) setQtyError(false);
                     }}
                   />
-                  {colorQtyError && (
+                  {qtyError && (
                     <p className="qty-error-msg" role="alert">Please enter a quantity</p>
                   )}
                 </div>
