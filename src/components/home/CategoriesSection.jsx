@@ -1,4 +1,5 @@
 // CategoriesSection — SVG icons, no emojis
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProducts } from "../../hooks/useProducts";
 import "./CategoriesSection.css";
@@ -40,17 +41,97 @@ const FoamIcon = () => (
   </svg>
 );
 
-export function CategoriesSection() {
+// Picks a random duration in the 4–6s window once per card instance, so
+// sibling cards don't all flip in lockstep even though they mount together.
+const randomRotationMs = () => Math.round(4000 + Math.random() * 2000);
+
+/**
+ * Rotates through a category's own product photos (already-loaded data —
+ * no extra API calls). With 0 or 1 matching products this renders exactly
+ * what the card always rendered (the static category illustration, or that
+ * single product's photo) and never starts a timer. With 2+ products it
+ * crossfades between them on its own independent interval and unwinds the
+ * interval on unmount.
+ */
+function CategoryCard({ to, accent, bg, icon, name, subtitle, fallbackImg, matchedProducts, count }) {
   const navigate = useNavigate();
+
+  // Only products with an actual photo can be rotated through; a product
+  // without an image is still counted, just not part of the visual rotation.
+  const rotationProducts = useMemo(
+    () => matchedProducts.filter(p => p.image),
+    [matchedProducts]
+  );
+
+  const [rotationMs] = useState(randomRotationMs);
+  const [index, setIndex] = useState(0);
+
+  const isRotating = rotationProducts.length > 1;
+
+  useEffect(() => {
+    if (!isRotating) return;
+    const id = setInterval(() => {
+      setIndex(i => (i + 1) % rotationProducts.length);
+    }, rotationMs);
+    return () => clearInterval(id);
+  }, [isRotating, rotationProducts.length, rotationMs]);
+
+  // Reset to the first slide if the underlying product list shrinks (e.g.
+  // fewer than `index` products left) so we never point past the end.
+  useEffect(() => {
+    if (index >= rotationProducts.length) setIndex(0);
+  }, [rotationProducts.length, index]);
+
+  const activeProduct = rotationProducts[index];
+  const displaySub = isRotating ? (activeProduct?.name || subtitle) : subtitle;
+
+  return (
+    <div
+      className="cat-card-4"
+      style={{ "--cat-accent": accent, "--cat-bg": bg }}
+      role="button"
+      tabIndex={0}
+      onClick={() => navigate(to)}
+    >
+      {isRotating ? (
+        rotationProducts.map((p, i) => (
+          <div
+            key={p.id}
+            className={`cat-card-4__bg cat-card-4__bg--layer${i === index ? " cat-card-4__bg--active" : ""}`}
+            style={{ backgroundImage: `url(${p.image})` }}
+          />
+        ))
+      ) : (
+        // 0 or 1 matching products — unchanged from the pre-rotation behaviour:
+        // always the static category illustration, no animation.
+        <div
+          className="cat-card-4__bg"
+          style={{ backgroundImage: `url(${fallbackImg})` }}
+        />
+      )}
+      <div className="cat-card-4__overlay" />
+      <div className="cat-card-4__body">
+        <span className="cat-card-4__icon">{icon}</span>
+        <h3 className="cat-card-4__name">{name}</h3>
+        <p className="cat-card-4__sub">{displaySub}</p>
+        <p className="cat-card-4__count">{count}+ products</p>
+        <span className="cat-card-4__cta">Explore →</span>
+      </div>
+    </div>
+  );
+}
+
+export function CategoriesSection() {
   const { products } = useProducts();
 
   // Backend category names are free text (admin-typed, no enforced casing),
   // so match loosely instead of requiring an exact literal string.
   const matchesCategory = (cat, needle) => (cat ?? "").toLowerCase().includes(needle);
-  const tshirtCount = products.filter(p => matchesCategory(p.category, "apparel")).length;
-  const foamCount = products.filter(p => matchesCategory(p.category, "memory foam")).length;
-  const copperCount = products.filter(p => matchesCategory(p.category, "copper")).length;
-  const craftCount = products.filter(p => matchesCategory(p.category, "handicraft")).length;
+
+  const tshirtProducts = products.filter(p => matchesCategory(p.category, "apparel"));
+  const foamProducts   = products.filter(p => matchesCategory(p.category, "memory foam"));
+  const copperProducts = products.filter(p => matchesCategory(p.category, "copper"));
+  const craftProducts  = products.filter(p => matchesCategory(p.category, "handicraft"));
 
   return (
     <section className="cats-section section" aria-labelledby="categories-heading">
@@ -65,93 +146,53 @@ export function CategoriesSection() {
 
         <nav className="cats-grid-4 reveal" aria-label="Product categories">
 
-          {/* T-SHIRTS */}
-          <div
-            className="cat-card-4"
-            style={{ "--cat-accent": "#335765", "--cat-bg": "#E8F4F6" }}
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate(`/shop?category=Apparel`)}
-          >
-            <div
-              className="cat-card-4__bg"
-              style={{ backgroundImage: `url(${cat1})` }}
-            />
-            <div className="cat-card-4__overlay" />
-            <div className="cat-card-4__body">
-              <span className="cat-card-4__icon"><ShirtIcon /></span>
-              <h3 className="cat-card-4__name">Apparel</h3>
-              <p className="cat-card-4__sub">Fashion</p>
-              <p className="cat-card-4__count">{tshirtCount}+ products</p>
-              <span className="cat-card-4__cta">Explore →</span>
-            </div>
-          </div>
+          <CategoryCard
+            to="/shop?category=Apparel"
+            accent="#335765"
+            bg="#E8F4F6"
+            icon={<ShirtIcon />}
+            name="Apparel"
+            subtitle="Fashion"
+            fallbackImg={cat1}
+            matchedProducts={tshirtProducts}
+            count={tshirtProducts.length}
+          />
 
-          {/* MEMORY FOAM */}
-          <div
-            className="cat-card-4"
-            style={{ "--cat-accent": "#4A6B8A", "--cat-bg": "#EDF3F7" }}
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate(`/shop?category=Memory Foam Products`)}
-          >
-            <div
-              className="cat-card-4__bg"
-              style={{ backgroundImage: `url(${cat2})` }}
-            />
-            <div className="cat-card-4__overlay" />
-            <div className="cat-card-4__body">
-              <span className="cat-card-4__icon"><FoamIcon /></span>
-              <h3 className="cat-card-4__name">Memory Foam Products</h3>
-              <p className="cat-card-4__sub">Sleep & Comfort</p>
-              <p className="cat-card-4__count">{foamCount}+ products</p>
-              <span className="cat-card-4__cta">Explore →</span>
-            </div>
-          </div>
+          <CategoryCard
+            to="/shop?category=Memory Foam Products"
+            accent="#4A6B8A"
+            bg="#EDF3F7"
+            icon={<FoamIcon />}
+            name="Memory Foam Products"
+            subtitle="Sleep & Comfort"
+            fallbackImg={cat2}
+            matchedProducts={foamProducts}
+            count={foamProducts.length}
+          />
 
-          {/* COPPER */}
-          <div
-            className="cat-card-4"
-            style={{ "--cat-accent": "#B87333", "--cat-bg": "#FEF6EC" }}
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate(`/shop?category=Copper Utensils`)}
-          >
-            <div
-              className="cat-card-4__bg"
-              style={{ backgroundImage: `url(${cat3})` }}
-            />
-            <div className="cat-card-4__overlay" />
-            <div className="cat-card-4__body">
-              <span className="cat-card-4__icon"><CopperIcon /></span>
-              <h3 className="cat-card-4__name">Copper Utensils</h3>
-              <p className="cat-card-4__sub">Ayurvedic Living</p>
-              <p className="cat-card-4__count">{copperCount}+ products</p>
-              <span className="cat-card-4__cta">Explore →</span>
-            </div>
-          </div>
+          <CategoryCard
+            to="/shop?category=Copper Utensils"
+            accent="#B87333"
+            bg="#FEF6EC"
+            icon={<CopperIcon />}
+            name="Copper Utensils"
+            subtitle="Ayurvedic Living"
+            fallbackImg={cat3}
+            matchedProducts={copperProducts}
+            count={copperProducts.length}
+          />
 
-          {/* HANDICRAFT */}
-          <div
-            className="cat-card-4"
-            style={{ "--cat-accent": "#7F543D", "--cat-bg": "#F5EEE8" }}
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate(`/shop?category=Handicraft Items`)}
-          >
-            <div
-              className="cat-card-4__bg"
-              style={{ backgroundImage: `url(${cat4})` }}
-            />
-            <div className="cat-card-4__overlay" />
-            <div className="cat-card-4__body">
-              <span className="cat-card-4__icon"><CraftIcon /></span>
-              <h3 className="cat-card-4__name">Handicraft Items</h3>
-              <p className="cat-card-4__sub">Authentic Indian Crafts</p>
-              <p className="cat-card-4__count">{craftCount}+ products</p>
-              <span className="cat-card-4__cta">Explore →</span>
-            </div>
-          </div>
+          <CategoryCard
+            to="/shop?category=Handicraft Items"
+            accent="#7F543D"
+            bg="#F5EEE8"
+            icon={<CraftIcon />}
+            name="Handicraft Items"
+            subtitle="Authentic Indian Crafts"
+            fallbackImg={cat4}
+            matchedProducts={craftProducts}
+            count={craftProducts.length}
+          />
 
         </nav>
       </div>

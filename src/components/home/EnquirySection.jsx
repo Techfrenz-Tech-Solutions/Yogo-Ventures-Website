@@ -135,17 +135,32 @@ export default function EnquirySection() {
     message:   validateMessage,
   };
 
+  // Resolves the dialing code for a selected country name. The database
+  // value (set by the admin in Country Master) always wins; the hardcoded
+  // ISD_CODES table is only a fallback for countries that predate the
+  // Phone Code field (or non-standard/test entries an admin hasn't fixed
+  // yet), and +91 is the last resort if neither source has a match.
+  const resolvePhoneCode = (countryName) => {
+    const dbMatch = countryList.find((c) => c.country_name === countryName);
+    if (dbMatch?.phone_code?.trim()) return dbMatch.phone_code.trim();
+
+    const staticMatch = ISD_CODES.find((item) => item.country === countryName);
+    if (staticMatch) return staticMatch.code;
+
+    return "+91";
+  };
+
   /* ── Change ── */
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "country") {
-      // Auto-update ISD code when country changes — look up from ISD_CODES
-      const selected = ISD_CODES.find((item) => item.country === value);
+      // Auto-update ISD code when country changes. Local number (form.phone)
+      // is left untouched, only the prefix changes.
       setForm((prev) => ({
         ...prev,
         country: value,
-        isdCode: selected ? selected.code : prev.isdCode,
+        isdCode: resolvePhoneCode(value),
       }));
     } else {
       setForm((prev) => ({ ...prev, [name]: value }));
@@ -330,7 +345,9 @@ export default function EnquirySection() {
               <FieldError id="enq-country-error" message={errors.country} />
             </div>
 
-            {/* Phone — ISD selector from local ISD_CODES (API has no phone codes) */}
+            {/* Phone — ISD selector. Prefers each country's DB-stored phone_code
+                (see resolvePhoneCode); ISD_CODES only fills the dropdown's
+                option list and backfills countries with no stored code. */}
             <div className="form-group">
               <label htmlFor="enq-phone">Phone Number</label>
               <div className={`phone-input-wrapper${errors.phone ? " input-error-border" : ""}`}>
@@ -341,6 +358,13 @@ export default function EnquirySection() {
                   onChange={handleChange}
                   aria-label="Country calling code"
                 >
+                  {/* A DB phone_code not present in ISD_CODES (e.g. a country an
+                      admin added with a code our static list doesn't have) still
+                      needs an <option> or the <select> silently shows the wrong
+                      code — this keeps the field truthful to the actual value. */}
+                  {!ISD_CODES.some((item) => item.code === form.isdCode) && (
+                    <option value={form.isdCode}>{form.isdCode}</option>
+                  )}
                   {ISD_CODES.map((item, i) => (
                     <option key={i} value={item.code}>
                       {item.flag} {item.code}

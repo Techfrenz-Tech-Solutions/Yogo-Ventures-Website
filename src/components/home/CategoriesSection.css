@@ -36,6 +36,18 @@
 }
 .cat-card-4:hover .cat-card-4__bg { transform: scale(1.12); }
 
+/* Rotating product photos within a category card — stacked layers that
+   crossfade via opacity. All layers are rendered (and thus start loading)
+   at once so switching the active layer never triggers a network fetch,
+   avoiding flashes / layout shift mid-transition. */
+.cat-card-4__bg--layer {
+  opacity: 0;
+  transition: opacity 0.8s ease, transform 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.cat-card-4__bg--active {
+  opacity: 1;
+}
+
 .cat-card-4__overlay {
   position: absolute;
   inset: 0;
