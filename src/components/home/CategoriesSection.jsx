@@ -2,13 +2,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProducts } from "../../hooks/useProducts";
+import Api from "../../utils/Api";
 import "./CategoriesSection.css";
-
-// ✅ Import category images (IMPORTANT FIX)
-import cat1 from "../../Assets/Categories/Category1.png";
-import cat2 from "../../Assets/Categories/Category2.png";
-import cat3 from "../../Assets/Categories/Category3.png";
-import cat4 from "../../Assets/Categories/Category4.png";
 
 // SVG icons for each category
 const CraftIcon = () => (
@@ -41,19 +36,29 @@ const FoamIcon = () => (
   </svg>
 );
 
+// category_master carries no icon/color of its own — this is a purely
+// decorative palette cycled by position so DB-driven tiles still look
+// visually distinct. It does not gate which categories render.
+const THEMES = [
+  { icon: <ShirtIcon />,  accent: "#335765", bg: "#E8F4F6" },
+  { icon: <FoamIcon />,   accent: "#4A6B8A", bg: "#EDF3F7" },
+  { icon: <CopperIcon />, accent: "#B87333", bg: "#FEF6EC" },
+  { icon: <CraftIcon />,  accent: "#7F543D", bg: "#F5EEE8" },
+];
+
 // Picks a random duration in the 4–6s window once per card instance, so
 // sibling cards don't all flip in lockstep even though they mount together.
 const randomRotationMs = () => Math.round(4000 + Math.random() * 2000);
 
 /**
  * Rotates through a category's own product photos (already-loaded data —
- * no extra API calls). With 0 or 1 matching products this renders exactly
- * what the card always rendered (the static category illustration, or that
- * single product's photo) and never starts a timer. With 2+ products it
- * crossfades between them on its own independent interval and unwinds the
- * interval on unmount.
+ * no extra API calls). With 0 matching products no image layer renders at
+ * all — just the card's flat accent background. With exactly 1 it renders
+ * that product's photo, static, and never starts a timer. With 2+ products
+ * it crossfades between them on its own independent interval and unwinds
+ * the interval on unmount.
  */
-function CategoryCard({ to, accent, bg, icon, name, subtitle, fallbackImg, matchedProducts, count }) {
+function CategoryCard({ to, accent, bg, icon, name, matchedProducts, count }) {
   const navigate = useNavigate();
 
   // Only products with an actual photo can be rotated through; a product
@@ -83,7 +88,6 @@ function CategoryCard({ to, accent, bg, icon, name, subtitle, fallbackImg, match
   }, [rotationProducts.length, index]);
 
   const activeProduct = rotationProducts[index];
-  const displaySub = isRotating ? (activeProduct?.name || subtitle) : subtitle;
 
   return (
     <div
@@ -93,27 +97,20 @@ function CategoryCard({ to, accent, bg, icon, name, subtitle, fallbackImg, match
       tabIndex={0}
       onClick={() => navigate(to)}
     >
-      {isRotating ? (
-        rotationProducts.map((p, i) => (
-          <div
-            key={p.id}
-            className={`cat-card-4__bg cat-card-4__bg--layer${i === index ? " cat-card-4__bg--active" : ""}`}
-            style={{ backgroundImage: `url(${p.image})` }}
-          />
-        ))
-      ) : (
-        // 0 or 1 matching products — unchanged from the pre-rotation behaviour:
-        // always the static category illustration, no animation.
+      {rotationProducts.map((p, i) => (
         <div
-          className="cat-card-4__bg"
-          style={{ backgroundImage: `url(${fallbackImg})` }}
+          key={p.id}
+          className={`cat-card-4__bg cat-card-4__bg--layer${i === index ? " cat-card-4__bg--active" : ""}`}
+          style={{ backgroundImage: `url(${p.image})` }}
         />
-      )}
+      ))}
       <div className="cat-card-4__overlay" />
       <div className="cat-card-4__body">
         <span className="cat-card-4__icon">{icon}</span>
         <h3 className="cat-card-4__name">{name}</h3>
-        <p className="cat-card-4__sub">{displaySub}</p>
+        {isRotating && activeProduct?.name && (
+          <p className="cat-card-4__sub">{activeProduct.name}</p>
+        )}
         <p className="cat-card-4__count">{count}+ products</p>
         <span className="cat-card-4__cta">Explore →</span>
       </div>
@@ -123,15 +120,22 @@ function CategoryCard({ to, accent, bg, icon, name, subtitle, fallbackImg, match
 
 export function CategoriesSection() {
   const { products } = useProducts();
+  const [categories, setCategories] = useState([]);
 
-  // Backend category names are free text (admin-typed, no enforced casing),
-  // so match loosely instead of requiring an exact literal string.
-  const matchesCategory = (cat, needle) => (cat ?? "").toLowerCase().includes(needle);
+  // Categories come from the backend only — no static fallback list.
+  useEffect(() => {
+    let cancelled = false;
+    Api.get('/category/categorydropdown')
+      .then(res => {
+        if (cancelled) return;
+        const rows = Array.isArray(res.data) ? res.data : (res.data?.data ?? []);
+        setCategories(rows);
+      })
+      .catch(() => { if (!cancelled) setCategories([]); });
+    return () => { cancelled = true; };
+  }, []);
 
-  const tshirtProducts = products.filter(p => matchesCategory(p.category, "apparel"));
-  const foamProducts   = products.filter(p => matchesCategory(p.category, "memory foam"));
-  const copperProducts = products.filter(p => matchesCategory(p.category, "copper"));
-  const craftProducts  = products.filter(p => matchesCategory(p.category, "handicraft"));
+  const matchesCategory = (cat, name) => (cat ?? "").toLowerCase() === name.toLowerCase();
 
   return (
     <section className="cats-section section" aria-labelledby="categories-heading">
@@ -144,57 +148,26 @@ export function CategoriesSection() {
           </p>
         </header>
 
+        {categories.length > 0 && (
         <nav className="cats-grid-4 reveal" aria-label="Product categories">
-
-          <CategoryCard
-            to="/shop?category=Apparel"
-            accent="#335765"
-            bg="#E8F4F6"
-            icon={<ShirtIcon />}
-            name="Apparel"
-            subtitle="Fashion"
-            fallbackImg={cat1}
-            matchedProducts={tshirtProducts}
-            count={tshirtProducts.length}
-          />
-
-          <CategoryCard
-            to="/shop?category=Memory Foam Products"
-            accent="#4A6B8A"
-            bg="#EDF3F7"
-            icon={<FoamIcon />}
-            name="Memory Foam Products"
-            subtitle="Sleep & Comfort"
-            fallbackImg={cat2}
-            matchedProducts={foamProducts}
-            count={foamProducts.length}
-          />
-
-          <CategoryCard
-            to="/shop?category=Copper Utensils"
-            accent="#B87333"
-            bg="#FEF6EC"
-            icon={<CopperIcon />}
-            name="Copper Utensils"
-            subtitle="Ayurvedic Living"
-            fallbackImg={cat3}
-            matchedProducts={copperProducts}
-            count={copperProducts.length}
-          />
-
-          <CategoryCard
-            to="/shop?category=Handicraft Items"
-            accent="#7F543D"
-            bg="#F5EEE8"
-            icon={<CraftIcon />}
-            name="Handicraft Items"
-            subtitle="Authentic Indian Crafts"
-            fallbackImg={cat4}
-            matchedProducts={craftProducts}
-            count={craftProducts.length}
-          />
-
+          {categories.map((cat, i) => {
+            const theme = THEMES[i % THEMES.length];
+            const matchedProducts = products.filter(p => matchesCategory(p.category, cat.category_name));
+            return (
+              <CategoryCard
+                key={cat.id}
+                to={`/shop?category=${encodeURIComponent(cat.category_name)}`}
+                accent={theme.accent}
+                bg={theme.bg}
+                icon={theme.icon}
+                name={cat.category_name}
+                matchedProducts={matchedProducts}
+                count={matchedProducts.length}
+              />
+            );
+          })}
         </nav>
+        )}
       </div>
     </section>
   );
