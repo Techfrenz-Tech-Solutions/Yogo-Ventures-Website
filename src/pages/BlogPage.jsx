@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { BLOG_POSTS } from "../data/content";
-import { useApp } from "../context/AppContext";
 import "./BlogPage.css";
 
 // Filter out About Us and Decor posts
@@ -76,7 +75,6 @@ function useScrollReveal(selector, deps) {
 export default function BlogPage() {
   const [activeCat, setActiveCat] = useState("All");
   const navigate  = useNavigate();
-  const { themeColor } = useApp();
   const altRefs   = useAltReveal([activeCat]);
 
   // Scroll-reveal for every .sr element
@@ -188,7 +186,6 @@ export default function BlogPage() {
                   </div>
                   <button
                     className="blog-read-btn"
-                    style={{ background: themeColor }}
                     onClick={() => navigate(`/blog/${post.id}`)}
                     aria-label={`Read article: ${post.title}`}
                   >

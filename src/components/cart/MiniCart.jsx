@@ -216,7 +216,6 @@ export default function MiniCart() {
   const {
     cart, cartOpen, setCartOpen,
     removeFromCart, updateQty, updateCartItem, cartCount,
-    themeColor,
   } = useApp();
 
   const navigate = useNavigate();
@@ -356,7 +355,6 @@ export default function MiniCart() {
               type="button"
               className="mini-cart__enquiry-btn"
               onClick={handleEnquiry}
-              style={{ backgroundColor: themeColor }}
             >
               Proceed to Enquiry →
             </button>

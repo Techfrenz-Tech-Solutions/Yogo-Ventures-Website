@@ -13,7 +13,6 @@ import Footer    from "./components/layout/Footer";
 // Common
 // import EnquiryModal  from "./components/common/EnquiryModal";
 // import CookieConsent from "./components/common/CookieConsent";
-import ThemeSwitcher from "./components/common/ThemeSwitcher";
 import ScrollUp      from "./components/common/ScrollUp";
 import Toast         from "./components/common/Toast";
 import SiteLoader    from "./components/common/SiteLoader";
@@ -176,7 +175,6 @@ export default function App() {
         />
       )} */}
 
-      <ThemeSwitcher />
       <ScrollUp />
       <Toast />
 

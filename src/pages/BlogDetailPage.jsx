@@ -2,13 +2,11 @@
 import { useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { BLOG_POSTS } from "../data/content";
-import { useApp } from "../context/AppContext";
 import "./BlogDetailPage.css";
 
 export default function BlogDetailPage() {
   const { id }         = useParams();
   const navigate       = useNavigate();
-  const { themeColor } = useApp();
 
   const post = BLOG_POSTS.find(p => String(p.id) === String(id));
 
@@ -29,7 +27,6 @@ export default function BlogDetailPage() {
         <p>The article you're looking for doesn't exist or has been removed.</p>
         <button
           className="bdet-back-btn"
-          style={{ background: themeColor }}
           onClick={() => navigate("/blog")}
         >
           ← Back to Journal
@@ -41,8 +38,8 @@ export default function BlogDetailPage() {
   return (
     <main className="page-enter bdet">
 
-      {/* ── HERO — matches ContactPage banner style, color synced with themeColor ── */}
-      <section className="page-hero bdet__hero" style={{ background: themeColor }}>
+      {/* ── HERO — matches ContactPage banner style ── */}
+      <section className="page-hero bdet__hero">
         <div className="container">
           <span
             className="section-tag"
@@ -112,7 +109,6 @@ export default function BlogDetailPage() {
               </p>
               <button
                 className="bdet__shop-btn"
-                style={{ background: themeColor }}
                 onClick={() =>
                   navigate(`/shop?category=${encodeURIComponent(post.category)}`)
                 }

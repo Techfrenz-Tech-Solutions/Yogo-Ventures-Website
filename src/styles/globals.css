@@ -14,6 +14,13 @@
   --sage:       #DBE2DC;
   --terra:      #7F543D;
 
+  /* Was previously only ever set at runtime by the (now-removed) UI theme
+     picker; kept as a static default here so toasts and other consumers
+     that read these vars directly still resolve to the site's one default
+     color instead of an unset variable. */
+  --footer-theme-primary:       #335765;
+  --footer-theme-primary-hover: #2A4750;
+
   /* Neutral Scale */
   --white:      #FFFFFF;
   --off-white:  #F4F8F8;

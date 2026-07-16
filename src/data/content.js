@@ -93,14 +93,6 @@ export const NAV_LINKS = [
   { label:"Contact",  path:"/contact" },
 ];
 
-export const THEMES = [
-  { name:"Deep Teal",  color:"#335765" },
-  { name:"Terracotta", color:"#7F543D" },
-  { name:"Forest",     color:"#2D5016" },
-  { name:"Plum",       color:"#4A2545" },
-  { name:"Navy",       color:"#1A4A6B" },
-];
-
 export const TRUSTED_BRANDS = [
   { name:"Craftsvilla",   logo:"https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=120&q=80" },
   { name:"FabIndia",      logo:"https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=120&q=80" },

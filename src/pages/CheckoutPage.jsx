@@ -109,6 +109,16 @@ export default function CheckoutPage() {
   };
 
   const handleSubmit = async () => {
+    // An empty cart has no products to quote — submitting anyway sends the
+    // backend an empty `color` string, which fails its required-field
+    // validation. Catching it here (rather than showing a confusing
+    // backend validator message) also prevents that failure response from
+    // ever reaching the status-blindness bug this used to have.
+    if (cart.length === 0) {
+      showToast("Your cart is empty. Add a product before requesting a quote.");
+      return;
+    }
+
     const e = validate();
     setErrors(e);
     const hasErrors = Object.values(e).some(Boolean);
@@ -168,6 +178,18 @@ export default function CheckoutPage() {
       });
 
       const data = response?.data || {};
+
+      // The backend returns HTTP 200 even for a validation/DB failure
+      // (status: 0 with a message) — axios won't throw for that, so it
+      // must be checked explicitly. Previously this was never checked at
+      // all: any 200 response was treated as a success, showing a "Quote
+      // Submitted!" screen with a blank Quote ID, no email, and clearing
+      // the cart even though nothing was saved.
+      if (data.status !== 1) {
+        showToast(data.message || "Something went wrong. Please try again.");
+        return;
+      }
+
       const reference = data.quote_reference || "";
       const wasEmailSent = data.email?.sent === true;
 

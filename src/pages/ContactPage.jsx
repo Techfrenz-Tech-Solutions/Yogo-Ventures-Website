@@ -2,7 +2,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useApp }          from "../context/AppContext";
 import { useScrollReveal } from "../hooks/useScrollReveal";
-import { ISD_CODES }       from "../data/countries"; // ISD prefix selector only
 import Api                 from "../utils/Api";
 import "./ContactPage.css";
 
@@ -182,10 +181,20 @@ export default function ContactPage() {
     Api.get("/country/countrydropdown")
       .then((res) => {
         if (cancelled) return;
-        // Shape: { status: 1, data: [{ id, country_code, country_name }] }
+        // Shape: { status: 1, data: [{ id, country_code, iso3, country_name, phone_code }] }
         const list = Array.isArray(res.data?.data) ? res.data.data : [];
-        const sorted = [...list].sort((a, b) => a.id - b.id);
+        const sorted = [...list].sort((a, b) => a.country_name.localeCompare(b.country_name));
         setCountryList(sorted);
+
+        // Default the form to India / +91 once the DB list has loaded, but
+        // only if the user hasn't already picked something else in the
+        // meantime (unlikely given how fast this resolves, but safe).
+        const india = sorted.find((c) => c.country_name === "India");
+        if (india) {
+          setForm((prev) => (
+            prev.country ? prev : { ...prev, country: india.country_name, isdCode: india.phone_code?.trim() || "+91" }
+          ));
+        }
       })
       .catch(() => { if (!cancelled) setCountriesError(true); })
       .finally(() => { if (!cancelled) setCountriesLoading(false); });
@@ -219,20 +228,23 @@ export default function ContactPage() {
     }
   };
 
-  // Resolves the dialing code for a selected country name. The database
-  // value (set by the admin in Country Master) always wins; the hardcoded
-  // ISD_CODES table is only a fallback for countries that predate the
-  // Phone Code field (or non-standard/test entries an admin hasn't fixed
-  // yet), and +91 is the last resort if neither source has a match.
+  // Resolves the dialing code for a selected country name from the DB
+  // list (Country Master is the single source of truth); +91 is the last
+  // resort only if the country somehow has no phone_code set.
   const resolvePhoneCode = (countryName) => {
     const dbMatch = countryList.find((c) => c.country_name === countryName);
-    if (dbMatch?.phone_code?.trim()) return dbMatch.phone_code.trim();
-
-    const staticMatch = ISD_CODES.find((item) => item.country === countryName);
-    if (staticMatch) return staticMatch.code;
-
-    return "+91";
+    return dbMatch?.phone_code?.trim() || "+91";
   };
+
+  // Distinct dialing codes across the DB country list — the phone-code
+  // <select> itself has no per-row country context, only the deduped code
+  // list, so multiple countries sharing a code (e.g. US and Canada both
+  // +1) collapse to a single option.
+  const isdOptions = [...new Map(
+    countryList
+      .filter((c) => c.phone_code?.trim())
+      .map((c) => [c.phone_code.trim(), c.phone_code.trim()])
+  ).values()];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -388,9 +400,8 @@ export default function ContactPage() {
                     <FieldError id="cf-country-error" message={errors.country} />
                   </div>
 
-                  {/* Phone — ISD prefix. Prefers each country's DB-stored phone_code
-                      (see resolvePhoneCode); ISD_CODES only fills the dropdown's
-                      option list and backfills countries with no stored code. */}
+                  {/* Phone — ISD prefix, built from the DB country list (Country
+                      Master is the single source of truth for dialing codes). */}
                   <div className="form-group">
                     <label className="form-label" htmlFor="cf-phone">Phone Number</label>
                     <div className={`cf-phone-wrapper${errors.phone ? " cf-input-error" : ""}`}>
@@ -399,13 +410,14 @@ export default function ContactPage() {
                         value={form.isdCode} onChange={handleChange}
                         aria-label="Country calling code"
                       >
-                        {/* A DB phone_code not present in ISD_CODES still needs an
+                        {/* A selected phone_code not present in the deduped DB
+                            list (e.g. before the list has loaded) still needs an
                             <option> or the <select> silently shows the wrong code. */}
-                        {!ISD_CODES.some((item) => item.code === form.isdCode) && (
+                        {!isdOptions.includes(form.isdCode) && (
                           <option value={form.isdCode}>{form.isdCode}</option>
                         )}
-                        {ISD_CODES.map((item, i) => (
-                          <option key={i} value={item.code}>{item.flag} {item.code}</option>
+                        {isdOptions.map((code) => (
+                          <option key={code} value={code}>{code}</option>
                         ))}
                       </select>
                       <div className="cf-isd-divider" aria-hidden="true" />

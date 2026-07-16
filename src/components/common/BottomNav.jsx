@@ -1,10 +1,13 @@
 // src/components/common/BottomNav.jsx — Mobile bottom navigation bar (no hamburger)
 // Shows only on screens ≤ 768 px via CSS
-// Theme-aware: active colour follows the global themeColor from AppContext
 
-import { useApp } from "../../context/AppContext";
 import { NavLink } from "react-router-dom";
 import "./BottomNav.css";
+
+// Site's single default accent color (was previously user-selectable via a
+// theme picker, now removed — this matches that picker's default, "Deep
+// Teal", which is also the site's static --deep CSS variable).
+const ACTIVE_COLOR = "#335765";
 
 const NAV_ITEMS = [
   {
@@ -74,14 +77,11 @@ function hexToRgbChannels(hex) {
 }
 
 export default function BottomNav() {
-  const { themeColor } = useApp();
-
-  // themeColor is a hex string, e.g. "#38BDF8"
-  // We expose it as --bn-active and derive a glow rgba from its channels.
-  const rgb = hexToRgbChannels(themeColor || "#38BDF8");
+  // We expose ACTIVE_COLOR as --bn-active and derive a glow rgba from its channels.
+  const rgb = hexToRgbChannels(ACTIVE_COLOR);
 
   const themeVars = {
-    "--bn-active": themeColor || "#38BDF8",
+    "--bn-active": ACTIVE_COLOR,
     "--bn-active-glow": `rgba(${rgb}, 0.50)`,
     "--bn-active-glow-faint": `rgba(${rgb}, 0.20)`,
     "--bn-active-border": `rgba(${rgb}, 0.35)`,
@@ -90,7 +90,7 @@ export default function BottomNav() {
     "--bn-hover-bg": `rgba(${rgb}, 0.10)`,
     "--bn-hover-glow": `rgba(${rgb}, 0.20)`,
     "--bn-hover-border": `rgba(${rgb}, 0.18)`,
-    "--bn-hover-icon": themeColor || "#38BDF8",
+    "--bn-hover-icon": ACTIVE_COLOR,
     "--bn-icon-drop-shadow": `rgba(${rgb}, 0.75)`,
     "--bn-icon-drop-shadow-hover": `rgba(${rgb}, 0.40)`,
   };

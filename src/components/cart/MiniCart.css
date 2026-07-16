@@ -329,16 +329,14 @@
   line-height: 1.5;
 }
 
-/*
- * Enquiry button
- * background-color applied via style={{ backgroundColor: themeColor }} in JSX.
- */
+/* Enquiry button */
 .mini-cart__enquiry-btn {
   display: block;
   width: 100%;
   box-sizing: border-box;
   padding: 14px 20px;
   border-radius: 50px;
+  background-color: var(--deep);
   color: #ffffff;
   border: none;
   outline: none;

@@ -39,21 +39,6 @@ export function AppProvider({ children }) {
     }
   }, [cart]);
 
-  // ── Theme color — persisted to localStorage ───────────
-  const [themeColor, setThemeColor] = useState(() => {
-    try {
-      return localStorage.getItem("yogo_theme") || "#335765";
-    } catch {
-      return "#335765";
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem("yogo_theme", themeColor);
-    } catch {}
-  }, [themeColor]);
-
   // ── Toast ─────────────────────────────────────────────
   const toastTimerRef = useRef(null);
   const showToast = useCallback(msg => {
@@ -257,13 +242,6 @@ export function AppProvider({ children }) {
     0
   );
 
-  // ── Theme CSS vars ────────────────────────────────────
-  useEffect(() => {
-    document.documentElement.style.setProperty("--deep", themeColor);
-    document.documentElement.style.setProperty("--footer-theme-primary", themeColor);
-    document.documentElement.style.setProperty("--footer-theme-primary-hover", themeColor);
-  }, [themeColor]);
-
   // ── Format price ──────────────────────────────────────
   const formatPrice = (inr, usd) =>
     currency === "INR"
@@ -284,8 +262,6 @@ export function AppProvider({ children }) {
         wishlist, toggleWishlist,
         // Toast
         toast, showToast,
-        // Theme
-        themeColor, setThemeColor,
         // Recently Viewed
         recentlyViewed, addRecentlyViewed,
       }}

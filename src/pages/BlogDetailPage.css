@@ -25,10 +25,9 @@
 
 /* ============================================================
    HERO — identical pattern to ContactPage .page-hero
-   background color is set via inline style={{ background: themeColor }}
-   so it automatically syncs with the footer/theme color picker
    ============================================================ */
 .bdet__hero {
+  background: var(--deep);
   padding-bottom: 40px;
 }
 
@@ -164,6 +163,7 @@
   padding: 12px 28px;
   border: none;
   border-radius: var(--radius-full);
+  background: var(--deep);
   color: var(--white);
   font-size: 14px;
   font-weight: 700;
@@ -183,6 +183,7 @@
   padding: 12px 28px;
   border: none;
   border-radius: var(--radius-full);
+  background: var(--deep);
   color: var(--white);
   font-size: 14px;
   font-weight: 700;
