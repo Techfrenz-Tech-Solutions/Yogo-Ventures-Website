@@ -1,14 +1,16 @@
-# 🌊 Coastal Retreat — Premium eCommerce Platform v2.0 (Vite)
+# YoGo Ventures — B2B Marketplace Website
 
-React 18 + Vite 5 eCommerce website with 100 products, aesthetic category cards, premium footer, and perfectly centered product popups.
+React 18 + Vite 5 quotation-based B2B marketplace for premium Fashion, Memory Foam Products, Copper Utensils, and Indian Handicrafts.
 
-## 🚀 Quick Start
+---
+
+## Quick Start
 
 ```bash
 # Install dependencies
 npm install
 
-# Start dev server (runs on http://localhost:3000)
+# Start development server
 npm run dev
 
 # Build for production
@@ -18,140 +20,203 @@ npm run build
 npm run preview
 ```
 
-## ✅ What's New in v2.0
+---
 
-| Feature | Details |
-|---|---|
-| **100 Products** | 10 products × 10 categories (Bath, Skincare, Home Décor, Sports, Jewellery, Hair, Accessories, Wellness, Fragrance, Clothing) |
-| **Aesthetic Category Cards** | Full photo-backed cards with hover zoom, gradient overlay, colour-coded accents, animated arrows |
-| **Premium Footer** | Newsletter strip, social icons, trust badges, contact info, SVG wave divider, payment method pills |
-| **Centered Popup** | QuickView modal uses `display:flex + align/justify: center` — perfectly centred on all screen sizes. Mobile: slides up from bottom |
-| **Vite 5** | Replaced Create React App — instant HMR, 10× faster builds, native ESM |
+## Project Overview
 
-## 📁 Folder Structure
-
-```
-coastal-retreat/
-├── index.html              ← Root HTML (Vite style, with SEO meta + Schema.org)
-├── vite.config.js          ← Vite config with manual chunks
-├── package.json            ← React 18 + Vite 5 deps
-├── public/
-│   ├── robots.txt
-│   └── sitemap.xml
-└── src/
-    ├── main.jsx            ← Entry point (ReactDOM.createRoot)
-    ├── App.js              ← Router + layout + global modals
-    ├── styles/
-    │   └── globals.css     ← Design system, CSS vars, animations
-    ├── data/
-    │   ├── products.js     ← 100 products across 10 categories
-    │   └── content.js      ← Testimonials, blog, services, stats
-    ├── context/
-    │   └── AppContext.js   ← Cart, wishlist, currency, theme
-    ├── hooks/
-    │   ├── useScrollReveal.js
-    │   └── useHeaderScroll.js
-    ├── utils/
-    │   └── helpers.js
-    ├── components/
-    │   ├── layout/
-    │   │   ├── Header.js + Header.css
-    │   │   ├── Footer.js + Footer.css    ← ✨ Premium redesign
-    │   │   └── MobileNav.js + MobileNav.css
-    │   ├── common/
-    │   │   ├── ProductCard.js + ProductCard.css
-    │   │   ├── QuickViewModal.js + QuickViewModal.css  ← ✨ Centered popup
-    │   │   ├── EnquiryModal.js + EnquiryModal.css
-    │   │   ├── CookieConsent.js + CookieConsent.css
-    │   │   ├── ThemeSwitcher.js + ThemeSwitcher.css
-    │   │   ├── Toast.js
-    │   │   └── CustomCursor.js + CustomCursor.css
-    │   ├── cart/
-    │   │   └── MiniCart.js + MiniCart.css
-    │   └── home/
-    │       ├── HeroSection.js + HeroSection.css
-    │       ├── CategoriesSection.js + CategoriesSection.css  ← ✨ Aesthetic cards
-    │       ├── StatsSection.js
-    │       ├── BrandsSection.js
-    │       ├── AboutSection.js
-    │       ├── WhyUsSection.js
-    │       ├── TestimonialsSection.js
-    │       └── HomeSections.css
-    └── pages/
-        ├── HomePage.js + HomePage.css
-        ├── ShopPage.js + ShopPage.css       ← Sidebar + 100 products
-        ├── ProductDetailPage.js + .css
-        ├── CheckoutPage.js + .css
-        ├── BlogPage.js + .css
-        ├── ServicesPage.js + .css
-        ├── AboutPage.js + .css
-        ├── ContactPage.js + .css
-        └── WishlistPage.js
-```
-
-## 🎨 Design System
-
-**Palette:** `#335765` (Deep) · `#74A8A4` (Mid) · `#B6D9E0` (Light) · `#DBE2DC` (Sage) · `#7F543D` (Terra)
-
-**Fonts:** Cormorant Garamond (serif/display) + DM Sans (body)
-
-## 🔌 CMS Integration (Sanity)
-```bash
-npm install @sanity/client
-```
-Replace `src/data/products.js` static array with a Sanity GROQ query.
-
-## 💳 Payment (Razorpay)
-Replace `handleSubmit` in `CheckoutPage.js` with the Razorpay SDK order flow.
+| Property        | Detail                                      |
+|-----------------|---------------------------------------------|
+| Framework       | React 18 + Vite 5                           |
+| Routing         | React Router DOM v6                         |
+| Styling         | CSS Custom Properties + Component CSS       |
+| Animation       | GSAP + ScrollTrigger                        |
+| State           | React Context API                           |
+| Backend API     | REST API via Axios (`src/utils/Api.js`)     |
+| Analytics       | Google Analytics 4 + Google Tag Manager     |
+| SEO             | Custom `useSEO` hook + JSON-LD schemas      |
+| Deployment      | Docker + nginx (static SPA)                 |
 
 ---
 
-## 🐳 Docker Deployment
+## Navigation Structure
 
-The website is containerised and served as a production nginx container. A multi-stage Dockerfile produces a static bundle via Vite and copies it into a minimal `nginx:alpine` image.
+| Route            | Page                  | Description                              |
+|------------------|-----------------------|------------------------------------------|
+| `/`              | Home                  | Hero, categories, best sellers, FAQ      |
+| `/shop`          | Shop                  | Product catalogue with sidebar filters   |
+| `/product/:id`   | Product Detail        | Images, description, get quote           |
+| `/checkout`      | Checkout              | Enquiry cart summary                     |
+| `/services`      | Services              | Sourcing, private label, bulk orders     |
+| `/contact`       | Contact               | Enquiry form + business info             |
+| `/wishlist`      | Wishlist              | Saved products                           |
+| `/PrivacyPolicy` | Privacy Policy        | Data protection policy                   |
+| `/TermOfuse`     | Terms & Conditions    | Terms of use                             |
 
-### Files added
+---
 
-| File | Purpose |
-|------|---------|
-| `Dockerfile` | Multi-stage build: `node:20-alpine` (build) → `nginx:alpine` (serve) |
-| `nginx.conf` | SPA routing (`try_files $uri /index.html`), gzip compression, long-term asset caching |
-| `.dockerignore` | Excludes `node_modules`, `dist`, `.git` from build context |
+## Product Categories
 
-### Build and run
+| Category             | Description                                    |
+|----------------------|------------------------------------------------|
+| Apparel              | Polo shirts, round-neck tees, hoodies          |
+| Memory Foam Products | Pillows, car neck rest, wedge, contour cushions|
+| Copper Utensils      | Bottles, cups, thali sets, kitchenware         |
+| Handicraft Items     | Home decor, blue pottery, tote bags, etc.      |
+
+---
+
+## Folder Structure
+
+```
+Yogo-Ventures-Website/
+├── index.html                  ← Root HTML — SEO meta, JSON-LD schemas, GTM
+├── vite.config.js              ← Vite build config with manual chunks
+├── package.json
+├── Dockerfile                  ← Multi-stage production build
+├── nginx.conf                  ← SPA routing + security headers + caching
+├── .env.example                ← Environment variable template
+├── public/
+│   ├── robots.txt              ← Crawl rules
+│   ├── sitemap.xml             ← XML sitemap with image extensions
+│   ├── manifest.json           ← PWA manifest
+│   ├── favicon.png
+│   └── [Hero/Logo images]
+└── src/
+    ├── main.jsx
+    ├── App.jsx                 ← Router + layout + global components
+    ├── styles/
+    │   └── globals.css         ← Design system, CSS vars, animations
+    ├── data/
+    │   └── content.js          ← Testimonials, blog posts, nav links, stats
+    ├── context/
+    │   └── AppContext.jsx      ← Cart, wishlist, toast, recently viewed
+    ├── hooks/
+    │   ├── useSEO.js           ← Dynamic per-page meta + JSON-LD injection
+    │   ├── useScrollReveal.jsx
+    │   ├── useHeaderScroll.jsx
+    │   ├── useProducts.jsx     ← Product data from backend API
+    │   └── useCategories.jsx   ← Category data from backend API
+    ├── utils/
+    │   ├── Api.js              ← Axios instance with base URL from env
+    │   ├── analytics.js        ← GTM dataLayer + GA4 event helpers
+    │   └── imageUrl.js         ← Backend storage image URL builder
+    ├── components/
+    │   ├── layout/
+    │   │   ├── Header.jsx + .css
+    │   │   └── Footer.jsx + .css
+    │   ├── common/
+    │   │   ├── BottomNav.jsx + .css
+    │   │   ├── MiniCart related
+    │   │   ├── ScrollUp.jsx
+    │   │   ├── Toast.jsx
+    │   │   ├── SiteLoader.jsx
+    │   │   └── ParticlesBackground.jsx
+    │   ├── cart/
+    │   │   └── MiniCart.jsx + .css
+    │   └── home/
+    │       ├── HeroSection.jsx + .css
+    │       ├── CategoriesSection.jsx + .css
+    │       ├── WhyUsSection.jsx
+    │       ├── TestimonialsSection.jsx
+    │       ├── FAQSection.jsx + .css
+    │       ├── EnquirySection.jsx + .css
+    │       └── HomeSections.css
+    └── pages/
+        ├── HomePage.jsx + .css
+        ├── ShopPage.jsx + .css
+        ├── ProductDetailPage.jsx + .css
+        ├── CheckoutPage.jsx + .css
+        ├── ServicesPage.jsx + .css
+        ├── ContactPage.jsx + .css
+        ├── WishlistPage.jsx
+        ├── PrivacyPolicy.jsx + .css
+        └── TermOfuse.jsx + .css
+```
+
+---
+
+## Environment Variables
+
+Copy `.env.example` to `.env` and fill in the values:
 
 ```bash
-# Build image
-docker build -t yogo-website .
+cp .env.example .env
+```
+
+See `.env.example` for all required variables. Never commit `.env` to version control.
+
+---
+
+## Docker Deployment
+
+```bash
+# Build production image
+docker build -t yogo-ventures-website .
 
 # Run container
 docker run -d \
-  --name yogo-website \
+  --name yogo-ventures-website \
   --restart unless-stopped \
-  -p 28096:80 \
-  yogo-website
+  -p 80:80 \
+  yogo-ventures-website
 ```
 
-### Live deployment
-
-| Environment | URL |
-|-------------|-----|
-| Production VM | `http://106.51.20.225:28096` |
-
-The container listens on port 80 internally and is exposed on host port **28096**.
-
-> **Note on env vars**: The `.env.example` lists `REACT_APP_*` keys for Sanity CMS, Razorpay, and Google Analytics. These are not yet wired into the source code — the site currently uses static data from `src/data/`. When integrating those services, add the corresponding `VITE_*` prefixed variables to a `.env` file (Vite ignores `REACT_APP_*`) and reference them via `import.meta.env.VITE_*`.
+The Dockerfile uses a multi-stage build:
+- **Stage 1** — `node:20-alpine` installs dependencies and runs `vite build`
+- **Stage 2** — `nginx:alpine` serves the static `dist/` output
 
 ---
 
-## 🔧 Recent Changes
+## SEO Features
 
-### Docker containerisation (2025-07-01)
-- Added `Dockerfile` — multi-stage production build using `node:20-alpine` and `nginx:alpine`
-- Added `nginx.conf` — SPA-friendly routing, gzip compression, and immutable asset caching headers
-- Added `.dockerignore` — keeps build context lean by excluding `node_modules`, `dist`, and `.git`
-- Deployed to VM at `http://106.51.20.225:28096` on port 28096
-- No source code changes required; entire site builds cleanly as a self-contained static bundle
+- Per-page dynamic `<title>`, meta description, canonical, and Open Graph via `useSEO` hook
+- JSON-LD schemas: `Organization`, `WebSite`, `SiteNavigationElement`, `BreadcrumbList`, `LocalBusiness`, `Product`, `CollectionPage`, `FAQPage`, `Service`
+- XML sitemap with image extensions submitted to Google Search Console
+- Structured robots.txt with bot-specific rules
+- Google Analytics 4 (`G-4Q0TFQRYTP`) + Google Tag Manager (`GTM-WRGXG2HH`)
+- Full GTM event tracking: page views, scroll depth, leads, product views, search, wishlist, add-to-cart
 
 ---
-*Made with 🌊 for the ocean · Coastal Retreat v2.0*
+
+## Analytics Events
+
+All events are in `src/utils/analytics.js`:
+
+| Event              | Trigger                              |
+|--------------------|--------------------------------------|
+| `page_view`        | Every route change                   |
+| `scroll`           | 25 / 50 / 75 / 90 / 100% depth       |
+| `generate_lead`    | Contact form + enquiry form submit   |
+| `request_quote`    | Get Quote button click               |
+| `add_to_cart`      | Add to enquiry cart                  |
+| `view_item`        | Product detail page load             |
+| `view_item_list`   | Category / shop page load            |
+| `search`           | Search query submitted               |
+| `add_to_wishlist`  | Wishlist toggle                      |
+| `phone_click`      | Phone number link click              |
+| `email_click`      | Email link click                     |
+| `whatsapp_click`   | WhatsApp link click                  |
+| `faq_open`         | FAQ accordion opened                 |
+
+---
+
+## Design System
+
+**Brand Palette:**
+
+| Token         | Value     | Usage                                    |
+|---------------|-----------|------------------------------------------|
+| `--deep`      | `#335765` | Primary CTAs, header, links              |
+| `--mid`       | `#74A8A4` | Accents, hover states, badges            |
+| `--light`     | `#B6D9E0` | Background tints, tags                   |
+| `--sage`      | `#DBE2DC` | Borders, subtle fills                    |
+| `--terra`     | `#7F543D` | Secondary CTAs, accent highlights        |
+| `--off-white` | `#F4F8F8` | Page background                          |
+| `--dark`      | `#1A2E35` | Body text, headings                      |
+| `--muted`     | `#5A7A82` | Secondary text, placeholders             |
+
+**Fonts:** Cormorant Garamond (display/serif) + DM Sans (body/UI)
+
+---
+
+*Yogo Ventures Website v2.0*
