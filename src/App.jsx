@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useContentProtection } from "./hooks/useContentProtection";
 
 // gsap.registerPlugin(ScrollTrigger);------------------------------
 
@@ -43,6 +44,9 @@ export default function App() {
   const [enquiryOpen,   setEnquiryOpen]   = useState(true);
   const [cookieVisible, setCookieVisible] = useState(true);
   const location = useLocation();
+
+  // Disable right-click context menu on images across the entire site
+  useContentProtection();
 
   /*
    * showLoader — true ONLY on the very first page load of the session.
