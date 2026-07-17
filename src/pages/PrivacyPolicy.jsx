@@ -1,6 +1,7 @@
 // src/pages/PrivacyPolicy.jsx — Yogo Ventures
 // CONTENT updated to match the Privacy Policy Word document (14 sections).
 // All design, layout, SVG style, CSS classes, hero, trust strip — UNCHANGED.
+import { useSEO } from "../hooks/useSEO";
 import "./PrivacyPolicy.css";
 
 /* ═══════════════════════════════════════════════════════════
@@ -704,6 +705,17 @@ function ContactBody() {
    MAIN PAGE — structure unchanged
    ═══════════════════════════════════════════════════════════ */
 export default function PrivacyPolicy() {
+  useSEO({
+    title: "Privacy Policy — How We Protect Your Data",
+    description: "Read Yogo Ventures' Privacy Policy. We are committed to protecting your personal information and data privacy in compliance with applicable laws.",
+    canonical: "https://www.yogoventures.com/PrivacyPolicy",
+    robots: "index, follow, noarchive",
+    breadcrumb: [
+      { name: "Home",           url: "https://www.yogoventures.com/" },
+      { name: "Privacy Policy", url: "https://www.yogoventures.com/PrivacyPolicy" },
+    ],
+  });
+
   return (
     <main className="pp-page page-enter">
       <title>Privacy Policy — YoGo Ventures | B2B Indian Export &amp; Wholesale Sourcing Platform</title>

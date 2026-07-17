@@ -1,5 +1,6 @@
 // src/pages/TermsAndConditions.jsx
 import { useState, useEffect, useRef } from "react";
+import { useSEO } from "../hooks/useSEO";
 import "./TermOfuse.css";
 
 /* ─── Style helpers — ALL colors read CSS variables at paint time ─── */
@@ -490,6 +491,17 @@ function SectionRow({ section, index }) {
 }
 
 export default function TermsAndConditions() {
+  useSEO({
+    title: "Terms of Use — Terms & Conditions",
+    description: "Read the Terms of Use for Yogo Ventures B2B marketplace. Understand the conditions governing product sourcing, quotation requests, and use of our platform.",
+    canonical: "https://www.yogoventures.com/TermOfuse",
+    robots: "index, follow, noarchive",
+    breadcrumb: [
+      { name: "Home",         url: "https://www.yogoventures.com/" },
+      { name: "Terms of Use", url: "https://www.yogoventures.com/TermOfuse" },
+    ],
+  });
+
   return (
     <div className="tnc-page">
       <section className="tnc-hero">

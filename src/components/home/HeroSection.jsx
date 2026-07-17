@@ -138,9 +138,13 @@ export default function HeroSection() {
         >
           <img
             src={s.image}
-            alt=""
+            alt={`${s.heading} — Yogo Ventures wholesale products`}
             className="hero__slide-img"
             draggable="false"
+            width="1440"
+            height="640"
+            loading={i === 0 ? "eager" : "lazy"}
+            fetchpriority={i === 0 ? "high" : "auto"}
           />
         </div>
       ))}
@@ -149,6 +153,9 @@ export default function HeroSection() {
 
       {/* Heading + CTA */}
       <div className={`hero__top-left${leaving ? " leaving" : ""}`}>
+        {/* SEO: Only one H1 — shows the currently active slide heading.
+            All other slides get aria-hidden so screen readers don't see duplicates.
+            The H1 text is always present in the DOM for Google to read. */}
         <h1 className="hero__product-name">{slide.heading}</h1>
         <div className="hero__ctas">
           <Link to={slide.shopLink} className="btn btn-primary btn-lg">

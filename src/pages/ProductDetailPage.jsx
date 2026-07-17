@@ -10,6 +10,8 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useProducts } from "../hooks/useProducts";
 import { useApp } from "../context/AppContext";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+import { useSEO } from "../hooks/useSEO";
+import { trackProductView, trackAddToCart, trackWishlist } from "../utils/analytics";
 import "./ProductDetailPage.css";
 import "./ColorCustomization.css";
 
@@ -699,6 +701,66 @@ export default function ProductDetailPage() {
 
   useScrollReveal([id]);
 
+  // ── Dynamic SEO for product page ──────────────────────────────────────────
+  const productTitle = product
+    ? `${product.name} — ${product.category} | Wholesale Supplier`
+    : "Product Detail";
+  const productDesc = product
+    ? `${product.name} from Yogo Ventures. ${product.description ? product.description.slice(0, 120) + "…" : `Premium ${product.category} available for bulk wholesale orders. Request a quotation.`}`
+    : "Product details — Yogo Ventures B2B wholesale marketplace.";
+  const productCanonical = product
+    ? `https://www.yogoventures.com/product/${product.id}`
+    : undefined;
+  const productImage = product?.image || "https://www.yogoventures.com/Logo.png";
+
+  useSEO({
+    title: productTitle,
+    description: productDesc,
+    canonical: productCanonical,
+    ogImage: productImage,
+    ogType: "product",
+    breadcrumb: product ? [
+      { name: "Home",              url: "https://www.yogoventures.com/" },
+      { name: "Shop",              url: "https://www.yogoventures.com/shop" },
+      { name: product.category,   url: `https://www.yogoventures.com/shop?category=${encodeURIComponent(product.category)}` },
+      { name: product.name,       url: productCanonical },
+    ] : undefined,
+    schemaId: product ? `product-${product.id}` : null,
+    schema: product ? {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": product.name,
+      "description": product.description || `Premium ${product.category} product available for bulk wholesale orders from Yogo Ventures.`,
+      "image": productImage,
+      "sku": String(product.id),
+      "category": product.category,
+      "brand": {
+        "@type": "Brand",
+        "name": "Yogo Ventures"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": productCanonical,
+        "priceCurrency": "INR",
+        "price": "0",
+        "priceValidUntil": "2027-12-31",
+        "availability": product.stock
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "Yogo Ventures",
+          "url": "https://www.yogoventures.com"
+        }
+      },
+      "isRelatedTo": {
+        "@type": "ItemList",
+        "name": product.category,
+        "url": `https://www.yogoventures.com/shop?category=${encodeURIComponent(product.category)}`
+      }
+    } : null,
+  });
+
   useEffect(() => {
     if (product) {
       setQty(""); setQtyError(false);
@@ -706,6 +768,12 @@ export default function ProductDetailPage() {
       setSelectedColors([]);
       addRecentlyViewed(product);
       window.scrollTo({ top: 0, behavior: "smooth" });
+      // ── Track product view in GTM/GA4 ──────────────────────────────────
+      trackProductView({
+        productId: product.id,
+        productName: product.name,
+        category: product.category,
+      });
     }
   }, [id, product]); // eslint-disable-line
 
@@ -729,13 +797,26 @@ export default function ProductDetailPage() {
       return;
     }
     addToCart(product, resolved, {}, { suppressToast: true });
+    // ── Track add to cart / request quote ─────────────────────────────
+    trackAddToCart({
+      productId: product.id,
+      productName: product.name,
+      category: product.category,
+      quantity: resolved,
+    });
     showToast("Product added to cart", "success", 2800, { position: "bottom-center", replace: true });
     setCartOpen(true);
   }, [product, qty, addToCart, showToast, setCartOpen]);
 
   const handleToggleWishlist = useCallback(() => {
+    const action = wishlist.includes(product?.id) ? "remove" : "add";
     toggleWishlist(product?.id);
-  }, [toggleWishlist, product]);
+    trackWishlist(action, {
+      productId: product?.id,
+      productName: product?.name,
+      category: product?.category,
+    });
+  }, [toggleWishlist, product, wishlist]);
 
   // ── Color customization handlers (Apparel only) ──────────────────────────
   const handleColorChange = useCallback((color) => {
@@ -823,7 +904,7 @@ export default function ProductDetailPage() {
      RENDER
      ════════════════════════════════════════════════════════════════ */
   return (
-    <main className="page-enter" aria-label={`Product: ${product.name}`}>
+    <main className="page-enter" id="main-content" aria-label={`Product: ${product.name} — ${product.category}`}>
       <ToastContainer toasts={toasts} />
 
       <div className="container">

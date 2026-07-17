@@ -1,97 +1,404 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- ══ PERFORMANCE: DNS Prefetch & Preconnect ══════════════════════════ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.yogoventures.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+    <!-- ══ FONTS: Preload critical fonts to reduce LCP ══════════════════════ -->
+    <link rel="preload" as="style"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
+      rel="stylesheet" />
+
+    <!-- ══ THEME & PWA ════════════════════════════════════════════════════════ -->
     <meta name="theme-color" content="#335765" />
+    <meta name="theme-color" content="#1A2E35" media="(prefers-color-scheme: dark)" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Yogo Ventures" />
+    <meta name="application-name" content="Yogo Ventures" />
+    <meta name="msapplication-TileColor" content="#335765" />
+    <meta name="format-detection" content="telephone=no" />
 
-    <!-- SEO -->
-    <title>Yogo Ventures — Authentic Handicrafts, Copper Utensils, Apparel &amp; Memory Foam | Chennai</title>
-    <meta name="description" content="Chennai's most trusted online store for authentic Indian handicrafts, Ayurvedic copper utensils, premium organic apparel, and memory foam comfort products. 25,000+ happy customers." />
-    <meta name="keywords" content="handicrafts Chennai, copper utensils, buy copper bottle, memory foam pillow, Indian handicrafts online, apparel organic, Yogo Ventures" />
-    <meta name="author" content="Yogo Ventures" />
-    <meta name="robots" content="index, follow" />
+    <!-- ══ FAVICONS ══════════════════════════════════════════════════════════ -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- ══ CANONICAL & ROBOTS ════════════════════════════════════════════════ -->
     <link rel="canonical" href="https://www.yogoventures.com/" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
-    <!-- Open Graph -->
-    <meta property="og:type"        content="website" />
-    <meta property="og:url"         content="https://www.yogoventures.com/" />
-    <meta property="og:title"       content="Yogo Ventures — Authentic Indian Products | Chennai" />
-    <meta property="og:description" content="200+ authentic Indian handicrafts, copper utensils, apparel and memory foam products. Trusted by 25,000+ customers." />
-    <meta property="og:image"       content="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=80" />
-    <meta property="og:site_name"   content="Yogo Ventures" />
-    <meta property="og:locale"      content="en_IN" />
+    <!-- ══ PRIMARY SEO META TAGS ════════════════════════════════════════════
+         Title format matches Sitelinks display in Google Search:
+         "Yogo Ventures | Fashion, Memory Foam, Copper Utensils & Handicrafts"
+         Description matches the SERP snippet shown under the Sitelinks block.
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <title>YoGo Ventures | Fashion, Memory Foam, Copper Utensils &amp; Handicrafts</title>
+    <meta name="description" content="YoGo Ventures offers premium Fashion, Memory Foam Products, Copper Utensils and Handicraft items. Request quotations for single or bulk orders at the best price." />
+    <meta name="keywords" content="YoGo Ventures, global wholesale supplier, international product sourcing, worldwide bulk supplier, B2B marketplace, B2B wholesale platform, global procurement services, international bulk orders, private label manufacturer, custom product development, quality inspection services, compliance certification, product sampling, global supply chain solutions, worldwide sourcing partner, trusted wholesale supplier, verified manufacturer, bulk order management, request quotation online, online product catalogue, fashion apparel supplier, copper utensils supplier, memory foam supplier, handicrafts supplier, wholesale fashion supplier, bulk apparel supplier, custom branding supplier, global trade supplier, wholesale product marketplace, global manufacturer network, corporate gifting supplier, e-commerce product supplier, retail wholesale supplier, premium quality products, competitive pricing supplier" />
+    <meta name="author" content="YoGo Ventures" />
+    <meta name="copyright" content="YoGo Ventures" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="rating" content="general" />
+    <meta name="geo.region" content="IN-TN" />
+    <meta name="geo.placename" content="Trichy, Tamil Nadu, India" />
+    <meta name="geo.position" content="10.7905;78.7047" />
+    <meta name="ICBM" content="10.7905, 78.7047" />
 
-    <!-- Twitter -->
+    <!-- ══ OPEN GRAPH ════════════════════════════════════════════════════════ -->
+    <meta property="og:type"         content="website" />
+    <meta property="og:url"          content="https://www.yogoventures.com/" />
+    <meta property="og:title"        content="YoGo Ventures | Fashion, Memory Foam, Copper Utensils &amp; Handicrafts" />
+    <meta property="og:description"  content="YoGo Ventures offers premium Fashion, Memory Foam Products, Copper Utensils and Handicraft items. Request quotations for single or bulk orders at the best price." />
+    <meta property="og:image"        content="https://www.yogoventures.com/Logo.png" />
+    <meta property="og:image:width"  content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt"    content="YoGo Ventures — B2B Marketplace for Premium Products" />
+    <meta property="og:site_name"    content="YoGo Ventures" />
+    <meta property="og:locale"       content="en_IN" />
+
+    <!-- ══ TWITTER / X CARD ════════════════════════════════════════════════ -->
     <meta name="twitter:card"        content="summary_large_image" />
-    <meta name="twitter:title"       content="Yogo Ventures — Authentic Indian Products" />
-    <meta name="twitter:description" content="Handicrafts, Copper, Apparel & Memory Foam. Chennai's most trusted store." />
-    <meta name="twitter:image"       content="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&q=80" />
+    <meta name="twitter:site"        content="@yogoventures" />
+    <meta name="twitter:creator"     content="@yogoventures" />
+    <meta name="twitter:title"       content="YoGo Ventures | Fashion, Memory Foam, Copper Utensils &amp; Handicrafts" />
+    <meta name="twitter:description" content="YoGo Ventures offers premium Fashion, Memory Foam Products, Copper Utensils and Handicraft items. Request quotations for single or bulk orders at the best price." />
+    <meta name="twitter:image"       content="https://www.yogoventures.com/Logo.png" />
+    <meta name="twitter:image:alt"   content="YoGo Ventures — B2B Product Marketplace" />
 
-    <!-- Schema.org -->
+    <!-- ══ GOOGLE SITE VERIFICATION ════════════════════════════════════════ -->
+    <meta name="google-site-verification" content="O_s7mOoyfrjdcCPx5UZi3m9ROgoEZ26huWVLIWJ7iZg" />
+
+    <!-- ══ SECURITY HEADERS ══════════════════════════════════════════════════ -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
+
+    <!-- ══ STRUCTURED DATA — Organization ════════════════════════════════════
+         Core entity declaration. Required for Knowledge Panel + Sitelinks.
+    ══════════════════════════════════════════════════════════════════════════ -->
     <script type="application/ld+json">
-    <!-- {
+    {
       "@context": "https://schema.org",
-      "@type": "OnlineStore",
+      "@type": "Organization",
+      "@id": "https://www.yogoventures.com/#organization",
       "name": "Yogo Ventures",
+      "alternateName": "YoGo Ventures",
       "url": "https://www.yogoventures.com",
-      "description": "Authentic Indian handicrafts, copper utensils, apparel, and memory foam products.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.yogoventures.com/Logo.png",
+        "width": 200,
+        "height": 60
+      },
+      "description": "YoGo Ventures offers premium Fashion, Memory Foam Products, Copper Utensils and Handicraft items. Request quotations for single or bulk orders at the best price.",
       "foundingDate": "2019",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "No. 12, Anna Salai",
-        "addressLocality": "Chennai",
-        "postalCode": "600002",
+        "addressLocality": "Tiruchirappalli",
         "addressRegion": "Tamil Nadu",
+        "postalCode": "620003",
         "addressCountry": "IN"
       },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+91-44-2345-6789",
-        "contactType": "customer service"
-      }
-    } -->
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+91-9003317417",
+          "contactType": "customer service",
+          "areaServed": ["IN","US","GB","AU","AE","DE","ES","QA"],
+          "availableLanguage": ["English","Tamil","Hindi"]
+        },
+        {
+          "@type": "ContactPoint",
+          "telephone": "+91-6369681960",
+          "contactType": "sales",
+          "availableLanguage": ["English","Tamil"]
+        }
+      ],
+      "email": "support@yogoventures.com",
+      "sameAs": [
+        "https://www.instagram.com/yogoventures",
+        "https://www.linkedin.com/company/yogoventures",
+        "https://wa.me/919003317417"
+      ]
+    }
     </script>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-<!-- Google Site Verification Tag -->
-    <meta name="google-site-verification" content="O_s7mOoyfrjdcCPx5UZi3m9ROgoEZ26huWVLIWJ7iZg" />
+    <!-- ══ STRUCTURED DATA — WebSite + Sitelinks Searchbox ════════════════════
+         potentialAction triggers the Sitelinks Searchbox in Google SERP.
+         The "name" and "description" here feed Google's site understanding
+         and directly influence the Sitelinks block title and description.
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://www.yogoventures.com/#website",
+      "name": "Yogo Ventures",
+      "url": "https://www.yogoventures.com",
+      "description": "YoGo Ventures offers premium Fashion, Memory Foam Products, Copper Utensils and Handicraft items. Request quotations for single or bulk orders at the best price.",
+      "publisher": { "@id": "https://www.yogoventures.com/#organization" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://www.yogoventures.com/shop?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      },
+      "inLanguage": "en-IN"
+    }
+    </script>
 
+    <!-- ══ STRUCTURED DATA — SiteNavigationElement ════════════════════════════
+         This is the PRIMARY schema for earning the exact Sitelinks layout
+         shown in the image. Each hasPart entry maps to one Sitelinks row:
+           Home · Shop · Services · Privacy Policy · Terms & Conditions · Contact Us
+         The "description" in each WebPage becomes the grey subtitle text
+         shown under each link in the Sitelinks block.
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Yogo Ventures",
+      "url": "https://www.yogoventures.com",
+      "hasPart": [
+        {
+          "@type": "WebPage",
+          "@id": "https://www.yogoventures.com/",
+          "name": "Home",
+          "url": "https://www.yogoventures.com/",
+          "description": "Go to the homepage of Yogo Ventures.",
+          "breadcrumb": "Home"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.yogoventures.com/shop",
+          "name": "Shop",
+          "url": "https://www.yogoventures.com/shop",
+          "description": "Browse all products across multiple categories.",
+          "breadcrumb": "Home > Shop"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.yogoventures.com/services",
+          "name": "Services",
+          "url": "https://www.yogoventures.com/services",
+          "description": "Explore the services provided by Yogo Ventures.",
+          "breadcrumb": "Home > Services"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.yogoventures.com/PrivacyPolicy",
+          "name": "Privacy Policy",
+          "url": "https://www.yogoventures.com/PrivacyPolicy",
+          "description": "Read our privacy policy and how we protect your data.",
+          "breadcrumb": "Home > Privacy Policy"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.yogoventures.com/TermOfuse",
+          "name": "Terms & Conditions",
+          "url": "https://www.yogoventures.com/TermOfuse",
+          "description": "Read the terms and conditions for using our website.",
+          "breadcrumb": "Home > Terms & Conditions"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://www.yogoventures.com/contact",
+          "name": "Contact Us",
+          "url": "https://www.yogoventures.com/contact",
+          "description": "Get in touch with us for any queries or support.",
+          "breadcrumb": "Home > Contact Us"
+        }
+      ]
+    }
+    </script>
 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4Q0TFQRYTP"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- ══ STRUCTURED DATA — BreadcrumbList ═══════════════════════════════════
+         Reinforces the site hierarchy to Google. Each item matches
+         a row in the Sitelinks block exactly.
+    ══════════════════════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",               "item": "https://www.yogoventures.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Shop",               "item": "https://www.yogoventures.com/shop" },
+        { "@type": "ListItem", "position": 3, "name": "Services",           "item": "https://www.yogoventures.com/services" },
+        { "@type": "ListItem", "position": 4, "name": "Privacy Policy",     "item": "https://www.yogoventures.com/PrivacyPolicy" },
+        { "@type": "ListItem", "position": 5, "name": "Terms & Conditions", "item": "https://www.yogoventures.com/TermOfuse" },
+        { "@type": "ListItem", "position": 6, "name": "Contact Us",         "item": "https://www.yogoventures.com/contact" }
+      ]
+    }
+    </script>
 
-  gtag('config', 'G-4Q0TFQRYTP');
-</script>
+    <!-- ══ STRUCTURED DATA — LocalBusiness ═══════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["LocalBusiness", "Store"],
+      "@id": "https://www.yogoventures.com/#localbusiness",
+      "name": "Yogo Ventures",
+      "image": "https://www.yogoventures.com/Logo.png",
+      "url": "https://www.yogoventures.com",
+      "telephone": "+91-9003317417",
+      "email": "support@yogoventures.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Tiruchirappalli",
+        "addressRegion": "Tamil Nadu",
+        "postalCode": "620003",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 10.7905,
+        "longitude": 78.7047
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+          "opens": "10:00",
+          "closes": "19:00"
+        }
+      ],
+      "priceRange": "₹₹",
+      "parentOrganization": { "@id": "https://www.yogoventures.com/#organization" }
+    }
+    </script>
 
+    <!-- ══ STRUCTURED DATA — ItemList: Product Categories ════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Yogo Ventures Product Categories",
+      "description": "Browse premium product categories — fashion, memory foam, copper utensils and handicrafts.",
+      "url": "https://www.yogoventures.com/shop",
+      "numberOfItems": 4,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Fashion Apparel",      "url": "https://www.yogoventures.com/shop?category=Apparel" },
+        { "@type": "ListItem", "position": 2, "name": "Memory Foam Products", "url": "https://www.yogoventures.com/shop?category=Memory+Foam+Products" },
+        { "@type": "ListItem", "position": 3, "name": "Copper Utensils",      "url": "https://www.yogoventures.com/shop?category=Copper+Utensils" },
+        { "@type": "ListItem", "position": 4, "name": "Handicraft Items",     "url": "https://www.yogoventures.com/shop?category=Handicraft+Items" }
+      ]
+    }
+    </script>
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-WRGXG2HH');</script>
-<!-- End Google Tag Manager -->
+    <!-- ══ STRUCTURED DATA — FAQ ═════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is it possible to customise any product as per the Customer requirements?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. We work directly with manufacturers to fulfil custom specifications on fabric, size, colour, material, and packaging." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it possible to print Customer Logo on the product?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Customer logo can be printed via screen printing, DTF, embroidery, or puff print techniques depending on the product type." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it possible to send a Sample piece to the customer address?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Sample pieces can be sent via courier after payment of sample cost plus courier charges." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the minimum order quantity for wholesale bulk orders?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Minimum order quantities vary by product category. Contact us through the enquiry form to receive category-specific MOQ details and wholesale pricing." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I order custom sizes or colours for apparel bulk orders?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Custom sizes and colours are available for bulk orders. We can match Pantone codes, RAL references, or hex values." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I clean copper items?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Use lemon and salt, tamarind paste, or a mild copper cleaner. Avoid harsh chemicals or abrasive scrubbers to preserve the finish." }
+        }
+      ]
+    }
+    </script>
 
+    <!-- ══ GOOGLE TAG MANAGER ══════════════════════════════════════════════ -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WRGXG2HH');</script>
+
+    <!-- ══ GOOGLE ANALYTICS 4 ══════════════════════════════════════════════ -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4Q0TFQRYTP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-4Q0TFQRYTP', {
+        'send_page_view': true,
+        'allow_google_signals': true,
+        'allow_ad_personalization_signals': false,
+        'cookie_flags': 'SameSite=None;Secure'
+      });
+    </script>
+
+    <!-- ══ GTM DATA LAYER ══════════════════════════════════════════════════ -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        'event': 'site_init',
+        'site_name': 'YoGo Ventures',
+        'site_url': 'https://www.yogoventures.com',
+        'site_type': 'b2b_marketplace',
+        'business_category': 'wholesale_supplier',
+        'currency': 'INR'
+      });
+    </script>
 
   </head>
   <body>
 
-    <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRGXG2HH"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+    <!-- ══ GTM NOSCRIPT ════════════════════════════════════════════════════ -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRGXG2HH"
+        height="0" width="0" style="display:none;visibility:hidden"
+        title="Google Tag Manager" aria-hidden="true"></iframe>
+    </noscript>
 
+    <!-- ══ SKIP TO MAIN ════════════════════════════════════════════════════ -->
+    <a href="#main-content" class="skip-to-main" style="
+      position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;
+      background:var(--deep,#335765);color:#fff;padding:12px 20px;border-radius:4px;
+      font-family:system-ui,sans-serif;font-size:14px;font-weight:600;z-index:10000;
+      text-decoration:none;
+    " onfocus="this.style.left='16px';this.style.top='16px';this.style.width='auto';this.style.height='auto';"
+       onblur="this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">
+      Skip to main content
+    </a>
 
-    <div id="root"></div>
+    <div id="root" role="none"></div>
     <script type="module" src="/src/main.jsx"></script>
+
   </body>
 </html>

@@ -96,6 +96,8 @@ function CategoryCard({ to, accent, bg, icon, name, matchedProducts, count }) {
       role="button"
       tabIndex={0}
       onClick={() => navigate(to)}
+      aria-label={`Browse ${name} — ${count}+ wholesale products`}
+      onKeyDown={(e) => e.key === "Enter" && navigate(to)}
     >
       {rotationProducts.map((p, i) => (
         <div
@@ -141,7 +143,7 @@ export function CategoriesSection() {
     <section className="cats-section section" aria-labelledby="categories-heading">
       <div className="container">
         <header className="section-header reveal">
-          <span className="section-tag">Browse By</span>
+          <span className="section-tag">Browse By Category</span>
           <h2 className="section-title" id="categories-heading">Top Categories</h2>
           <p className="section-subtitle">
             Discover our signature product lines — each handpicked for quality and authenticity.

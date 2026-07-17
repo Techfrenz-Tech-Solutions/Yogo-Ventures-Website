@@ -2,6 +2,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useApp }          from "../context/AppContext";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+import { useSEO }          from "../hooks/useSEO";
+import { trackFormSubmit, trackPhoneClick, trackEmailClick } from "../utils/analytics";
 import Api                 from "../utils/Api";
 import "./ContactPage.css";
 
@@ -169,6 +171,37 @@ export default function ContactPage() {
   const { showToast } = useApp();
   useScrollReveal([]);
 
+  useSEO({
+    title: "Contact Us — Request a Quotation for Bulk Orders",
+    description: "Contact Yogo Ventures for wholesale inquiries, bulk order quotations, and B2B sourcing. Reach us at support@yogoventures.com or +91 9003317417. Mon–Sat 10AM–7PM IST.",
+    canonical: "https://www.yogoventures.com/contact",
+    breadcrumb: [
+      { name: "Home",       url: "https://www.yogoventures.com/" },
+      { name: "Contact Us", url: "https://www.yogoventures.com/contact" },
+    ],
+    schemaId: "contact-page",
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact Yogo Ventures",
+      "description": "Contact Yogo Ventures for wholesale bulk order inquiries, product sourcing, and B2B quotations.",
+      "url": "https://www.yogoventures.com/contact",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "Yogo Ventures",
+        "email": "support@yogoventures.com",
+        "telephone": "+91-9003317417",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Tiruchirappalli",
+          "addressRegion": "Tamil Nadu",
+          "postalCode": "620003",
+          "addressCountry": "IN"
+        }
+      }
+    },
+  });
+
   const { visible: confettiVisible, particles, fire: fireConfetti } = useConfettiToast();
 
   // ── Live country list — GET /country/countrydropdown (public) ─────────────
@@ -300,6 +333,12 @@ export default function ContactPage() {
         subject:      form.subject.trim(),
         message:      form.message.trim(),
       });
+      // ── Track lead conversion in GTM/GA4 ──────────────────────────────
+      trackFormSubmit({
+        formId: "contact_form",
+        country: form.country,
+        subject: form.subject.trim(),
+      });
       fireConfetti();
       setForm(INITIAL_FORM);
       setErrors(INITIAL_ERRORS);
@@ -313,7 +352,7 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="page-enter contact-page" aria-label="Contact page">
+    <main className="page-enter contact-page" id="main-content" aria-label="Contact Yogo Ventures — Request Quotation">
 
       {/* ── HERO ── */}
       <section className="page-hero section--dark">

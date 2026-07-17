@@ -79,8 +79,9 @@ export function WhyUsSection() {
       <div className="container">
         <header className="section-header reveal">
           <span className="section-tag">Why Choose YoGo</span>
+          <h2 className="section-title" id="whyus-heading">Why Choose Yogo Ventures</h2>
           <p className="section-subtitle">
-            Six key advantages that make YoGo Ventures the preferred choice for global buyers.
+            Six key advantages that make Yogo Ventures the preferred B2B wholesale supplier and sourcing partner for global buyers.
           </p>
         </header>
         <div className="why-grid">

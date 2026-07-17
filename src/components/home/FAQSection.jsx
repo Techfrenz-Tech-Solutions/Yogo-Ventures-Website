@@ -1,6 +1,7 @@
 // FAQSection — accordion, one open at a time, SVG chevron icon
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { trackFAQOpen } from "../../utils/analytics";
 import "./FAQSection.css";
 
 const FAQS = [
@@ -46,7 +47,13 @@ function ChevronIcon({ open }) {
 export function FAQSection() {
   const [openIdx, setOpenIdx] = useState(null);
 
-  const toggle = (i) => setOpenIdx(prev => prev === i ? null : i);
+  const toggle = (i) => {
+    const isOpening = openIdx !== i;
+    setOpenIdx(prev => prev === i ? null : i);
+    if (isOpening) {
+      trackFAQOpen(FAQS[i].q);
+    }
+  };
 
   return (
     <section id="faq" className="section faq-section" aria-labelledby="faq-heading">

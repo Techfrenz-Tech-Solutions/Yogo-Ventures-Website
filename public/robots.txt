@@ -1,10 +1,69 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# robots.txt — Yogo Ventures (https://www.yogoventures.com)
+# Optimized for Google Search Console & Core Web Vitals
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── Default: Allow all well-behaved crawlers ──────────────────────────────────
 User-agent: *
 Allow: /
 
-# Disallow admin/private paths
+# Allow product and category pages (important for e-commerce indexing)
+Allow: /shop
+Allow: /shop?category=
+Allow: /product/
+Allow: /services
+Allow: /contact
+Allow: /PrivacyPolicy
+Allow: /TermOfuse
+
+# Disallow transactional & user-specific pages (no SEO value)
+Disallow: /checkout
+Disallow: /wishlist
+
+# Disallow internal API, admin, and private paths
+Disallow: /api/
 Disallow: /admin/
 Disallow: /private/
+
+# Disallow query strings that create duplicate content (sort/search)
+Disallow: /shop?sort=
+Disallow: /shop?q=
+
+# ── Google-specific rules ─────────────────────────────────────────────────────
+User-agent: Googlebot
+Allow: /
+Disallow: /checkout
+Disallow: /wishlist
+Disallow: /api/
+Disallow: /admin/
+
+# ── Google Image Bot (allow product images for Google Images) ─────────────────
+User-agent: Googlebot-Image
+Allow: /
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.webp$
+
+# ── Bing / Microsoft crawler ──────────────────────────────────────────────────
+User-agent: bingbot
+Allow: /
+Disallow: /checkout
+Disallow: /wishlist
 Disallow: /api/
 
-# Sitemap location
-Sitemap: https://www.coastalretreat.in/sitemap.xml
+# ── Block known bad bots ──────────────────────────────────────────────────────
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# ── Sitemap locations ─────────────────────────────────────────────────────────
+Sitemap: https://www.yogoventures.com/sitemap.xml

@@ -5,6 +5,7 @@ import { useProducts } from "../hooks/useProducts";
 import { useCategories } from "../hooks/useCategories";
 import { useApp } from "../context/AppContext";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+import { useSEO } from "../hooks/useSEO";
 import "./ShopPage.css";
 
 const norm = (s) => (s ?? "").trim().toLowerCase();
@@ -119,6 +120,46 @@ export default function ShopPage() {
   const [, startTransition] = useTransition();
 
   useScrollReveal([]);
+
+  // ── Dynamic SEO based on active category ─────────────────────────────────
+  const activeCat = category === "All" ? null : category;
+  const seoTitle = activeCat
+    ? `${activeCat} — Wholesale Products | Buy in Bulk`
+    : "Shop All Products — Fashion, Copper Utensils, Memory Foam & Handicrafts";
+  const seoDesc = activeCat
+    ? `Browse premium ${activeCat} at Yogo Ventures — India's trusted B2B wholesale supplier. Request quotation for bulk orders.`
+    : "Shop all products at Yogo Ventures — premium fashion apparel, copper utensils, memory foam products and authentic Indian handicrafts. B2B wholesale pricing.";
+  const seoCanonical = activeCat
+    ? `https://www.yogoventures.com/shop?category=${encodeURIComponent(activeCat)}`
+    : "https://www.yogoventures.com/shop";
+
+  useSEO({
+    title: seoTitle,
+    description: seoDesc,
+    canonical: seoCanonical,
+    ogImage: "https://www.yogoventures.com/Hero1.png",
+    breadcrumb: [
+      { name: "Home", url: "https://www.yogoventures.com/" },
+      { name: "Shop", url: "https://www.yogoventures.com/shop" },
+      ...(activeCat ? [{ name: activeCat, url: seoCanonical }] : []),
+    ],
+    schemaId: "shop-collection",
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": seoTitle,
+      "description": seoDesc,
+      "url": seoCanonical,
+      "isPartOf": { "@id": "https://www.yogoventures.com/#website" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.yogoventures.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Shop", "item": "https://www.yogoventures.com/shop" },
+        ],
+      },
+    },
+  });
 
   // ── URL param sync ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -244,7 +285,7 @@ export default function ShopPage() {
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <main className="page-enter shop-page" aria-label="Shop — Yogo Ventures">
+    <main className="page-enter shop-page" id="main-content" aria-label="Shop — Browse All Wholesale Products | Yogo Ventures">
 
       {/* HERO */}
       <div className="shop-page__hero">

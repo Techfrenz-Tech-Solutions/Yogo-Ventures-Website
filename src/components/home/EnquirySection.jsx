@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Api from "../../utils/Api";
+import { trackFormSubmit } from "../../utils/analytics";
 import "./EnquirySection.css";
 
 /* ── Validators ── */
@@ -233,6 +234,13 @@ export default function EnquirySection() {
         phone_number:     `${form.isdCode}${form.phone.trim()}`,
         product_category: form.category,
         message:          form.message.trim(),
+      });
+
+      // ── Track enquiry form as a lead conversion ───────────────────────
+      trackFormSubmit({
+        formId: "enquiry_form",
+        country: form.country,
+        subject: form.category,
       });
 
       showToast("Enquiry submitted! We'll get back to you shortly.", "success");

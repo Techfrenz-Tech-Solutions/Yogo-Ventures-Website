@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Link }      from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useSEO } from "../hooks/useSEO";
 import { gsap }      from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HeroSection        from "../components/home/HeroSection";
@@ -174,6 +175,33 @@ export default function HomePage() {
   const [newArrivals, setNewArrivals] = useState([]);
   const navigate    = useNavigate();
 
+  /* ── SEO — Homepage ────────────────────────────────────────────────────── */
+  useSEO({
+    title: "Premium Fashion, Copper Utensils, Memory Foam & Indian Handicrafts | B2B Wholesale Supplier",
+    description: "Yogo Ventures is India's trusted B2B wholesale supplier of premium fashion apparel, ayurvedic copper utensils, memory foam products, and authentic Indian handicrafts. Request a quotation for bulk orders.",
+    canonical: "https://www.yogoventures.com/",
+    ogImage: "https://www.yogoventures.com/Logo.png",
+    breadcrumb: [
+      { name: "Home", url: "https://www.yogoventures.com/" },
+    ],
+    schemaId: "homepage-webpage",
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": "https://www.yogoventures.com/#webpage",
+      "url": "https://www.yogoventures.com/",
+      "name": "Yogo Ventures — Premium Fashion, Copper Utensils, Memory Foam & Handicrafts",
+      "description": "India's trusted B2B wholesale supplier of premium fashion apparel, copper utensils, memory foam products and authentic Indian handicrafts.",
+      "isPartOf": { "@id": "https://www.yogoventures.com/#website" },
+      "publisher": { "@id": "https://www.yogoventures.com/#organization" },
+      "inLanguage": "en-IN",
+      "potentialAction": {
+        "@type": "ReadAction",
+        "target": ["https://www.yogoventures.com/"]
+      }
+    },
+  });
+
   // Best-sellers / new-arrivals come from the backend only — no static fallback.
   useEffect(() => {
     Api.get('/bestselling/best-sellinglist')
@@ -256,7 +284,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className="page-enter" aria-label="Yogo Ventures Home">
+    <main className="page-enter" id="main-content" aria-label="Yogo Ventures — B2B Wholesale Marketplace India">
 
       {/* 1. HERO */}
       <HeroSection />
@@ -320,19 +348,19 @@ export default function HomePage() {
         <div className="container">
           <div className="sourcing-cta-block reveal">
             <h2 className="sourcing-cta-block__title" id="sourcing-heading">
-              Can&#39;t find the product you&#39;re looking for?
+              Can&#39;t Find the Product You&#39;re Looking For?
             </h2>
             <p className="sourcing-cta-block__body">
-              No worries &#8212; we offer reliable sourcing services across India. We collaborate
-              with trusted manufacturers in specialized production hubs to help you source the
-              right products at competitive prices.
+              No worries &#8212; Yogo Ventures offers reliable pan-India product sourcing services.
+              We collaborate with trusted manufacturers in specialized production hubs across India
+              to help you source the right products at competitive wholesale prices.
             </p>
             <p className="sourcing-cta-block__body">
-              From product sourcing and sampling to supplier coordination and order management,
-              we support you through every step to make your sourcing process smooth and efficient.
+              From product sourcing and sampling to supplier coordination and bulk order management,
+              we support you through every step to make your B2B sourcing process smooth and efficient.
             </p>
             <Link to="/services" className="btn btn--footer-theme btn-lg" style={{ textDecoration: "none" }}>
-              Explore Our Services &#8594;
+              Explore Our Sourcing Services &#8594;
             </Link>
           </div>
         </div>

@@ -194,7 +194,7 @@
 /* ── Dot pagination ─────────────────────────────────────────────────────── */
 .hero__dots {
   position: absolute;
-  bottom: 24px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
@@ -204,26 +204,25 @@
 }
 
 .hero__dot {
-  height: 8px;
   width: 8px;
-  border-radius: 999px;
-  border: none;
+  height: 8px;
+  min-width: 8px !important;
+  min-height: 8px !important;
   padding: 0;
+  border: none;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.45);
   cursor: pointer;
-  transition: width 0.3s ease, background 0.3s ease, transform 0.2s ease;
-  will-change: width, background;
+  transition: width 0.3s ease, background 0.3s ease;
 }
 
 .hero__dot:hover {
-  background: rgba(255, 255, 255, 0.75);
-  transform: scale(1.15);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .hero__dot.active {
-  width: 28px;
+  width: 24px;
   background: #fff;
-  transform: scale(1);
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -310,9 +309,9 @@
   .hero__nav--prev { left: 12px; }
   .hero__nav--next { right: 12px; }
 
-  .hero__dots { bottom: 18px; gap: 7px; }
-  .hero__dot  { height: 7px; width: 7px; }
-  .hero__dot.active { width: 22px; }
+  .hero__dots { bottom: 14px; gap: 7px; }
+  .hero__dot  { width: 7px; height: 7px; min-width: 7px !important; min-height: 7px !important; }
+  .hero__dot.active { width: 20px; }
 
   /* SLIDE 1 — APPAREL (1024×717, ratio 1.4282)
      contain = all 3 men fully visible, bg fills any side gaps */
@@ -399,8 +398,8 @@
   .hero__nav--prev { left: 8px; }
   .hero__nav--next { right: 8px; }
 
-  .hero__dots { bottom: 14px; gap: 6px; }
-  .hero__dot  { height: 6px; width: 6px; }
+  .hero__dots { bottom: 12px; gap: 6px; }
+  .hero__dot  { width: 6px; height: 6px; min-width: 6px !important; min-height: 6px !important; }
   .hero__dot.active { width: 18px; }
 }
 

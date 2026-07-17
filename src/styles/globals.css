@@ -1,9 +1,9 @@
 /* ============================================================
-   COASTAL RETREAT — Global Design System
-   Palette: #335765 | #74A8A4 | #B6D9E0 | #DBE2DC | #7F543D
+   YOGO VENTURES — Global Design System
+   Brand Palette: #335765 | #74A8A4 | #B6D9E0 | #DBE2DC | #7F543D
+   Fonts loaded in index.html <head> via preconnect + stylesheet link.
+   Do NOT @import fonts here — that causes double-loading (FOIT/flash).
    ============================================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
 
 /* ── CSS VARIABLES ── */
 :root {
@@ -741,4 +741,137 @@ ul, ol { list-style: none; }
 #root {
   position: relative;
   /* z-index: 1; ← REMOVED — was trapping header behind root's stacking context */
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   CORE WEB VITALS & PERFORMANCE OPTIMIZATIONS
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── LCP: prevent layout shift on hero images ────────────────────────────── */
+.hero__slide-bg img,
+.hero__slide-img {
+  /* Explicit dimensions prevent CLS while image loads */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── CLS: reserve space for images before they load ─────────────────────── */
+img[width][height] {
+  /* Use explicit width/height attributes to maintain aspect ratio */
+  aspect-ratio: attr(width) / attr(height);
+}
+
+/* ── INP: reduce paint complexity on off-screen sections ─────────────────── */
+/* content-visibility:auto defers rendering of below-fold content,
+   improving INP and FCP. contain-intrinsic-size avoids layout shift. */
+.faq-section,
+.why-grid,
+.testimonials-section,
+.about-team {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
+/* ── CLS: skeleton placeholders for dynamically loaded product grids ─────── */
+.sp-products-grid:empty,
+.home-products-grid:empty {
+  min-height: 320px;
+}
+
+/* ── ACCESSIBILITY: Focus ring — visible for keyboard navigation ──────────── */
+/* WCAG 2.1 AA requires a 3:1 contrast ratio for focus indicators */
+:focus-visible {
+  outline: 2px solid var(--mid);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Remove outline for mouse/touch users, keep for keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── ACCESSIBILITY: Skip to main content link ────────────────────────────── */
+.skip-to-main:focus {
+  position: fixed !important;
+  left: 16px !important;
+  top: 16px !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  clip: auto !important;
+  z-index: 10000;
+  background: var(--deep);
+  color: var(--white);
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: var(--shadow-md);
+}
+
+/* ── SECURITY: prevent clickjacking via CSS ──────────────────────────────── */
+/* frame-busting via CSS is a defense-in-depth measure */
+body { display: block !important; }
+
+/* ── PERFORMANCE: GPU-composited animations only ─────────────────────────── */
+/* Use transform + opacity instead of top/left/width/height for animations */
+.page-enter {
+  will-change: opacity, transform;
+}
+
+.reveal {
+  will-change: opacity, transform;
+}
+
+/* Clean up will-change after animation to free GPU memory */
+.reveal.visible,
+.page-enter {
+  will-change: auto;
+}
+
+/* ── PERFORMANCE: Image rendering optimization ───────────────────────────── */
+.hpc__img,
+.sp-card__img,
+.ymal-card__img,
+.cat-card-4__bg {
+  /* Hint to browser for decoding priority */
+  decoding: auto;
+}
+
+/* ── MOBILE: Touch target size (WCAG 2.5.5 — minimum 44×44px) ────────────── */
+.header__icon-btn,
+.header__nav-link,
+.footer__social,
+.faq-item__question,
+.hero__dot,
+.hero__nav {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* ── PRINT: Minimal print stylesheet ─────────────────────────────────────── */
+@media print {
+  .header,
+  .footer,
+  .hero__nav,
+  .hero__dots,
+  .BottomNav,
+  .header__actions,
+  .search-overlay,
+  .pdp-toast-container {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 12pt;
+  }
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    color: #555;
+  }
 }

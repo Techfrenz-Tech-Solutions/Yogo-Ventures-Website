@@ -87,10 +87,10 @@ export const STATS = [
 ];
 
 export const NAV_LINKS = [
-  { label:"Home",     path:"/" },
-  { label:"Shop",     path:"/shop" },
-  { label:"Services", path:"/services" },
-  { label:"Contact",  path:"/contact" },
+  { label: "Home",     path: "/" },
+  { label: "Shop",     path: "/shop" },
+  { label: "Services", path: "/services" },
+  { label: "Contact",  path: "/contact" },
 ];
 
 export const TRUSTED_BRANDS = [

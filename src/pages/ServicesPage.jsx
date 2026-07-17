@@ -1,5 +1,6 @@
 // src/pages/SourcingPage.jsx
 import { useNavigate } from "react-router-dom";
+import { useSEO } from "../hooks/useSEO";
 import heroBanner        from "../Assets/Services/Banner.png";
 import panIndiaSourcing  from "../Assets/Services/Services1.png";
 import customizedDev     from "../Assets/Services/Services2.png";
@@ -94,8 +95,43 @@ const audience = [
 export default function SourcingPage() {
   const navigate = useNavigate();
 
+  useSEO({
+    title: "B2B Sourcing Services — Pan-India Product Sourcing, Private Label & Bulk Orders",
+    description: "Yogo Ventures offers end-to-end B2B sourcing services across India — pan-India product sourcing, customized development, private label branding, quality inspection, and bulk order management.",
+    canonical: "https://www.yogoventures.com/services",
+    ogImage: "https://www.yogoventures.com/Hero1.png",
+    keywords: "global product sourcing, B2B sourcing services, private label manufacturer, bulk order management, quality inspection services, custom product development, packaging design, compliance certification, product sampling, worldwide manufacturer network, global supply chain solutions, international sourcing, wholesale procurement, factory sourcing, e-commerce seller sourcing, request quotation, sourcing solutions, reliable supplier, trusted supplier, business sourcing partner",
+    breadcrumb: [
+      { name: "Home",     url: "https://www.yogoventures.com/" },
+      { name: "Services", url: "https://www.yogoventures.com/services" },
+    ],
+    schemaId: "services-page",
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "B2B Product Sourcing & Wholesale Services",
+      "description": "End-to-end pan-India product sourcing, private label branding, quality inspection, and bulk order management for global wholesale buyers.",
+      "provider": { "@id": "https://www.yogoventures.com/#organization" },
+      "areaServed": { "@type": "Country", "name": "India" },
+      "serviceType": "B2B Product Sourcing",
+      "url": "https://www.yogoventures.com/services",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Sourcing Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pan-India Product Sourcing" }},
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Customized Development" }},
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Private Label & Branding" }},
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Quality Inspection" }},
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bulk Order Management" }},
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Communication Bridge" }}
+        ]
+      }
+    },
+  });
+
   return (
-    <div className="sourcing-page">
+    <div className="sourcing-page" id="main-content">
 
       {/* ── HERO ── */}
       <section className="sourcing-hero">
