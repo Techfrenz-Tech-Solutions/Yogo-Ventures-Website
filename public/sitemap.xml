@@ -1,144 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   sitemap.xml — Yogo Ventures (https://www.yogoventures.com)
-  Optimized for Google Search Console fast indexing & coverage.
-  Submit this URL in Google Search Console → Sitemaps.
+  Sitemap Index — Submit this single URL in Google Search Console → Sitemaps.
+  Google will crawl all child sitemaps automatically from here.
 -->
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-  xsi:schemaLocation="
-    http://www.sitemaps.org/schemas/sitemap/0.9
-    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
-    http://www.google.com/schemas/sitemap-image/1.1
-    http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- ═══════════════════════════════════════
-       TIER 1 — Primary Navigation Pages
-       Priority 1.0 — 0.8
-       ═══════════════════════════════════════ -->
+  <!-- Core pages: Home, About, Contact, Policy, Terms -->
+  <sitemap>
+    <loc>https://www.yogoventures.com/sitemap-pages.xml</loc>
+    <lastmod>2026-07-18</lastmod>
+  </sitemap>
 
-  <!-- Home Page -->
-  <url>
-    <loc>https://www.yogoventures.com/</loc>
-    <lastmod>2026-07-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-    <image:image>
-      <image:loc>https://www.yogoventures.com/Logo.png</image:loc>
-      <image:title>YoGo Ventures — Premium B2B Marketplace India</image:title>
-      <image:caption>YoGo Ventures — Wholesale supplier of fashion apparel, copper utensils, memory foam products and Indian handicrafts</image:caption>
-    </image:image>
-  </url>
+  <!-- Shop category landing pages -->
+  <sitemap>
+    <loc>https://www.yogoventures.com/sitemap-categories.xml</loc>
+    <lastmod>2026-07-18</lastmod>
+  </sitemap>
 
-  <!-- Shop — Main Product Catalogue -->
-  <url>
-    <loc>https://www.yogoventures.com/shop</loc>
-    <lastmod>2026-07-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://www.yogoventures.com/Hero1.png</image:loc>
-      <image:title>Shop All Products — YoGo Ventures</image:title>
-      <image:caption>Browse premium fashion, copper utensils, memory foam and handicraft products at Yogo Ventures</image:caption>
-    </image:image>
-  </url>
+  <!-- Individual product detail pages -->
+  <sitemap>
+    <loc>https://www.yogoventures.com/sitemap-products.xml</loc>
+    <lastmod>2026-07-18</lastmod>
+  </sitemap>
 
-  <!-- Services -->
-  <url>
-    <loc>https://www.yogoventures.com/services</loc>
-    <lastmod>2026-07-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <!-- Services & enquiry pages -->
+  <sitemap>
+    <loc>https://www.yogoventures.com/sitemap-services.xml</loc>
+    <lastmod>2026-07-18</lastmod>
+  </sitemap>
 
-  <!-- Contact Us -->
-  <url>
-    <loc>https://www.yogoventures.com/contact</loc>
-    <lastmod>2026-07-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <!-- Product & banner images for Google Images indexing -->
+  <sitemap>
+    <loc>https://www.yogoventures.com/sitemap-images.xml</loc>
+    <lastmod>2026-07-18</lastmod>
+  </sitemap>
 
-  <!-- ═══════════════════════════════════════
-       TIER 2 — Category Pages
-       (via shop?category= filter — distinct
-        content, separate ranking opportunities)
-       Priority 0.8 — 0.7
-       ═══════════════════════════════════════ -->
-
-  <!-- Category: Fashion Apparel -->
-  <url>
-    <loc>https://www.yogoventures.com/shop?category=Apparel</loc>
-    <lastmod>2026-07-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://www.yogoventures.com/Hero1.png</image:loc>
-      <image:title>Premium Fashion Apparel — Wholesale Supplier India</image:title>
-      <image:caption>Bulk fashion apparel — polo shirts, round neck tees, hoodies with custom branding and screen printing</image:caption>
-    </image:image>
-  </url>
-
-  <!-- Category: Memory Foam Products -->
-  <url>
-    <loc>https://www.yogoventures.com/shop?category=Memory+Foam+Products</loc>
-    <lastmod>2026-07-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <image:image>
-      <image:loc>https://www.yogoventures.com/Hero2.jpg</image:loc>
-      <image:title>Memory Foam Products — Pillows &amp; Mattresses Wholesale</image:title>
-      <image:caption>Ergonomic memory foam pillows, car neck rest pillows and memory foam mattresses from trusted supplier</image:caption>
-    </image:image>
-  </url>
-
-  <!-- Category: Copper Utensils -->
-  <url>
-    <loc>https://www.yogoventures.com/shop?category=Copper+Utensils</loc>
-    <lastmod>2026-07-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <image:image>
-      <image:loc>https://www.yogoventures.com/Hero3.png</image:loc>
-      <image:title>Copper Utensils — Ayurvedic Copper Bottles &amp; Kitchenware</image:title>
-      <image:caption>Pure copper bottles, cups, thali sets and kitchenware — bulk wholesale copper utensils supplier India</image:caption>
-    </image:image>
-  </url>
-
-  <!-- Category: Handicraft Items -->
-  <url>
-    <loc>https://www.yogoventures.com/shop?category=Handicraft+Items</loc>
-    <lastmod>2026-07-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <image:image>
-      <image:loc>https://www.yogoventures.com/Hero4.png</image:loc>
-      <image:title>Indian Handicrafts — Authentic Handmade Products Wholesale</image:title>
-      <image:caption>GI-tagged authentic Indian handicrafts, handmade home decor and gift items from artisan clusters</image:caption>
-    </image:image>
-  </url>
-
-  <!-- ═══════════════════════════════════════
-       TIER 3 — Legal / Policy Pages
-       Priority 0.3
-       ═══════════════════════════════════════ -->
-
-  <!-- Privacy Policy -->
-  <url>
-    <loc>https://www.yogoventures.com/PrivacyPolicy</loc>
-    <lastmod>2026-07-17</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <!-- Terms of Use -->
-  <url>
-    <loc>https://www.yogoventures.com/TermOfuse</loc>
-    <lastmod>2026-07-17</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-</urlset>
+</sitemapindex>

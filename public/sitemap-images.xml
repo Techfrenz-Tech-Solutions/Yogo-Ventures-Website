@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  sitemap-images.xml — Yogo Ventures
+  Image sitemap for Google Images indexing.
+  Covers hero/banner images, category representative images, and key product images.
+
+  Google Image Sitemap spec: https://developers.google.com/search/docs/crawling-indexing/sitemaps/image-sitemaps
+-->
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://www.sitemaps.org/schemas/sitemap/0.9
+    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
+    http://www.google.com/schemas/sitemap-image/1.1
+    http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">
+
+  <!-- ══════════════════════════════════════════
+       HOME PAGE — Banner / Hero images
+       ══════════════════════════════════════════ -->
+  <url>
+    <loc>https://www.yogoventures.com/</loc>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Logo.png</image:loc>
+      <image:title>YoGo Ventures Logo — Premium B2B Marketplace India</image:title>
+      <image:caption>YoGo Ventures — Wholesale supplier of fashion apparel, copper utensils, memory foam products and Indian handicrafts</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero1.png</image:loc>
+      <image:title>Fashion Apparel Hero — Wholesale Apparel India</image:title>
+      <image:caption>Premium polo shirts, round neck tees and hoodies for bulk orders with custom branding</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero2.jpg</image:loc>
+      <image:title>Memory Foam Products Hero — Ergonomic Pillows Wholesale</image:title>
+      <image:caption>Ergonomic memory foam pillows, car neck rests and lumbar support cushions</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero3.png</image:loc>
+      <image:title>Copper Utensils Hero — Pure Copper Kitchenware India</image:title>
+      <image:caption>Pure copper bottles, jugs, thali sets and kitchenware — bulk wholesale supplier India</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero4.png</image:loc>
+      <image:title>Indian Handicrafts Hero — Authentic Handmade Products</image:title>
+      <image:caption>GI-tagged blue pottery, wooden handicrafts and handmade cotton bags from Indian artisan clusters</image:caption>
+    </image:image>
+  </url>
+
+  <!-- ══════════════════════════════════════════
+       CATEGORY IMAGES
+       ══════════════════════════════════════════ -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Apparel</loc>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Polo1.png</image:loc>
+      <image:title>Polo T-Shirt Beige — Wholesale Polo Apparel India</image:title>
+      <image:caption>Bulk polo t-shirts available in multiple colours with custom embroidery and screen printing</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Round1.png</image:loc>
+      <image:title>Round Neck T-Shirt — Wholesale Crew Neck Apparel India</image:title>
+      <image:caption>Premium round neck t-shirts for corporate branding, uniforms and promotional use</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hoodie1.png</image:loc>
+      <image:title>Custom Hoodie — Wholesale Hoodies India</image:title>
+      <image:caption>Soft fleece hoodies for team apparel, branded merchandise and casual wear</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Memory+Foam+Products</loc>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero2.jpg</image:loc>
+      <image:title>Memory Foam Products — Car Neck Rest and Pillows Wholesale</image:title>
+      <image:caption>High-density memory foam car accessories and sleep support products</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Copper+Utensils</loc>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero3.png</image:loc>
+      <image:title>Copper Utensils — Wholesale Copper Bottles and Kitchenware India</image:title>
+      <image:caption>Pure copper water bottles, jugs, cups and thali sets — antimicrobial ayurvedic kitchenware</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Handicraft+Items</loc>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero4.png</image:loc>
+      <image:title>Indian Handicrafts — Blue Pottery Wooden Handicrafts and Cotton Bags</image:title>
+      <image:caption>Authentic handmade Indian handicrafts — blue pottery vases, wooden decor and artisan cotton bags</image:caption>
+    </image:image>
+  </url>
+
+  <!-- ══════════════════════════════════════════
+       KEY PRODUCT IMAGES
+       (Best sellers & representative products)
+       ══════════════════════════════════════════ -->
+
+  <!-- Polo Beige -->
+  <url>
+    <loc>https://www.yogoventures.com/product/1</loc>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Polo1.png</image:loc>
+      <image:title>Polo Apparel Beige — Wholesale Polo T-Shirt India</image:title>
+      <image:caption>Premium beige polo t-shirt for bulk orders, corporate uniforms and branded apparel</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Round Neck Beige -->
+  <url>
+    <loc>https://www.yogoventures.com/product/6</loc>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Round1.png</image:loc>
+      <image:title>Round Neck Apparel Beige — Wholesale Crew Neck T-Shirt</image:title>
+      <image:caption>Classic beige crew neck t-shirt for branding, uniforms and promotional merchandise</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Hoodie Black -->
+  <url>
+    <loc>https://www.yogoventures.com/product/11</loc>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hoodie1.png</image:loc>
+      <image:title>Black Hoodie — Wholesale Custom Hoodie India</image:title>
+      <image:caption>Premium black hoodie in soft fleece fabric for team apparel and branded merchandise</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Car Neck Rest Pillow -->
+  <url>
+    <loc>https://www.yogoventures.com/product/16</loc>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Truck.png</image:loc>
+      <image:title>Car Neck Rest Pillow — Memory Foam Neck Support India</image:title>
+      <image:caption>High-density memory foam car neck rest pillow for comfortable long-drive support</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Copper Water Container -->
+  <url>
+    <loc>https://www.yogoventures.com/product/21</loc>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero3.png</image:loc>
+      <image:title>Copper Water Container — Antimicrobial Copper Storage India</image:title>
+      <image:caption>Food-grade copper water container with natural antimicrobial properties for daily wellness use</image:caption>
+    </image:image>
+  </url>
+
+  <!-- About section image -->
+  <url>
+    <loc>https://www.yogoventures.com/</loc>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Aboutsection.png</image:loc>
+      <image:title>About YoGo Ventures — B2B Wholesale Marketplace India</image:title>
+      <image:caption>YoGo Ventures connects wholesale buyers with premium Indian product categories including apparel, copper and handicrafts</image:caption>
+    </image:image>
+  </url>
+
+</urlset>

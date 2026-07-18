@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  sitemap-categories.xml — Yogo Ventures
+  Shop category & sub-category landing pages.
+  Each ?category= URL surfaces a distinct, filtered product grid — separate
+  ranking opportunities for category-level search queries.
+-->
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+  xsi:schemaLocation="
+    http://www.sitemaps.org/schemas/sitemap/0.9
+    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
+    http://www.google.com/schemas/sitemap-image/1.1
+    http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">
+
+  <!-- ══════════════════════════════════════════
+       APPAREL
+       ══════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Apparel</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero1.png</image:loc>
+      <image:title>Premium Fashion Apparel — Wholesale Supplier India</image:title>
+      <image:caption>Bulk fashion apparel: polo shirts, round neck tees, hoodies with custom branding and screen printing</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Sub-category: Polo -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Apparel&amp;sub=Polo</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Sub-category: Round Neck -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Apparel&amp;sub=Round+Neck</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Sub-category: Hoodies -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Apparel&amp;sub=Hoodies</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ══════════════════════════════════════════
+       MEMORY FOAM PRODUCTS
+       ══════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Memory+Foam+Products</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero2.jpg</image:loc>
+      <image:title>Memory Foam Products — Pillows &amp; Car Accessories Wholesale</image:title>
+      <image:caption>Ergonomic memory foam pillows, car neck rest pillows, wedge pillows and lumbar support cushions</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Sub-category: Car Neck Rest Pillow -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Memory+Foam+Products&amp;sub=Car+Neck+Rest+Pillow</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Sub-category: Contour Pillow -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Memory+Foam+Products&amp;sub=Contour+Pillow</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Sub-category: Wedge Pillow -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Memory+Foam+Products&amp;sub=Wedge+Pillow</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Sub-category: Car Back Rest -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Memory+Foam+Products&amp;sub=Car+Back+Rest</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Sub-category: Coccyx Cushion -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Memory+Foam+Products&amp;sub=Coccyx+Cushion</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- ══════════════════════════════════════════
+       COPPER UTENSILS
+       ══════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Copper+Utensils</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero3.png</image:loc>
+      <image:title>Copper Utensils — Ayurvedic Copper Bottles &amp; Kitchenware</image:title>
+      <image:caption>Pure copper bottles, jugs, cups, thali sets and kitchenware — bulk wholesale copper utensils supplier India</image:caption>
+    </image:image>
+  </url>
+
+  <!-- ══════════════════════════════════════════
+       HANDICRAFT ITEMS
+       ══════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Handicraft+Items</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.yogoventures.com/Hero4.png</image:loc>
+      <image:title>Indian Handicrafts — Authentic Handmade Products Wholesale</image:title>
+      <image:caption>GI-tagged authentic Indian handicrafts — blue pottery, wooden handicrafts and handmade cotton bags from artisan clusters</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Sub-category: Blue Pottery -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Handicraft+Items&amp;sub=Blue+Pottery</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Sub-category: Handmade Cotton Bags -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Handicraft+Items&amp;sub=Handmade+Cotton+Bags</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Sub-category: Wooden Handicraft -->
+  <url>
+    <loc>https://www.yogoventures.com/shop?category=Handicraft+Items&amp;sub=Wooden+Handicraft</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>

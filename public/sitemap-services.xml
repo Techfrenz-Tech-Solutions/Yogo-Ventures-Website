@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  sitemap-services.xml — Yogo Ventures
+  Services, quotation, support and distribution pages.
+-->
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://www.sitemaps.org/schemas/sitemap/0.9
+    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- ── Services Overview ─────────────────────────────────── -->
+  <url>
+    <loc>https://www.yogoventures.com/services</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ── Get a Quote (contact with intent anchor) ──────────── -->
+  <!--
+    Currently the quotation flow lives on /contact.
+    If a dedicated /quotation route is added later, add it here.
+  -->
+  <url>
+    <loc>https://www.yogoventures.com/contact</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>

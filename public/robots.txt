@@ -66,4 +66,12 @@ User-agent: MJ12bot
 Disallow: /
 
 # ── Sitemap locations ─────────────────────────────────────────────────────────
+# Primary sitemap index (submit this one to Google Search Console)
 Sitemap: https://www.yogoventures.com/sitemap.xml
+
+# Child sitemaps (also referenced by sitemap.xml index above)
+Sitemap: https://www.yogoventures.com/sitemap-pages.xml
+Sitemap: https://www.yogoventures.com/sitemap-categories.xml
+Sitemap: https://www.yogoventures.com/sitemap-products.xml
+Sitemap: https://www.yogoventures.com/sitemap-services.xml
+Sitemap: https://www.yogoventures.com/sitemap-images.xml
