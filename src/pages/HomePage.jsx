@@ -177,10 +177,10 @@ export default function HomePage() {
 
   /* ── SEO — Homepage ────────────────────────────────────────────────────── */
   useSEO({
-    title: "Premium Fashion, Copper Utensils, Memory Foam & Indian Handicrafts | B2B Wholesale Supplier",
+    title: "B2B Wholesale Supplier — Fashion, Copper Utensils, Memory Foam & Handicrafts",
     description: "Yogo Ventures is India's trusted B2B wholesale supplier of premium fashion apparel, ayurvedic copper utensils, memory foam products, and authentic Indian handicrafts. Request a quotation for bulk orders.",
     canonical: "https://www.yogoventures.com/",
-    ogImage: "https://www.yogoventures.com/Logo.png",
+    ogImage: "https://www.yogoventures.com/Hero1.png",
     breadcrumb: [
       { name: "Home", url: "https://www.yogoventures.com/" },
     ],
@@ -190,11 +190,15 @@ export default function HomePage() {
       "@type": "WebPage",
       "@id": "https://www.yogoventures.com/#webpage",
       "url": "https://www.yogoventures.com/",
-      "name": "Yogo Ventures — Premium Fashion, Copper Utensils, Memory Foam & Handicrafts",
-      "description": "India's trusted B2B wholesale supplier of premium fashion apparel, copper utensils, memory foam products and authentic Indian handicrafts.",
+      "name": "Yogo Ventures — B2B Wholesale Supplier India",
+      "description": "India's trusted B2B wholesale supplier of premium fashion apparel, copper utensils, memory foam products and authentic Indian handicrafts. Request quotations for bulk orders.",
       "isPartOf": { "@id": "https://www.yogoventures.com/#website" },
       "publisher": { "@id": "https://www.yogoventures.com/#organization" },
       "inLanguage": "en-IN",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.yogoventures.com/Hero1.png"
+      },
       "potentialAction": {
         "@type": "ReadAction",
         "target": ["https://www.yogoventures.com/"]

@@ -717,9 +717,7 @@ export default function PrivacyPolicy() {
   });
 
   return (
-    <main className="pp-page page-enter">
-      <title>Privacy Policy — YoGo Ventures | B2B Indian Export &amp; Wholesale Sourcing Platform</title>
-
+    <main className="pp-page page-enter" id="main-content" aria-label="Yogo Ventures Privacy Policy">
       <PrivacyHero />
 
       <div className="pp-trust-strip">

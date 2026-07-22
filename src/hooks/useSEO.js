@@ -16,14 +16,15 @@
 
 import { useEffect } from "react";
 
-const SITE_NAME    = "YoGo Ventures";
+const SITE_NAME    = "Yogo Ventures";
 const SITE_URL     = "https://www.yogoventures.com";
-const DEFAULT_IMG  = `${SITE_URL}/Logo.png`;
-const DEFAULT_DESC = "YoGo Ventures is a trusted B2B wholesale marketplace in India offering premium fashion apparel, copper utensils, memory foam products, and authentic Indian handicrafts.";
+const DEFAULT_IMG  = `${SITE_URL}/Hero1.png`;
+const DEFAULT_DESC = "Yogo Ventures is India's trusted B2B wholesale supplier of premium fashion apparel, copper utensils, memory foam products, and authentic Indian handicrafts.";
 
 /**
- * Helper: set or create a <meta> tag by name attribute.
- * Avoids duplicates by finding the existing tag first.
+ * Helper: set or create a <meta> tag.
+ * attr  = attribute name to match on, e.g. "name" or "property"
+ * value = attribute value, e.g. "description" or "og:title"
  */
 function setMeta(attr, value, content) {
   let el = document.querySelector(`meta[${attr}="${value}"]`);
@@ -35,9 +36,7 @@ function setMeta(attr, value, content) {
   el.setAttribute("content", content);
 }
 
-/**
- * Helper: set or create a <link> tag.
- */
+/** Helper: set or update a <link rel="…"> tag. */
 function setLink(rel, href) {
   let el = document.querySelector(`link[rel="${rel}"]`);
   if (!el) {
@@ -50,7 +49,7 @@ function setLink(rel, href) {
 
 /**
  * Helper: inject or update a JSON-LD <script> block.
- * Uses a data-schema-id attribute to avoid duplicates.
+ * Uses data-schema-id to avoid duplicates across navigations.
  */
 function setSchema(id, schemaObj) {
   let el = document.querySelector(`script[data-schema-id="${id}"]`);
@@ -69,19 +68,40 @@ function removeSchema(id) {
 }
 
 /**
+ * Build the full page title.
+ *
+ * Rules:
+ *  - If title already begins with "Yogo Ventures" (any casing) → use as-is
+ *  - Otherwise prefix with "Yogo Ventures | "
+ *  - No title provided → fallback to homepage default
+ *
+ * This prevents double-branding like:
+ *   "Yogo Ventures | Yogo Ventures | Shop All Products…"   ← old bug
+ */
+function buildTitle(title) {
+  if (!title) {
+    return "Yogo Ventures | Fashion, Memory Foam, Copper Utensils & Handicrafts";
+  }
+  if (/^yogo ventures/i.test(title.trim())) {
+    return title.trim();
+  }
+  return `Yogo Ventures | ${title}`;
+}
+
+/**
  * Main hook
  *
- * @param {object} params
- * @param {string}  params.title       — Full page title (no need to append site name, it's done here)
- * @param {string}  params.description — Meta description (120–160 chars ideal)
- * @param {string}  params.canonical   — Full canonical URL
- * @param {string}  [params.ogImage]   — OG image URL (falls back to Logo.png)
- * @param {string}  [params.ogType]    — OG type (default: "website")
- * @param {string}  [params.robots]    — Robots directive (default: "index, follow")
- * @param {object}  [params.schema]    — Single JSON-LD schema object, or null to remove
- * @param {string}  [params.schemaId]  — Unique ID for the schema block (required if schema provided)
- * @param {Array}   [params.breadcrumb] — Array of {name, url} for BreadcrumbList schema
- * @param {string}  [params.keywords]  — Page-specific meta keywords (comma-separated string)
+ * @param {object}  params
+ * @param {string}  params.title        — Page-specific title segment
+ * @param {string}  params.description  — Meta description (120–160 chars)
+ * @param {string}  params.canonical    — Full canonical URL for this page
+ * @param {string}  [params.ogImage]    — OG image URL (defaults to Hero1.png)
+ * @param {string}  [params.ogType]     — OG type (default: "website")
+ * @param {string}  [params.robots]     — Robots directive
+ * @param {object}  [params.schema]     — JSON-LD schema object to inject
+ * @param {string}  [params.schemaId]   — Unique ID for the schema block
+ * @param {Array}   [params.breadcrumb] — [{name, url}] for BreadcrumbList schema
+ * @param {string}  [params.keywords]   — Page-specific meta keywords
  */
 export function useSEO({
   title,
@@ -96,19 +116,19 @@ export function useSEO({
   keywords = null,
 }) {
   useEffect(() => {
-    const fullTitle = title ? `YoGo Ventures | ${title}` : "YoGo Ventures | Fashion, Memory Foam, Copper Utensils & Handicrafts";
+    const fullTitle = buildTitle(title);
 
     // ── Document title ────────────────────────────────────────────────────
     document.title = fullTitle;
 
-    // ── Standard meta tags ────────────────────────────────────────────────
+    // ── Primary meta tags ─────────────────────────────────────────────────
     setMeta("name", "description", description);
     setMeta("name", "robots", robots);
     if (keywords) {
       setMeta("name", "keywords", keywords);
     }
 
-    // ── Canonical ─────────────────────────────────────────────────────────
+    // ── Canonical URL ─────────────────────────────────────────────────────
     if (canonical) {
       setLink("canonical", canonical);
     }
@@ -118,17 +138,17 @@ export function useSEO({
     setMeta("property", "og:description", description);
     setMeta("property", "og:url",         canonical || `${SITE_URL}/`);
     setMeta("property", "og:image",       ogImage);
-    setMeta("property", "og:image:alt",   fullTitle);
+    setMeta("property", "og:image:alt",   `${SITE_NAME} — ${title || "B2B Wholesale Marketplace India"}`);
     setMeta("property", "og:type",        ogType);
     setMeta("property", "og:site_name",   SITE_NAME);
     setMeta("property", "og:locale",      "en_IN");
 
-    // ── Twitter Card ──────────────────────────────────────────────────────
+    // ── Twitter / X Card ──────────────────────────────────────────────────
     setMeta("name", "twitter:card",        "summary_large_image");
     setMeta("name", "twitter:title",       fullTitle);
     setMeta("name", "twitter:description", description);
     setMeta("name", "twitter:image",       ogImage);
-    setMeta("name", "twitter:image:alt",   fullTitle);
+    setMeta("name", "twitter:image:alt",   `${SITE_NAME} — ${title || "B2B Wholesale Marketplace India"}`);
 
     // ── Page-specific JSON-LD schema ──────────────────────────────────────
     if (schema && schemaId) {
@@ -139,7 +159,7 @@ export function useSEO({
 
     // ── BreadcrumbList schema ─────────────────────────────────────────────
     if (breadcrumb && breadcrumb.length > 0) {
-      const breadcrumbSchema = {
+      setSchema("page-breadcrumb", {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": breadcrumb.map((item, i) => ({
@@ -148,23 +168,23 @@ export function useSEO({
           "name": item.name,
           "item": item.url,
         })),
-      };
-      setSchema("page-breadcrumb", breadcrumbSchema);
+      });
     } else {
       removeSchema("page-breadcrumb");
     }
 
-    // ── Track page view in GTM / GA4 ─────────────────────────────────────
+    // ── Virtual page view — GTM dataLayer ────────────────────────────────
+    // Fires on every SPA navigation so GTM GA4 tag picks it up correctly.
     if (window.dataLayer) {
       window.dataLayer.push({
-        event: "page_view",
-        page_title: fullTitle,
-        page_location: canonical || window.location.href,
-        page_path: window.location.pathname,
+        event:          "page_view",
+        page_title:     fullTitle,
+        page_location:  canonical || window.location.href,
+        page_path:      window.location.pathname + window.location.search,
       });
     }
 
-    // ── Cleanup: restore homepage meta on unmount ─────────────────────────
+    // ── Cleanup on unmount / route change ─────────────────────────────────
     return () => {
       if (schemaId) removeSchema(schemaId);
       removeSchema("page-breadcrumb");

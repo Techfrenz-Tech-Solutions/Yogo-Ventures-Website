@@ -11,7 +11,7 @@ import { useProducts } from "../hooks/useProducts";
 import { useApp } from "../context/AppContext";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useSEO } from "../hooks/useSEO";
-import { trackProductView, trackAddToCart, trackWishlist } from "../utils/analytics";
+import { trackProductView, trackAddToCart, trackWishlist, trackRequestQuote } from "../utils/analytics";
 import "./ProductDetailPage.css";
 import "./ColorCustomization.css";
 
@@ -742,11 +742,12 @@ export default function ProductDetailPage() {
         "@type": "Offer",
         "url": productCanonical,
         "priceCurrency": "INR",
-        "price": "0",
+        "price": "1",
         "priceValidUntil": "2027-12-31",
         "availability": product.stock
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
+        "description": "Price on request — contact Yogo Ventures for wholesale bulk order quotation.",
         "seller": {
           "@type": "Organization",
           "name": "Yogo Ventures",
@@ -797,8 +798,14 @@ export default function ProductDetailPage() {
       return;
     }
     addToCart(product, resolved, {}, { suppressToast: true });
-    // ── Track add to cart / request quote ─────────────────────────────
+    // ── Track add to cart + request quote (GA4 conversion event) ──────────
     trackAddToCart({
+      productId: product.id,
+      productName: product.name,
+      category: product.category,
+      quantity: resolved,
+    });
+    trackRequestQuote({
       productId: product.id,
       productName: product.name,
       category: product.category,
@@ -873,6 +880,12 @@ export default function ProductDetailPage() {
     }
 
     mergeColorToCart(product, selectedColors, stableKey);
+    trackRequestQuote({
+      productId: product.id,
+      productName: product.name,
+      category: product.category,
+      quantity: selectedColors.reduce((sum, c) => sum + (c.quantity || 1), 0),
+    });
     showToast("Product added to cart", "success", 2800, { position: "bottom-center", replace: true });
     setCartOpen(true);
     setSelectedColors([]);

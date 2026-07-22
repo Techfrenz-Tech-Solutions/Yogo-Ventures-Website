@@ -1,13 +1,15 @@
 # ══════════════════════════════════════════════════════════════════════════════
 # robots.txt — Yogo Ventures (https://www.yogoventures.com)
 # Optimized for Google Search Console & Core Web Vitals
+# Last updated: 2026-07-22
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ── Default: Allow all well-behaved crawlers ──────────────────────────────────
+# ── Default: Allow all well-behaved crawlers ───────────────────────────────────
 User-agent: *
 Allow: /
 
-# Allow product and category pages (important for e-commerce indexing)
+# ── Explicitly allow key indexable paths (reinforces priority for crawlers
+#    that respect longest-match, e.g. Googlebot)
 Allow: /shop
 Allow: /shop?category=
 Allow: /product/
@@ -16,28 +18,42 @@ Allow: /contact
 Allow: /PrivacyPolicy
 Allow: /TermOfuse
 
-# Disallow transactional & user-specific pages (no SEO value)
+# ── Disallow transactional & user-only pages (no SEO value) ───────────────────
+# NOTE: specific disallows must appear AFTER specific allows for longest-match
+#       parsers to correctly prefer the Allow: /shop?category= rule above.
 Disallow: /checkout
 Disallow: /wishlist
 
-# Disallow internal API, admin, and private paths
+# ── Disallow internal API, admin, and private paths ──────────────────────────
 Disallow: /api/
 Disallow: /admin/
 Disallow: /private/
 
-# Disallow query strings that create duplicate content (sort/search)
+# ── Disallow duplicate-content query strings ─────────────────────────────────
+# /shop?sort= and /shop?q= produce the same page layout with reordered content.
+# They are lower-specificity than the Allow: /shop?category= rule above,
+# so category filter pages remain crawlable.
 Disallow: /shop?sort=
 Disallow: /shop?q=
 
-# ── Google-specific rules ─────────────────────────────────────────────────────
+# ── Google-specific rules ──────────────────────────────────────────────────────
 User-agent: Googlebot
 Allow: /
+Allow: /shop
+Allow: /shop?category=
+Allow: /product/
+Allow: /services
+Allow: /contact
+Allow: /PrivacyPolicy
+Allow: /TermOfuse
 Disallow: /checkout
 Disallow: /wishlist
 Disallow: /api/
 Disallow: /admin/
+Disallow: /shop?sort=
+Disallow: /shop?q=
 
-# ── Google Image Bot (allow product images for Google Images) ─────────────────
+# ── Google Image Bot — allow product + banner images ──────────────────────────
 User-agent: Googlebot-Image
 Allow: /
 Allow: /*.png$
@@ -45,12 +61,16 @@ Allow: /*.jpg$
 Allow: /*.jpeg$
 Allow: /*.webp$
 
-# ── Bing / Microsoft crawler ──────────────────────────────────────────────────
+# ── Bing / Microsoft ──────────────────────────────────────────────────────────
 User-agent: bingbot
 Allow: /
+Allow: /shop?category=
+Allow: /product/
 Disallow: /checkout
 Disallow: /wishlist
 Disallow: /api/
+Disallow: /shop?sort=
+Disallow: /shop?q=
 
 # ── Block known bad bots ──────────────────────────────────────────────────────
 User-agent: AhrefsBot
@@ -66,10 +86,8 @@ User-agent: MJ12bot
 Disallow: /
 
 # ── Sitemap locations ─────────────────────────────────────────────────────────
-# Primary sitemap index (submit this one to Google Search Console)
+# Submit sitemap.xml to Google Search Console — it references all child sitemaps.
 Sitemap: https://www.yogoventures.com/sitemap.xml
-
-# Child sitemaps (also referenced by sitemap.xml index above)
 Sitemap: https://www.yogoventures.com/sitemap-pages.xml
 Sitemap: https://www.yogoventures.com/sitemap-categories.xml
 Sitemap: https://www.yogoventures.com/sitemap-products.xml

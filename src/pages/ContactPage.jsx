@@ -409,7 +409,7 @@ export default function ContactPage() {
                     <input
                       id="cf-email"
                       className={`form-input${errors.email ? " cf-input-error" : ""}`}
-                      type="text" name="email" value={form.email}
+                      type="email" name="email" value={form.email}
                       onChange={handleChange} onBlur={handleBlur}
                       autoComplete="email" aria-describedby="cf-email-error"
                     />
@@ -515,7 +515,31 @@ export default function ContactPage() {
                 {INFO.map(({ Icon, value, label }) => (
                   <div key={label} className="contact-info-card">
                     <span className="contact-info-card__icon"><Icon /></span>
-                    <p className="contact-info-card__value">{value}</p>
+                    {label === "Phone" ? (
+                      <p className="contact-info-card__value">
+                        <a href="tel:+919003317417"
+                           onClick={() => trackPhoneClick("+919003317417")}
+                           aria-label="Call Yogo Ventures: +91 9003317417">
+                          +91 9003317417
+                        </a>
+                        {", "}
+                        <a href="tel:+916369681960"
+                           onClick={() => trackPhoneClick("+916369681960")}
+                           aria-label="Call Yogo Ventures: +91 6369681960">
+                          +91 6369681960
+                        </a>
+                      </p>
+                    ) : label === "Email" ? (
+                      <p className="contact-info-card__value">
+                        <a href="mailto:support@yogoventures.com"
+                           onClick={() => trackEmailClick("support@yogoventures.com")}
+                           aria-label="Email Yogo Ventures">
+                          {value}
+                        </a>
+                      </p>
+                    ) : (
+                      <p className="contact-info-card__value">{value}</p>
+                    )}
                   </div>
                 ))}
               </div>

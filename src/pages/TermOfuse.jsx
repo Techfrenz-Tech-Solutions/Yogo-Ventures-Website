@@ -503,7 +503,7 @@ export default function TermsAndConditions() {
   });
 
   return (
-    <div className="tnc-page">
+    <main className="tnc-page page-enter" id="main-content" aria-label="Yogo Ventures Terms of Use">
       <section className="tnc-hero">
         <div className="tnc-hero__bg-circle" aria-hidden="true" />
         <div className="tnc-hero__bg-circle tnc-hero__bg-circle--2" aria-hidden="true" />
@@ -533,6 +533,6 @@ export default function TermsAndConditions() {
         <p>By using our website or submitting an inquiry, you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions.</p>
         <p className="tnc-page-footer__copy">© 2026 YoGo Ventures. All rights reserved.</p>
       </div>
-    </div>
+    </main>
   );
 }

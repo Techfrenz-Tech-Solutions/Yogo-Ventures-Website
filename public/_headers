@@ -1,53 +1,38 @@
 # ══════════════════════════════════════════════════════════════════════════════
-# _headers — Yogo Ventures (Netlify HTTP Response Headers)
-# For nginx, see nginx.conf in project root.
-# These headers are required for:
-#   - Google Search Console "Security" enhancement
-#   - Core Web Vitals: HTTPS, HSTS improve trust signals
-#   - SEO: Google favors HTTPS + security headers in ranking
+# _headers — Yogo Ventures (Netlify / Cloudflare HTTP Response Headers)
+# For nginx deployments, see nginx.conf in project root.
+#
+# These headers directly affect:
+#   - Google Search Console "Security" report (HSTS, CSP, X-Frame-Options)
+#   - Core Web Vitals: HTTPS enforcement improves trust signals
+#   - SEO: Google favors HTTPS + security headers
+#   - Cache performance: correct headers prevent stale SPA shell
 # ══════════════════════════════════════════════════════════════════════════════
 
 /*
-  # ── Security Headers ───────────────────────────────────────────────────────
-
-  # HSTS: force HTTPS for 2 years; include subdomains; allow preload list
+  # ── Security Headers ────────────────────────────────────────────────────────
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-
-  # Prevent MIME type sniffing (XSS vector)
   X-Content-Type-Options: nosniff
-
-  # Stop clickjacking — only yogoventures.com frames allowed
   X-Frame-Options: SAMEORIGIN
-
-  # Enable XSS auditor (legacy browsers)
   X-XSS-Protection: 1; mode=block
-
-  # Control referrer information sent to other sites
   Referrer-Policy: strict-origin-when-cross-origin
-
-  # Permissions Policy — disable unused browser APIs
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=()
-
-  # Content Security Policy
-  # - default-src: only our own origin
-  # - script-src: self + GTM + GA4 + Vite HMR in dev
-  # - style-src: self + Google Fonts
-  # - img-src: self + data URIs + api subdomain (product images) + unsplash (legacy)
-  # - font-src: self + Google Fonts CDN
-  # - connect-src: self + GA4 + GTM + our API
-  # - frame-src: GTM noscript iframe
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://api.yogoventures.com https://images.unsplash.com https://www.google-analytics.com https://www.googletagmanager.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.yogoventures.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://region1.google-analytics.com; frame-src https://www.googletagmanager.com; object-src 'none'; base-uri 'self';
 
-  # ── Performance Headers ─────────────────────────────────────────────────────
-
-  # Cache Control for HTML — always revalidate (SPA, content changes)
+  # ── SPA HTML shell: always revalidate so Google gets fresh meta tags ────────
   Cache-Control: no-cache, no-store, must-revalidate
 
-# ── Static Assets: long-term caching (Vite adds content hashes to filenames) ──
+# ── Prevent indexing of transactional / user-only pages ─────────────────────
+/checkout
+  X-Robots-Tag: noindex, nofollow
+/wishlist
+  X-Robots-Tag: noindex, nofollow
+
+# ── Static Assets: long-term caching (Vite adds content hashes to filenames) ─
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-# ── Images: cache for 30 days ──────────────────────────────────────────────
+# ── Public images: cache 30 days ─────────────────────────────────────────────
 /*.png
   Cache-Control: public, max-age=2592000
 /*.jpg
@@ -59,10 +44,22 @@
 /*.svg
   Cache-Control: public, max-age=2592000
 
-# ── Manifest and Service Worker: short cache ──────────────────────────────
+# ── Sitemaps: cache 24 hours (re-crawled daily by Googlebot) ────────────────
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+/sitemap-pages.xml
+  Cache-Control: public, max-age=86400
+/sitemap-categories.xml
+  Cache-Control: public, max-age=86400
+/sitemap-products.xml
+  Cache-Control: public, max-age=86400
+/sitemap-services.xml
+  Cache-Control: public, max-age=86400
+/sitemap-images.xml
+  Cache-Control: public, max-age=86400
+
+# ── PWA / Discovery files ─────────────────────────────────────────────────────
 /manifest.json
   Cache-Control: public, max-age=86400
 /robots.txt
-  Cache-Control: public, max-age=86400
-/sitemap.xml
   Cache-Control: public, max-age=86400

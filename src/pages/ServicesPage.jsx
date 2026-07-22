@@ -131,12 +131,19 @@ export default function SourcingPage() {
   });
 
   return (
-    <div className="sourcing-page" id="main-content">
+    <main className="sourcing-page page-enter" id="main-content" aria-label="Yogo Ventures B2B Sourcing Services">
 
       {/* ── HERO ── */}
       <section className="sourcing-hero">
         <div className="sourcing-hero__banner">
-          <img src={heroBanner} alt="YoGo Sourcing — End-to-End Sourcing Across India" />
+          <img
+            src={heroBanner}
+            alt="Yogo Ventures B2B Sourcing — End-to-End Product Sourcing Across India"
+            loading="eager"
+            fetchpriority="high"
+            width="1440"
+            height="480"
+          />
         </div>
         <div className="sourcing-container sourcing-hero__text">
           <h1 className="sourcing-hero__title">End-to-End Sourcing Across India</h1>
@@ -163,7 +170,7 @@ export default function SourcingPage() {
           <div className="sourcing-services__grid">
             {services.map((s, i) => (
               <div key={i} className="sourcing-card">
-                <img src={s.img} alt={s.title} className="sourcing-card__img" />
+                <img src={s.img} alt={s.title} className="sourcing-card__img" loading="lazy" width="400" height="260" />
                 <h3 className="sourcing-card__title">{s.title}</h3>
                 <p className="sourcing-card__desc">{s.desc}</p>
               </div>
@@ -177,7 +184,14 @@ export default function SourcingPage() {
         <div className="sourcing-container">
           <div className="sourcing-audience__inner">
             <div className="sourcing-audience__img-wrap">
-              <img src={whoThisIsFor} alt="Who This Is For" className="sourcing-audience__img" />
+              <img
+                src={whoThisIsFor}
+                alt="Who Yogo Ventures B2B Sourcing Services Are For — Importers, E-commerce Sellers, Retailers"
+                className="sourcing-audience__img"
+                loading="lazy"
+                width="560"
+                height="420"
+              />
             </div>
             <div className="sourcing-audience__content">
               <h2 className="sourcing-section-title">Who This Is For</h2>
@@ -238,6 +252,6 @@ export default function SourcingPage() {
         </button>
       </section>
 
-    </div>
+    </main>
   );
 }

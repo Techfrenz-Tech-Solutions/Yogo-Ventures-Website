@@ -6,6 +6,7 @@ import { useCategories } from "../hooks/useCategories";
 import { useApp } from "../context/AppContext";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 import { useSEO } from "../hooks/useSEO";
+import { trackCategoryView } from "../utils/analytics";
 import "./ShopPage.css";
 
 const norm = (s) => (s ?? "").trim().toLowerCase();
@@ -282,6 +283,16 @@ export default function ShopPage() {
   }, [filteredOnly, sortBy]);
 
   const isLoading = productsLoading || categoriesLoading;
+
+  // ── Fire category view event whenever active category or results change ──
+  useEffect(() => {
+    if (!isLoading) {
+      trackCategoryView({
+        category: activeCat || "All",
+        itemCount: filtered.length,
+      });
+    }
+  }, [activeCat, isLoading, filtered.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (

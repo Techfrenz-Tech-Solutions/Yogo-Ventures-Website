@@ -153,10 +153,31 @@ export default function HeroSection() {
 
       {/* Heading + CTA */}
       <div className={`hero__top-left${leaving ? " leaving" : ""}`}>
-        {/* SEO: Only one H1 — shows the currently active slide heading.
-            All other slides get aria-hidden so screen readers don't see duplicates.
-            The H1 text is always present in the DOM for Google to read. */}
-        <h1 className="hero__product-name">{slide.heading}</h1>
+        {/*
+          SEO: H1 contains both the brand name (visually hidden but present for
+          Google) and the visible slide category heading. This ensures "Yogo
+          Ventures" appears in every H1 regardless of which slide is active,
+          which is critical for brand-name recognition in Google Search.
+        */}
+        <h1 className="hero__product-name">
+          <span
+            className="hero__brand-prefix"
+            style={{
+              position: "absolute",
+              width: "1px",
+              height: "1px",
+              padding: 0,
+              margin: "-1px",
+              overflow: "hidden",
+              clip: "rect(0,0,0,0)",
+              whiteSpace: "nowrap",
+              border: 0,
+            }}
+          >
+            Yogo Ventures —{" "}
+          </span>
+          {slide.heading}
+        </h1>
         <div className="hero__ctas">
           <Link to={slide.shopLink} className="btn btn-primary btn-lg">
             View Products
