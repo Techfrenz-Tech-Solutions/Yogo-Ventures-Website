@@ -594,6 +594,9 @@ ul, ol { list-style: none; }
   transform: translateX(-50%);
   z-index: var(--z-toast);
   pointer-events: none;
+  /* constrain width so long messages never overflow on any screen size */
+  width: max-content;
+  max-width: min(520px, calc(100vw - 32px));
 }
 .toast {
   background: var(--footer-theme-primary);
@@ -602,9 +605,37 @@ ul, ol { list-style: none; }
   border-radius: var(--radius-full);
   font-size: 14px;
   font-weight: 500;
-  white-space: nowrap;
+  /* allow wrapping — prevents overflow on mobile */
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+  line-height: 1.55;
   box-shadow: var(--shadow-lg);
   animation: fadeUp 0.35s var(--ease);
+}
+
+/* Tighter padding and smaller text on phones */
+@media (max-width: 640px) {
+  .toast-container {
+    bottom: 80px; /* sit above the mobile bottom nav */
+    max-width: calc(100vw - 24px);
+  }
+  .toast {
+    font-size: 13px;
+    padding: 11px 20px;
+    border-radius: var(--radius-lg);
+  }
+}
+
+@media (max-width: 400px) {
+  .toast-container {
+    bottom: 72px;
+    max-width: calc(100vw - 16px);
+  }
+  .toast {
+    font-size: 12px;
+    padding: 10px 16px;
+  }
 }
 
 /* ── OVERLAY ── */

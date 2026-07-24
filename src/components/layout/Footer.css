@@ -86,12 +86,47 @@
 .footer__contact-item a { color: rgba(255,255,255,0.55); text-decoration: none; }
 .footer__contact-item a:hover { color: var(--light); }
 
-/* Wave */
-.footer__wave-divider { line-height: 0; overflow: hidden; }
-.footer__wave-divider svg { display: block; width: 100%; height: 40px; }
+/* Wave Divider */
+.footer__wave-divider {
+  line-height: 0;
+  overflow: hidden;
+  width: 100%;
+  /* desktop height */
+  height: 60px;
+  background: #0F1E24;
+  /* ensure no margin collapses kill the wave */
+  display: block;
+  position: relative;
+}
+.footer__wave-divider svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 60px;
+  /* stretch horizontally across every viewport width */
+  position: absolute;
+  inset: 0;
+}
+
+@media (max-width: 1024px) {
+  .footer__wave-divider       { height: 50px; }
+  .footer__wave-divider svg   { min-height: 50px; }
+}
+@media (max-width: 640px) {
+  .footer__wave-divider       { height: 40px; }
+  .footer__wave-divider svg   { min-height: 40px; }
+}
+@media (max-width: 400px) {
+  .footer__wave-divider       { height: 32px; }
+  .footer__wave-divider svg   { min-height: 32px; }
+}
 
 /* Bottom bar */
-.footer__bottom { padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.07); background: rgba(0,0,0,0.2); }
+.footer__bottom {
+  padding: 16px 0;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  background: rgba(0,0,0,0.2);
+}
 .footer__bottom-inner {
   display: flex; justify-content: space-between; align-items: center;
   gap: 16px; flex-wrap: wrap;
@@ -100,11 +135,28 @@
   display: flex; align-items: center; gap: 10px;
   font-size: 12px; color: rgba(255,255,255,0.35); flex-wrap: wrap;
 }
-.footer__bottom-sep { color: rgba(255,255,255,0.2); }
-.footer__bottom-link { color: rgba(255,255,255,0.4); text-decoration: none; }
+.footer__bottom-sep   { color: rgba(255,255,255,0.2); }
+.footer__bottom-link  { color: rgba(255,255,255,0.4); text-decoration: none; }
 .footer__bottom-link:hover { color: var(--light); }
-
 .footer__bottom-right { font-size: 12px; color: rgba(255,255,255,0.35); }
+
+/* ── On screens where the BottomNav is visible (≤ 1024px), add
+   padding-bottom to the footer bottom bar so its content is never
+   obscured by the fixed 70px navigation bar.
+   The safe-area-inset-bottom handles iPhone home indicator extra space. ── */
+@media (max-width: 1024px) {
+  .footer__bottom {
+    padding-bottom: calc(var(--bn-height, 70px) + 12px);
+  }
+}
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  @media (max-width: 1024px) {
+    .footer__bottom {
+      padding-bottom: calc(var(--bn-height, 70px) + 12px + env(safe-area-inset-bottom));
+    }
+  }
+}
 
 /* TechFrenz link — orange hover */
 .footer__techfrenz {
@@ -157,3 +209,24 @@
 }
 .footer__feature-icon svg { stroke: #fff; }
 .footer__feature span:last-child { color: rgba(255,255,255,0.75); font-size: 12px; }
+
+/* ── SHOP CATEGORY SKELETON (while live categories load) ─────────────────── */
+@keyframes footer-shimmer {
+  0%   { background-position: -200px 0; }
+  100% { background-position:  200px 0; }
+}
+.footer__col-skeleton {
+  height: 14px;
+  border-radius: 4px;
+  margin: 6px 0;
+  width: 70%;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.06) 25%,
+    rgba(255,255,255,0.13) 50%,
+    rgba(255,255,255,0.06) 75%
+  );
+  background-size: 400px 100%;
+  animation: footer-shimmer 1.4s ease-in-out infinite;
+  list-style: none;
+}

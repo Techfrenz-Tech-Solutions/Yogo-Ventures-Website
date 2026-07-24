@@ -509,7 +509,19 @@
   overflow: hidden;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-.qty-selector--error { border-color: #DC2626; box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.12); }
+.qty-selector--error { border-color: #DC2626; box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.12); animation: qty-shake 0.35s ease; }
+
+/* Shake keyframe — fires once when qty is empty and Get Quote is clicked */
+@keyframes qty-shake {
+  0%         { transform: translateX(0); }
+  15%        { transform: translateX(-6px); }
+  30%        { transform: translateX(5px); }
+  45%        { transform: translateX(-4px); }
+  60%        { transform: translateX(3px); }
+  75%        { transform: translateX(-2px); }
+  90%        { transform: translateX(1px); }
+  100%       { transform: translateX(0); }
+}
 .qty-selector__val {
   min-width: 80px; width: 80px;
   text-align: center; font-size: 15px; font-weight: 600; color: var(--dark);
@@ -694,7 +706,7 @@
 
 /* ── COLOR PICKER QUANTITY FIELD — ERROR STATES ────────────────────────────*/
 .qty-required-mark { color: #DC2626; }
-.qty-input--error { border-color: #DC2626 !important; box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.12) !important; }
+.qty-input--error { border-color: #DC2626 !important; box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.12) !important; animation: qty-shake 0.35s ease; }
 .qty-error-msg { font-size: 11px; color: #DC2626; margin: 4px 0 0; font-weight: 500; font-family: var(--font-sans); }
 
 /* ── SELECTED COLORS LIST — SINGLE HORIZONTAL ROW ──────────────────────────*/

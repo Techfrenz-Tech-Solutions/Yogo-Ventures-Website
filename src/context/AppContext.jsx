@@ -1,5 +1,7 @@
 // src/context/AppContext.js
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
+import Api from "../utils/Api";
+import { storageUrl } from "../utils/imageUrl";
 
 const AppContext = createContext(null);
 
@@ -9,6 +11,53 @@ export function AppProvider({ children }) {
   const [currency,     setCurrency]     = useState("INR");
   const [cartOpen,     setCartOpen]     = useState(false);
   const [toast,        setToast]        = useState(null);
+
+  // ── Products — single shared fetch for the entire app ─────────
+  // Avoids duplicate network calls when multiple components each
+  // call useProducts() independently (Header search, WishlistPage,
+  // ShopPage, ProductDetailPage all need the same list).
+  const [products,        setProducts]        = useState([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    function normalizeProduct(row) {
+      const variationPaths =
+        Array.isArray(row.variation_images) && row.variation_images.length > 0
+          ? [...row.variation_images]
+              .sort((a, b) => a.sort_order - b.sort_order)
+              .map(v => v.image_path)
+          : [row.image1, row.image2, row.image3, row.image4, row.image5].filter(Boolean);
+
+      const images = [row.index_image, ...variationPaths]
+        .filter(Boolean)
+        .map(storageUrl);
+
+      return {
+        id:          row.id,
+        code:        row.product_code,
+        name:        row.product_name,
+        category:    row.category_name,
+        subCategory: row.sub_category_name,
+        description: row.product_description,
+        image:       images[0] ?? "",
+        images,
+        stock:       true,
+      };
+    }
+
+    Api.get("/product/productlist")
+      .then(res => {
+        if (cancelled) return;
+        const rows = Array.isArray(res.data) ? res.data : (res.data?.data ?? []);
+        setProducts(rows.map(normalizeProduct));
+      })
+      .catch(() => { if (!cancelled) setProducts([]); })
+      .finally(() => { if (!cancelled) setProductsLoading(false); });
+
+    return () => { cancelled = true; };
+  }, []);
 
   // ── Recently viewed — persisted to localStorage ──────────────
   const [recentlyViewed, setRecentlyViewed] = useState(() => {
@@ -251,6 +300,8 @@ export function AppProvider({ children }) {
   return (
     <AppContext.Provider
       value={{
+        // Products (shared singleton — avoids duplicate API calls)
+        products, productsLoading,
         // Currency
         currency, setCurrency,
         formatPrice,

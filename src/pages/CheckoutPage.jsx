@@ -76,6 +76,7 @@ export default function CheckoutPage() {
   const validateField = field => () => {
     let msg = "";
     if (field === "firstName" && !form.firstName.trim()) msg = "First name is required";
+    if (field === "lastName"  && !form.lastName.trim())  msg = "Last name is required";
     if (field === "email") {
       if (!form.email.trim()) {
         msg = "Email address is required";
@@ -91,6 +92,7 @@ export default function CheckoutPage() {
   const validate = () => {
     const e = {};
     if (!form.firstName.trim()) e.firstName = "First name is required";
+    if (!form.lastName.trim())  e.lastName  = "Last name is required";
     const emailVal = form.email.trim();
     if (!emailVal) {
       e.email = "Email address is required";
@@ -223,8 +225,8 @@ export default function CheckoutPage() {
   // ── Success screen ──────────────────────────────────────────────────────────
   if (submitted) {
     return (
-      <main className="page-enter" style={{ padding: "100px 0", textAlign: "center" }}>
-        <div className="container" style={{ maxWidth: "560px" }}>
+      <main className="page-enter checkout-success-page" id="main-content" aria-label="Quote submitted successfully">
+        <div className="container checkout-success-container">
           <div className="checkout-success">
             <div className="checkout-success__icon-wrap">
               <div className={`checkout-success__icon${showBlast ? " checkout-success__icon--active" : ""}`}>
@@ -256,8 +258,7 @@ export default function CheckoutPage() {
               Quote #{orderId}
             </div>
             <button
-              className="btn btn-secondary btn-lg"
-              style={{ marginTop: "32px" }}
+              className="btn btn-secondary btn-lg checkout-success__cta"
               onClick={() => navigate("/")}
             >
               Continue Shopping
@@ -318,7 +319,7 @@ export default function CheckoutPage() {
                 {/* Last Name */}
                 <div className="form-group">
                   <label className="form-label" htmlFor="co-lastname">
-                    Last Name
+                    Last Name <span className="form-required">*</span>
                   </label>
                   <input
                     id="co-lastname"

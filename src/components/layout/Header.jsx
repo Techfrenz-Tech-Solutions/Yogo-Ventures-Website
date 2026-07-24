@@ -8,18 +8,7 @@ import { useProducts } from "../../hooks/useProducts";
 import { trackSearch, trackPhoneClick, trackEmailClick } from "../../utils/analytics";
 import "./Header.css";
 
-/* ── SVG Icons ── */
-function HeartIcon({ filled }) {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18"
-      fill={filled ? "#ef4444" : "none"}
-      stroke={filled ? "#ef4444" : "currentColor"}
-      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-    </svg>
-  );
-}
-
+/* ── SVG Icons ─────────────────────────────────────────────────────────────── */
 function SearchIcon() {
   return (
     <svg viewBox="0 0 24 24" width="18" height="18" fill="none"
@@ -35,25 +24,23 @@ function SearchIcon() {
   );
 }
 
-/* ── Sun Icon (light mode) ── */
 function SunIcon() {
   return (
     <svg viewBox="0 0 24 24" width="17" height="17" fill="none"
       stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="4.5"/>
-      <line x1="12" y1="2"   x2="12" y2="4.5"/>
+      <line x1="12" y1="2"    x2="12" y2="4.5"/>
       <line x1="12" y1="19.5" x2="12" y2="22"/>
-      <line x1="4.22" y1="4.22" x2="5.87" y2="5.87"/>
+      <line x1="4.22" y1="4.22"   x2="5.87"  y2="5.87"/>
       <line x1="18.13" y1="18.13" x2="19.78" y2="19.78"/>
       <line x1="2"   y1="12" x2="4.5"  y2="12"/>
       <line x1="19.5" y1="12" x2="22"  y2="12"/>
-      <line x1="4.22" y1="19.78" x2="5.87" y2="18.13"/>
-      <line x1="18.13" y1="5.87" x2="19.78" y2="4.22"/>
+      <line x1="4.22" y1="19.78" x2="5.87"  y2="18.13"/>
+      <line x1="18.13" y1="5.87"  x2="19.78" y2="4.22"/>
     </svg>
   );
 }
 
-/* ── Moon Icon (dark mode) ── */
 function MoonIcon() {
   return (
     <svg viewBox="0 0 24 24" width="17" height="17" fill="none"
@@ -63,11 +50,6 @@ function MoonIcon() {
   );
 }
 
-/* ── Badge count formatter ──
-   1–99      → exact count, normal badge
-   100–9999  → "99+" with pulsing alert badge
-   10000+    → exact count shown (large number mode)
-── */
 const formatBadgeCount = (count) => {
   if (count > 10000) return count.toLocaleString();
   if (count > 99)    return "99+";
@@ -80,8 +62,8 @@ const getBadgeModifier = (count) => {
   return "header__cart-badge";
 };
 
-/* ── Nav items — same icons as BottomNav ── */
-const MENU_ITEMS = [
+/* ── Nav items for right sidebar ─────────────────────────────────────────── */
+const SIDEBAR_ITEMS = [
   {
     label: "Home", path: "/",
     icon: (
@@ -114,28 +96,6 @@ const MENU_ITEMS = [
       </svg>
     ),
   },
-  // {
-  //   label: "Blog", path: "/blog",
-  //   icon: (
-  //     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-  //       strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
-  //       <path d="M4 4h16v12H4z"/>
-  //       <path d="M8 20h8M12 16v4"/>
-  //       <line x1="8" y1="8" x2="16" y2="8"/>
-  //       <line x1="8" y1="12" x2="12" y2="12"/>
-  //     </svg>
-  //   ),
-  // },
-  // {
-  //   // label: "About", path: "/about",
-  //   icon: (
-  //     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-  //       strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
-  //       <circle cx="12" cy="8" r="4"/>
-  //       <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-  //     </svg>
-  //   ),
-  // },
   {
     label: "Contact", path: "/contact",
     icon: (
@@ -154,14 +114,13 @@ export default function Header() {
   const location  = useLocation();
   const navigate  = useNavigate();
 
-  const [searchOpen,  setSearchOpen]  = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchOpen,      setSearchOpen]      = useState(false);
+  const [searchQuery,     setSearchQuery]     = useState("");
   const [activeSearchTab, setActiveSearchTab] = useState("Apparel");
-  const [menuOpen,    setMenuOpen]    = useState(false);
+  const [menuOpen,        setMenuOpen]        = useState(false);
 
-  /* ── Theme toggle state ── */
+  /* ── Theme toggle ── */
   const [isDark,   setIsDark]   = useState(() => {
-    // Restore from localStorage on mount
     if (typeof window !== "undefined") {
       return localStorage.getItem("yogo-theme") === "dark";
     }
@@ -169,32 +128,29 @@ export default function Header() {
   });
   const [spinning, setSpinning] = useState(false);
 
-  const inputRef      = useRef(null);
+  const inputRef = useRef(null);
 
   const wishlistCount = wishlist.length;
 
-  /* ── Apply theme to <html> on mount + whenever isDark changes ── */
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
     localStorage.setItem("yogo-theme", isDark ? "dark" : "light");
   }, [isDark]);
 
-  /* ── Theme toggle handler — rotates icon then swaps ── */
   const toggleTheme = () => {
     if (spinning) return;
     setSpinning(true);
-    // Swap icon at the visual midpoint (250ms into a 500ms spin)
     setTimeout(() => setIsDark(v => !v), 250);
     setTimeout(() => setSpinning(false), 520);
   };
 
-  /* ── Lock body scroll when menu open ── */
+  /* ── Lock body scroll when sidebar open ── */
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
-  /* ── Close menu on route change ── */
+  /* ── Close sidebar on route change ── */
   useEffect(() => { setMenuOpen(false); }, [location.pathname]);
 
   /* ── Search focus ── */
@@ -226,25 +182,18 @@ export default function Header() {
     : [];
 
   const SEARCH_TABS = [
-    { id: "Apparel", label: "Apparel" },
+    { id: "Apparel",              label: "Apparel"     },
     { id: "Memory Foam Products", label: "Memory Foam" },
-    { id: "Copper Utensils", label: "Copper" },
-    { id: "Handicraft Items", label: "Handicraft" },
+    { id: "Copper Utensils",      label: "Copper"      },
+    { id: "Handicraft Items",     label: "Handicraft"  },
   ];
 
   const SEARCH_TAB_SUGGESTIONS = {
-    Apparel: ["Polo Apparel", "Round Neck Apparel", "Hoodie"],
-    "Memory Foam Products": ["Car Neck Rest Pillow", "Contour Pillow", "Wedge Pillow"],
-    "Copper Utensils": ["Copper Bottle", "Copper Cup", "Copper Thali Set"],
-    "Handicraft Items": ["Blue Pottery Wall Plates", "Wooden Walking Stick", "Tote Bags"],
+    Apparel:               ["Polo Apparel", "Round Neck Apparel", "Hoodie"],
+    "Memory Foam Products":["Car Neck Rest Pillow", "Contour Pillow", "Wedge Pillow"],
+    "Copper Utensils":     ["Copper Bottle", "Copper Cup", "Copper Thali Set"],
+    "Handicraft Items":    ["Blue Pottery Wall Plates", "Wooden Walking Stick", "Tote Bags"],
   };
-
-  const POPULAR = [
-    "Apparel",
-    "Memory Foam Products",
-    "Copper Utensils",
-    "Handicraft Items",
-  ];
 
   const handleResultClick = (p) => {
     navigate(`/product/${p.id}`);
@@ -256,28 +205,20 @@ export default function Header() {
 
   return (
     <>
+      {/* ════════════════════════════════════════
+          HEADER BAR
+          Layout: [Logo] [Desktop Nav] [Search] [Theme] [Hamburger]
+          Wishlist + Cart are in BottomNav on all screen sizes.
+          ════════════════════════════════════════ */}
       <header className={`header${scrolled ? " header--scrolled" : ""}`} role="banner">
         <div className="header__inner container">
-
-          {/* ── HAMBURGER — left of logo, mobile only ──
-          <button
-            className={`header__hamburger${menuOpen ? " header__hamburger--open" : ""}`}
-            onClick={() => setMenuOpen(v => !v)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav-menu"
-          >
-            <span className="header__hamburger-bar"/>
-            <span className="header__hamburger-bar"/>
-            <span className="header__hamburger-bar"/>
-          </button> */}
 
           {/* ── LOGO ── */}
           <Link to="/" className="header__logo-wrap" aria-label="Yogo Ventures — go to homepage">
             <img src="./Logo.png" alt="Yogo Ventures Logo" className="header__logo-img"/>
           </Link>
 
-          {/* ── DESKTOP NAV ── */}
+          {/* ── DESKTOP NAV (hidden ≤ 1024px) ── */}
           <nav className="header__nav" aria-label="Main navigation">
             {NAV_LINKS.map(link => (
               <Link
@@ -291,8 +232,10 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* ── ACTIONS ── */}
+          {/* ── ACTIONS: Search · Theme · Hamburger ── */}
           <div className="header__actions">
+
+            {/* SEARCH PILL — always in header, never inside sidebar */}
             <button
               className="header__search-pill"
               onClick={() => setSearchOpen(true)}
@@ -304,48 +247,7 @@ export default function Header() {
               <kbd className="header__search-kbd">⌘K</kbd>
             </button>
 
-            {/* ── CART ── */}
-            <button
-              className="header__icon-btn"
-              onClick={() => setCartOpen(true)}
-              aria-label={`Cart — ${cartCount} items`}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                strokeLinecap="round" strokeLinejoin="round" width="22" height="22" aria-hidden="true">
-                {/* Handle */}
-                <path d="M2 3h2l1.5 9h11l1.5-6H6"/>
-                {/* Basket bottom */}
-                <path d="M5.5 12H17a1 1 0 0 1 1 1v1H5l.5-2z"/>
-                {/* Wheels */}
-                <circle cx="8" cy="19" r="1.5" fill="currentColor" stroke="none"/>
-                <circle cx="15" cy="19" r="1.5" fill="currentColor" stroke="none"/>
-              </svg>
-              {cartCount > 0 && (
-                <span className={getBadgeModifier(cartCount)} aria-hidden="true">
-                  {formatBadgeCount(cartCount)}
-                </span>
-              )}
-              {/* Notification ring — only shown when count > 100 */}
-              {cartCount > 100 && (
-                <span className="header__cart-ring" aria-hidden="true"/>
-              )}
-            </button>
-
-            {/* ── WISHLIST ── */}
-            <Link
-              to="/wishlist"
-              className="header__icon-btn header__wishlist-btn"
-              aria-label={`Wishlist — ${wishlistCount} items`}
-            >
-              <HeartIcon filled={wishlistCount > 0}/>
-              {wishlistCount > 0 && (
-                <span className="header__cart-badge header__wishlist-badge" aria-hidden="true">
-                  {formatBadgeCount(wishlistCount)}
-                </span>
-              )}
-            </Link>
-
-            {/* ── THEME TOGGLE — sun / moon ── */}
+            {/* THEME TOGGLE */}
             <button
               className={`header__icon-btn header__theme-btn${spinning ? " header__theme-btn--spinning" : ""}`}
               onClick={toggleTheme}
@@ -356,33 +258,55 @@ export default function Header() {
                 {isDark ? <MoonIcon/> : <SunIcon/>}
               </span>
             </button>
+
+            {/* HAMBURGER — right side, all breakpoints */}
+            <button
+              className={`header__hamburger${menuOpen ? " header__hamburger--open" : ""}`}
+              onClick={() => setMenuOpen(v => !v)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              aria-controls="sidebar-nav"
+            >
+              <span className="header__hamburger-bar"/>
+              <span className="header__hamburger-bar"/>
+              <span className="header__hamburger-bar"/>
+            </button>
           </div>
+
         </div>
       </header>
 
-      {/* ══════════════════════════════════════
-          MOBILE MENU BACKDROP
-          ══════════════════════════════════════ */}
+      {/* ════════════════════════════════════════
+          RIGHT SIDEBAR + BACKDROP
+          ════════════════════════════════════════ */}
+
+      {/* Backdrop */}
       <div
-        className={`hmenu-backdrop${menuOpen ? " hmenu-backdrop--visible" : ""}`}
+        className={`sidebar-backdrop${menuOpen ? " sidebar-backdrop--visible" : ""}`}
         onClick={() => setMenuOpen(false)}
         aria-hidden="true"
       />
 
-      {/* ══════════════════════════════════════
-          MOBILE SLIDE-IN MENU
-          ══════════════════════════════════════ */}
-      <div
-        id="mobile-nav-menu"
-        className={`hmenu${menuOpen ? " hmenu--open" : ""}`}
+      {/* Right slide-in sidebar */}
+      <aside
+        id="sidebar-nav"
+        className={`sidebar${menuOpen ? " sidebar--open" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-label="Site navigation"
       >
-        <div className="hmenu__head">
-          <img src="./Logo.png" alt="Yogo Ventures" className="hmenu__logo"/>
+        {/* ── Sidebar header ── */}
+        <div className="sidebar__head">
+          {/* <Link
+            to="/"
+            className="sidebar__logo-wrap"
+            onClick={() => setMenuOpen(false)}
+            aria-label="Yogo Ventures — go to homepage"
+          >
+            <img src="./Logo.png" alt="Yogo Ventures" className="sidebar__logo"/>
+          </Link> */}
           <button
-            className="hmenu__close"
+            className="sidebar__close"
             onClick={() => setMenuOpen(false)}
             aria-label="Close menu"
           >
@@ -394,51 +318,74 @@ export default function Header() {
           </button>
         </div>
 
-        <nav className="hmenu__nav" aria-label="Mobile navigation">
-          {MENU_ITEMS.map(({ label, path, icon }, i) => (
+        {/* ── Decorative orb ── */}
+        <div className="sidebar__orb" aria-hidden="true"/>
+
+        {/* ── Nav links ── */}
+        <nav className="sidebar__nav" aria-label="Sidebar navigation">
+          {SIDEBAR_ITEMS.map(({ label, path, icon }, i) => (
             <NavLink
               key={path}
               to={path}
               end={path === "/"}
               className={({ isActive }) =>
-                `hmenu__item${isActive ? " hmenu__item--active" : ""}`
+                `sidebar__item${isActive ? " sidebar__item--active" : ""}`
               }
-              style={{ "--i": i }}
+              style={{ "--sidebar-i": i }}
               onClick={() => setMenuOpen(false)}
             >
-              <span className="hmenu__icon-wrap">
-                <span className="hmenu__icon">{icon}</span>
-                <span className="hmenu__glow"/>
+              {/* Icon chip */}
+              <span className="sidebar__icon-chip">
+                <span className="sidebar__icon">{icon}</span>
+                <span className="sidebar__icon-glow"/>
               </span>
-              <span className="hmenu__label">{label}</span>
+              <span className="sidebar__label">{label}</span>
+              {/* Active indicator arrow */}
+              <span className="sidebar__arrow" aria-hidden="true">
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none"
+                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 8h10M9 4l4 4-4 4"/>
+                </svg>
+              </span>
             </NavLink>
           ))}
         </nav>
 
-        <div className="hmenu__footer">
-          <a href="tel:+919003317417" className="hmenu__contact"
-             onClick={() => trackPhoneClick("+919003317417")}>
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none"
+        {/* ── Divider ── */}
+        <div className="sidebar__divider" aria-hidden="true"/>
+
+        {/* ── Quick contact ── */}
+        <div className="sidebar__footer">
+          <a
+            href="tel:+919003317417"
+            className="sidebar__contact"
+            onClick={() => { trackPhoneClick("+919003317417"); setMenuOpen(false); }}
+          >
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
               stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.62 3.38 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 5.29 5.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
             </svg>
-            +91 9003317417
+            +91 9003317417, +91 6369681960
           </a>
-          <a href="mailto:support@yogoventures.com" className="hmenu__contact"
-             onClick={() => trackEmailClick("support@yogoventures.com")}>
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none"
+          <a
+            href="mailto:support@yogoventures.com"
+            className="sidebar__contact"
+            onClick={() => { trackEmailClick("support@yogoventures.com"); setMenuOpen(false); }}
+          >
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
               stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
               <polyline points="22,6 12,13 2,6"/>
             </svg>
             support@yogoventures.com
           </a>
+          <p className="sidebar__hours">Mon – Sat · 10AM – 7PM IST</p>
         </div>
-      </div>
+      </aside>
 
-      {/* ══════════════════════════════════════
+      {/* ════════════════════════════════════════
           FULL-SCREEN SEARCH OVERLAY
-          ══════════════════════════════════════ */}
+          ════════════════════════════════════════ */}
       {searchOpen && (
         <div
           className="search-overlay"
@@ -483,12 +430,7 @@ export default function Header() {
                       onKeyDown={e => e.key === "Enter" && handleResultClick(p)}
                     >
                       <div className="search-result-item__img-wrap">
-                        <img
-                          src={p.image}
-                          alt={p.name}
-                          className="search-result-item__img"
-                          loading="lazy"
-                        />
+                        <img src={p.image} alt={p.name} className="search-result-item__img" loading="lazy"/>
                       </div>
                       <div className="search-result-item__info">
                         <p className="search-result-item__cat">{p.category}</p>
@@ -519,7 +461,6 @@ export default function Header() {
                       </button>
                     ))}
                   </div>
-
                   <div className="search-suggestions">
                     <p className="search-suggestions__label">
                       Recommended {activeSearchTab === "Apparel" ? "Apparel" : activeSearchTab}

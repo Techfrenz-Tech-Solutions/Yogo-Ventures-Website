@@ -209,7 +209,12 @@ select.input-error-border {
   padding: 14px 24px;
   border-radius: 50px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
-  white-space: nowrap;
+  /* constrain width so long messages wrap instead of overflow */
+  max-width: calc(100vw - 32px);
+  width: max-content;
+  white-space: normal;
+  text-align: center;
+  word-break: break-word;
   animation: enquiry-toast-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
              enquiry-toast-out 0.3s ease 3.1s forwards;
   pointer-events: none;
@@ -249,12 +254,10 @@ select.input-error-border {
     margin-bottom: 20px;
   }
   .enquiry-toast {
-    bottom: 20px;
+    bottom: 80px; /* clear the mobile bottom nav */
     font-size: 13px;
     padding: 12px 18px;
-    max-width: calc(100vw - 40px);
-    white-space: normal;
-    text-align: center;
+    border-radius: 16px;
   }
 }
 

@@ -682,7 +682,11 @@ export default function ProductDetailPage() {
 
   const [qty,             setQty]             = useState("");
   const [qtyError,        setQtyError]        = useState(false);
+  const [qtyShake,        setQtyShake]        = useState(0);   // increments to retrigger shake
   const [innerImageIndex, setInnerImageIndex]  = useState(0);
+
+  // Ref attached to the qty input (works for both apparel + non-apparel)
+  const qtyRef = useRef(null);
 
   // ── Color customization state (Apparel only) ─────────────────────────────
   const [currentPickedColor, setCurrentPickedColor] = useState({ hex: "#0057b8", name: "Royal Blue" });
@@ -778,7 +782,20 @@ export default function ProductDetailPage() {
     }
   }, [id, product]); // eslint-disable-line
 
-  useEffect(() => { if (qty !== "" && parseInt(qty, 10) >= 1) setQtyError(false); }, [qty]);
+  useEffect(() => { if (qty !== "" && parseInt(qty, 10) >= 1) { setQtyError(false); setQtyShake(0); } }, [qty]);
+
+  // ── Scroll to + focus + shake the qty input when validation fails ──────────
+  const focusQtyField = useCallback(() => {
+    setQtyError(true);
+    setQtyShake(n => n + 1);   // increment forces re-render → CSS animation retriggers
+    const el = qtyRef.current;
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => {
+      el.focus({ preventScroll: true });
+      el.select?.();
+    }, 320);
+  }, []);
 
   const isWishlisted = wishlist.includes(product?.id);
 
@@ -794,7 +811,7 @@ export default function ProductDetailPage() {
   const handleAddToCart = useCallback(() => {
     const resolved = parseInt(qty, 10);
     if (isNaN(resolved) || resolved < 1) {
-      setQtyError(true);
+      focusQtyField();
       return;
     }
     addToCart(product, resolved, {}, { suppressToast: true });
@@ -813,7 +830,7 @@ export default function ProductDetailPage() {
     });
     showToast("Product added to cart", "success", 2800, { position: "bottom-center", replace: true });
     setCartOpen(true);
-  }, [product, qty, addToCart, showToast, setCartOpen]);
+  }, [product, qty, addToCart, showToast, setCartOpen, focusQtyField]);
 
   const handleToggleWishlist = useCallback(() => {
     const action = wishlist.includes(product?.id) ? "remove" : "add";
@@ -833,7 +850,7 @@ export default function ProductDetailPage() {
   const handleAddColor = useCallback(() => {
     const parsedQty = parseInt(qty, 10);
     if (isNaN(parsedQty) || parsedQty < 1) {
-      setQtyError(true);
+      focusQtyField();
       showToast("Please enter a quantity before adding a colour", "warning", 2800, { position: "bottom-center" });
       return;
     }
@@ -854,7 +871,7 @@ export default function ProductDetailPage() {
     });
 
     setQty("");
-  }, [qty, showToast]);
+  }, [qty, showToast, focusQtyField]);
 
   const handleRemoveColor = useCallback((hex) => {
     setSelectedColors(prev => prev.filter(c => c.hex !== hex));
@@ -866,7 +883,7 @@ export default function ProductDetailPage() {
     if (selectedColors.length === 0) {
       const parsedQty = parseInt(qty, 10);
       if (isNaN(parsedQty) || parsedQty < 1) {
-        setQtyError(true);
+        focusQtyField();
         showToast("Please enter a quantity and add a colour first", "warning", 2800, { position: "bottom-center" });
         return;
       }
@@ -890,7 +907,7 @@ export default function ProductDetailPage() {
     setCartOpen(true);
     setSelectedColors([]);
     setQty("");
-  }, [selectedColors, currentPickedColor, qty, product, mergeColorToCart, showToast, setCartOpen]);
+  }, [selectedColors, currentPickedColor, qty, product, mergeColorToCart, showToast, setCartOpen, focusQtyField]);
 
   // ── Loading ──────────────────────────────────────────────────────────────
   if (loading) {
@@ -1001,8 +1018,12 @@ export default function ProductDetailPage() {
                   Quantity
                   <span className="pdp-info__qty-required" aria-hidden="true"> *</span>
                 </p>
-                <div className={`qty-selector${qtyError ? " qty-selector--error" : ""}`}>
+                <div
+                  key={qtyShake}
+                  className={`qty-selector${qtyError ? " qty-selector--error" : ""}`}
+                >
                   <input
+                    ref={qtyRef}
                     type="number"
                     className="qty-selector__val"
                     value={qty}
@@ -1077,11 +1098,12 @@ export default function ProductDetailPage() {
                   </div>
                 </div>
 
-                <div className="quantity-wrap">
+                <div key={qtyShake} className="quantity-wrap">
                   <span className="quantity-label">
                     Quantity (pcs)<span className="qty-required-mark" aria-hidden="true"> *</span>:
                   </span>
                   <input
+                    ref={qtyRef}
                     type="number"
                     min="1"
                     className={`qty-input${qtyError ? " qty-input--error" : ""}`}

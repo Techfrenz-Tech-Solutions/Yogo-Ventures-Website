@@ -251,7 +251,7 @@ export default function ContactPage() {
   const runValidator = (name, value) => {
     switch (name) {
       case "firstName": return validateRequired(value, "First Name");
-      case "lastName":  return "";
+      case "lastName":  return validateRequired(value, "Last Name");
       case "email":     return validateEmail(value);
       case "phone":     return validatePhone(value);
       case "country":   return validateCountry(value);
@@ -311,7 +311,7 @@ export default function ContactPage() {
   const handleSubmit = async () => {
     const newErrors = {
       firstName: runValidator("firstName", form.firstName),
-      lastName:  "",
+      lastName:  runValidator("lastName",  form.lastName),
       email:     runValidator("email",    form.email),
       phone:     runValidator("phone",    form.phone),
       country:   runValidator("country",  form.country),
@@ -319,7 +319,7 @@ export default function ContactPage() {
       message:   runValidator("message",  form.message),
     };
     setErrors(newErrors);
-    setTouched({ firstName:true, lastName:false, email:true, phone:true, country:true, subject:true, message:true });
+    setTouched({ firstName:true, lastName:true, email:true, phone:true, country:true, subject:true, message:true });
     if (Object.values(newErrors).some(Boolean)) return;
 
     setSubmitting(true);
@@ -392,14 +392,16 @@ export default function ContactPage() {
                       <FieldError id="cf-fname-error" message={errors.firstName} />
                     </div>
                     <div className="form-group">
-                      <label className="form-label" htmlFor="cf-lname">Last Name</label>
+                      <label className="form-label" htmlFor="cf-lname">Last Name<Req /></label>
                       <input
                         id="cf-lname"
-                        className="form-input"
+                        className={`form-input${errors.lastName ? " cf-input-error" : ""}`}
                         type="text" name="lastName" value={form.lastName}
                         onChange={handleChange} onBlur={handleBlur}
                         autoComplete="family-name"
+                        aria-describedby="cf-lname-error"
                       />
+                      <FieldError id="cf-lname-error" message={errors.lastName} />
                     </div>
                   </div>
 

@@ -301,10 +301,10 @@ export default function ShopPage() {
       {/* HERO */}
       <div className="shop-page__hero">
         <div className="container">
-          <h1 className="shop-page__hero-title">Shop — YoGo Ventures</h1>
-          <p className="shop-page__hero-sub">
+          <h1 className="shop-page__hero-title">Shop — YoGo Ventures</h1><br></br>
+          {/* <p className="shop-page__hero-sub">
             Premium Apparels, Memory Foam Products, Copper Utensils And Authentic Indian handicrafts.
-          </p>
+          </p> */}
           <nav className="shop-cat-pills" aria-label="Quick category filter">
             <button
               className={`shop-cat-pill${category === "All" ? " active" : ""}`}

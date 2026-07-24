@@ -3,12 +3,16 @@
 //      correct phone href values, keyword-rich tagline, schema-ready markup.
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { trackWhatsAppClick } from "../../utils/analytics";
+import { useCategories } from "../../hooks/useCategories";
 import "./Footer.css";
 
 export default function Footer() {
   const year     = new Date().getFullYear();
   const navigate  = useNavigate();
   const location  = useLocation();
+
+  // ── Live categories from the backend (same source as ShopPage sidebar) ───
+  const { categories, loading: catsLoading } = useCategories();
 
   const handleFaqClick = (e) => {
     e.preventDefault();
@@ -21,14 +25,6 @@ export default function Footer() {
       }, 350);
     }
   };
-
-  // ── SEO: category links use the correct backend category names ───────────
-  const SHOP_LINKS = [
-    { label: "Fashion Apparel",      cat: "Apparel" },
-    { label: "Memory Foam Products", cat: "Memory Foam Products" },
-    { label: "Copper Utensils",      cat: "Copper Utensils" },
-    { label: "Handicraft Items",     cat: "Handicraft Items" },
-  ];
 
   const SITEMAP_LINKS = [
     { label: "Home",     path: "/" },
@@ -90,7 +86,7 @@ export default function Footer() {
               </a>
 
               <a
-                href="https://linkedin.com/company/yogoventures"
+                href="https://www.linkedin.com/in/priya-ravi-3801a9361/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer__social"
@@ -137,17 +133,24 @@ export default function Footer() {
             <h3 className="footer__col-heading">Shop</h3>
             <nav aria-label="Shop by product category">
               <ul className="footer__col-list">
-                {SHOP_LINKS.map(l => (
-                  <li key={l.cat}>
-                    <Link
-                      to={`/shop?category=${encodeURIComponent(l.cat)}`}
-                      className="footer__col-link"
-                      aria-label={`Browse ${l.label} wholesale products`}
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
+                {/* While loading, show skeleton placeholders so the layout
+                    doesn't jump when categories arrive from the API */}
+                {catsLoading
+                  ? Array.from({ length: 4 }).map((_, i) => (
+                      <li key={i} className="footer__col-skeleton" aria-hidden="true" />
+                    ))
+                  : categories.map(cat => (
+                      <li key={cat}>
+                        <Link
+                          to={`/shop?category=${encodeURIComponent(cat)}`}
+                          className="footer__col-link"
+                          aria-label={`Browse ${cat} wholesale products`}
+                        >
+                          {cat}
+                        </Link>
+                      </li>
+                    ))
+                }
               </ul>
             </nav>
           </div>
@@ -237,9 +240,21 @@ export default function Footer() {
 
       {/* ── Wave Divider ── */}
       <div className="footer__wave-divider" aria-hidden="true">
-        <svg viewBox="0 0 1440 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,20 C180,40 360,0 540,20 C720,40 900,0 1080,20 C1260,40 1380,10 1440,20 L1440,40 L0,40 Z"
-            fill="rgba(182,217,224,0.12)"/>
+        <svg
+          viewBox="0 0 1440 60"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Back layer — slightly offset, lower opacity */}
+          <path
+            d="M0,30 C240,58 480,4 720,30 C960,56 1200,6 1440,30 L1440,60 L0,60 Z"
+            fill="rgba(116,168,164,0.10)"
+          />
+          {/* Front layer — main visible wave */}
+          <path
+            d="M0,38 C180,18 360,54 540,38 C720,22 900,54 1080,38 C1260,22 1360,46 1440,38 L1440,60 L0,60 Z"
+            fill="rgba(182,217,224,0.22)"
+          />
         </svg>
       </div>
 

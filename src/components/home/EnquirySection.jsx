@@ -7,7 +7,8 @@ import "./EnquirySection.css";
 const validateFirstName = (v) =>
   v.trim() ? "" : "First name is required.";
 
-const validateLastName = (v) => "";
+const validateLastName = (v) =>
+  v.trim() ? "" : "Last name is required.";
 
 const validateEmail = (v) => {
   if (!v || v.trim() === "") return "Email address is required.";
@@ -212,7 +213,7 @@ export default function EnquirySection() {
 
     setErrors(newErrors);
     setTouched({
-      firstName: true, lastName: false, email: true,
+      firstName: true, lastName: true, email: true,
       phone: true, country: true, category: true, message: true,
     });
 
@@ -319,13 +320,16 @@ export default function EnquirySection() {
                 <FieldError id="enq-firstName-error" message={errors.firstName} />
               </div>
               <div className="form-group">
-                <label htmlFor="enq-lastName">Last Name</label>
+                <label htmlFor="enq-lastName">Last Name <span className="required-star">*</span></label>
                 <input
                   id="enq-lastName" type="text" name="lastName"
                   value={form.lastName}
                   onChange={handleChange} onBlur={handleBlur}
+                  className={errors.lastName ? "input-error-border" : ""}
+                  aria-describedby="enq-lastName-error"
                   autoComplete="family-name"
                 />
+                <FieldError id="enq-lastName-error" message={errors.lastName} />
               </div>
             </div>
 

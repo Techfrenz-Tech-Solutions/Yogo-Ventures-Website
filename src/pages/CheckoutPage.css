@@ -425,6 +425,9 @@
   font-family: monospace;
   color: var(--deep);
   letter-spacing: 1px;
+  /* prevent long quote IDs from overflowing narrow screens */
+  word-break: break-all;
+  max-width: 100%;
   animation: pop 440ms ease-out;
 }
 @keyframes pop {
@@ -451,13 +454,122 @@
   opacity: 1;
 }
 
+/* ── Success page wrapper ─────────────────────────────────────────────────── */
+/* Replaces the inline style={{ padding:"100px 0", textAlign:"center" }} */
+.checkout-success-page {
+  padding: 80px 0 80px;
+  text-align: center;
+}
+.checkout-success-container {
+  max-width: 560px;
+}
+/* "Continue Shopping" button inside the success card */
+.checkout-success__cta {
+  margin-top: 28px;
+  width: 100%;
+  max-width: 280px;
+}
+
 /* RESPONSIVE */
 @media (max-width: 1024px) {
   .checkout-layout { grid-template-columns: 1fr; }
   .checkout-summary { position: static; }
 }
+
 @media (max-width: 640px) {
   .checkout-form-grid { grid-template-columns: 1fr; }
   .checkout-card { padding: 20px; }
   .phone-isd-select { width: 130px; font-size: 12px; }
+
+  /* ── Success page wrapper ── */
+  .checkout-success-page {
+    padding: 48px 0 60px;
+  }
+  .checkout-success-container {
+    max-width: 100%;
+    padding-inline: 16px;
+  }
+  .checkout-success__cta {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /* ── Success card ── */
+  .checkout-success {
+    padding: 32px 20px;
+    border-radius: var(--radius-md);
+  }
+  .checkout-success__icon-wrap {
+    width: 88px;
+    height: 88px;
+  }
+  .checkout-success__icon {
+    width: 88px;
+    height: 88px;
+  }
+  .checkout-success__icon svg {
+    width: 38px;
+    height: 38px;
+  }
+  .checkout-success__msg {
+    font-size: 14px;
+    max-width: 100%;
+  }
+  .checkout-success__order-id {
+    font-size: 12px;
+    padding: 8px 14px;
+    letter-spacing: 0.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Success page wrapper */
+  .checkout-success-page {
+    padding: 36px 0 48px;
+  }
+  .checkout-success-container {
+    padding-inline: 12px;
+  }
+
+  /* Success card */
+  .checkout-success {
+    padding: 28px 16px;
+  }
+  .checkout-success .section-title {
+    font-size: clamp(22px, 6vw, 32px);
+  }
+  .checkout-success__msg {
+    font-size: 13px;
+    line-height: 1.65;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Tightest phones — Galaxy S8 (360px), iPhone SE (375px) */
+  .checkout-success-page {
+    padding: 28px 0 40px;
+  }
+  .checkout-success-container {
+    padding-inline: 10px;
+  }
+  .checkout-success {
+    padding: 22px 12px;
+  }
+  .checkout-success__icon-wrap {
+    width: 72px;
+    height: 72px;
+  }
+  .checkout-success__icon {
+    width: 72px;
+    height: 72px;
+  }
+  .checkout-success__icon svg {
+    width: 30px;
+    height: 30px;
+  }
+  .checkout-success__order-id {
+    font-size: 11px;
+    padding: 7px 10px;
+    letter-spacing: 0;
+  }
 }
