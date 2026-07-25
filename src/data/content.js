@@ -89,6 +89,7 @@ export const STATS = [
 export const NAV_LINKS = [
   { label: "Home",     path: "/" },
   { label: "Shop",     path: "/shop" },
+  { label: "Wishlist", path: "/wishlist" },
   { label: "Services", path: "/services" },
   { label: "Contact",  path: "/contact" },
 ];

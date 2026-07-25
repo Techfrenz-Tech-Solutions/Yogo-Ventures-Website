@@ -208,7 +208,7 @@ export default function Header() {
       {/* ════════════════════════════════════════
           HEADER BAR
           Layout: [Logo] [Desktop Nav] [Search] [Theme] [Hamburger]
-          Wishlist + Cart are in BottomNav on all screen sizes.
+          Cart is in BottomNav on all screen sizes.
           ════════════════════════════════════════ */}
       <header className={`header${scrolled ? " header--scrolled" : ""}`} role="banner">
         <div className="header__inner container">
