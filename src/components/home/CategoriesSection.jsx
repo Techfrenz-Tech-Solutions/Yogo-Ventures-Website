@@ -106,6 +106,19 @@ export function CategoriesSection() {
   }, []);
 
   const matchesCategory = (cat, name) => (cat ?? "").toLowerCase() === name.toLowerCase();
+  const displayCategories = useMemo(
+    () => categories
+      .map((cat, i) => {
+        const matchedProducts = products.filter(p => matchesCategory(p.category, cat.category_name));
+        return {
+          cat,
+          theme: THEMES[i % THEMES.length],
+          matchedProducts,
+        };
+      })
+      .filter(item => item.matchedProducts.length > 0),
+    [categories, products]
+  );
 
   return (
     <section className="cats-section section" aria-labelledby="categories-heading">
@@ -118,11 +131,9 @@ export function CategoriesSection() {
           </p>
         </header>
 
-        {categories.length > 0 && (
+        {displayCategories.length > 0 && (
         <nav className="cats-grid-4 reveal" aria-label="Product categories">
-          {categories.map((cat, i) => {
-            const theme = THEMES[i % THEMES.length];
-            const matchedProducts = products.filter(p => matchesCategory(p.category, cat.category_name));
+          {displayCategories.map(({ cat, theme, matchedProducts }) => {
             return (
               <CategoryCard
                 key={cat.id}
