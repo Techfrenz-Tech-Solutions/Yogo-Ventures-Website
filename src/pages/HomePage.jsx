@@ -27,6 +27,8 @@ const fromBackend = (row, prefix) => ({
   _source: "backend",
 });
 
+const normalizeName = (value) => (value ?? "").trim().toLowerCase();
+
 gsap.registerPlugin(ScrollTrigger);
 
 function FireIcon() {
@@ -113,9 +115,13 @@ function HeartIconBtn({ filled, onClick, label }) {
 }
 
 function HomeProductCard({ product }) {
-  const { toggleWishlist, wishlist } = useApp();
-  const isWishlisted = wishlist.includes(product.id);
-  const href = product._source === "backend" ? "/shop" : `/product/${product.id}`;
+  const { products, toggleWishlist, wishlist, showToast } = useApp();
+  const realProduct = product._source === "backend"
+    ? products.find(p => normalizeName(p.name) === normalizeName(product.name))
+    : product;
+  const wishlistId = realProduct?.id;
+  const isWishlisted = wishlistId != null && wishlist.includes(wishlistId);
+  const href = realProduct ? `/product/${realProduct.id}` : "/shop";
 
   return (
     <article className="hpc" aria-label={product.name}>
@@ -129,7 +135,14 @@ function HomeProductCard({ product }) {
         </span>
         <HeartIconBtn
           filled={isWishlisted}
-          onClick={e => { e.preventDefault(); toggleWishlist(product.id); }}
+          onClick={e => {
+            e.preventDefault();
+            if (wishlistId == null) {
+              showToast("Product is still loading. Please try again.");
+              return;
+            }
+            toggleWishlist(wishlistId);
+          }}
           label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
         />
         {!product.stock && <div className="hpc__oos">Out of Stock</div>}
@@ -142,9 +155,13 @@ function HomeProductCard({ product }) {
 }
 
 function NewArrivalCard({ product }) {
-  const { toggleWishlist, wishlist } = useApp();
-  const isWishlisted = wishlist.includes(product.id);
-  const href = product._source === "backend" ? "/shop" : `/product/${product.id}`;
+  const { products, toggleWishlist, wishlist, showToast } = useApp();
+  const realProduct = product._source === "backend"
+    ? products.find(p => normalizeName(p.name) === normalizeName(product.name))
+    : product;
+  const wishlistId = realProduct?.id;
+  const isWishlisted = wishlistId != null && wishlist.includes(wishlistId);
+  const href = realProduct ? `/product/${realProduct.id}` : "/shop";
 
   return (
     <article className="hpc" aria-label={product.name}>
@@ -158,7 +175,14 @@ function NewArrivalCard({ product }) {
         </span>
         <HeartIconBtn
           filled={isWishlisted}
-          onClick={e => { e.preventDefault(); toggleWishlist(product.id); }}
+          onClick={e => {
+            e.preventDefault();
+            if (wishlistId == null) {
+              showToast("Product is still loading. Please try again.");
+              return;
+            }
+            toggleWishlist(wishlistId);
+          }}
           label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
         />
         {!product.stock && <div className="hpc__oos">Out of Stock</div>}
