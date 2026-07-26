@@ -5,6 +5,27 @@ import { storageUrl } from "../utils/imageUrl";
 
 const AppContext = createContext(null);
 
+function normalizeWishlistId(id) {
+  const numericId = Number(id);
+  return Number.isInteger(numericId) && numericId > 0 ? numericId : null;
+}
+
+function normalizeWishlistList(list) {
+  const seen = new Set();
+  const normalized = [];
+  for (const rawId of Array.isArray(list) ? list : []) {
+    const id = normalizeWishlistId(rawId);
+    if (id == null || seen.has(id)) continue;
+    seen.add(id);
+    normalized.push(id);
+  }
+  return normalized;
+}
+
+function sameIdList(a, b) {
+  return a.length === b.length && a.every((id, index) => id === b[index]);
+}
+
 export function AppProvider({ children }) {
   // ── State ──────────────────────────────────────────────
 
@@ -250,7 +271,7 @@ export function AppProvider({ children }) {
     try {
       const stored = localStorage.getItem("yogo_wishlist");
       const parsed = stored ? JSON.parse(stored) : [];
-      return Array.isArray(parsed) ? parsed : [];
+      return normalizeWishlistList(parsed);
     } catch {
       return [];
     }
@@ -262,10 +283,22 @@ export function AppProvider({ children }) {
     } catch {}
   }, [wishlist]);
 
-  const toggleWishlist = useCallback((id) => {
+  useEffect(() => {
+    if (productsLoading) return;
+    const validProductIds = new Set(products.map(p => normalizeWishlistId(p.id)).filter(id => id != null));
     setWishlist(prev => {
-      const isWishlisted = prev.includes(id);
-      const next = isWishlisted ? prev.filter(x => x !== id) : [...prev, id];
+      const next = normalizeWishlistList(prev).filter(id => validProductIds.has(id));
+      return sameIdList(prev, next) ? prev : next;
+    });
+  }, [products, productsLoading]);
+
+  const toggleWishlist = useCallback((id) => {
+    const normalizedId = normalizeWishlistId(id);
+    if (normalizedId == null) return;
+    setWishlist(prev => {
+      const cleanPrev = normalizeWishlistList(prev);
+      const isWishlisted = cleanPrev.includes(normalizedId);
+      const next = isWishlisted ? cleanPrev.filter(x => x !== normalizedId) : [...cleanPrev, normalizedId];
       showToast(isWishlisted ? "Product removed from wish list" : "Product added to wish list");
       return next;
     });
