@@ -172,9 +172,10 @@ export default function ContactPage() {
   useScrollReveal([]);
 
   useSEO({
-    title: "Contact Us — Request a Quotation for Bulk Orders",
-    description: "Contact Yogo Ventures for wholesale inquiries, bulk order quotations, and B2B sourcing. Reach us at support@yogoventures.com or +91 9003317417. Mon–Sat 10AM–7PM IST.",
+    title: "Contact Us — Source Products from India | Request Wholesale Quotation",
+    description: "Contact Yogo Ventures to source products from India. Reach our reliable sourcing company for wholesale inquiries and B2B quotations at support@yogoventures.com or +91 9003317417. Mon–Sat 10AM–7PM IST.",
     canonical: "https://www.yogoventures.com/contact",
+    keywords: "Find Indian Manufacturer, Source Products from India, Reliable sourcing company in India, Global B2B sourcing company India, request quotation India, B2B wholesale inquiry, contact Indian supplier",
     breadcrumb: [
       { name: "Home",       url: "https://www.yogoventures.com/" },
       { name: "Contact Us", url: "https://www.yogoventures.com/contact" },

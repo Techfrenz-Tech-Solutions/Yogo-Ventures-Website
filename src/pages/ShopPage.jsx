@@ -134,10 +134,28 @@ export default function ShopPage() {
     ? `https://www.yogoventures.com/shop?category=${encodeURIComponent(activeCat)}`
     : "https://www.yogoventures.com/shop";
 
+  const seoKeywords = (() => {
+    const cat = activeCat ? activeCat.toLowerCase() : "";
+    if (cat.includes("apparel")) {
+      return "Cotton T-Shirt Manufacturer India, Tirupur Garment Manufacturer, Private Label Clothing Manufacturer, Garment Exporter India, Wholesale Clothing Supplier India, bulk apparel supplier, custom branding apparel";
+    }
+    if (cat === "copper utensils") {
+      return "Copper Water Bottle Manufacturer, Copper Kitchenware Supplier, Pure Copper Products India, Copper Bottle Supplier, ayurvedic copper utensils, bulk copper wholesale India";
+    }
+    if (cat === "memory foam products") {
+      return "Memory Foam Cushion Manufacturer, Orthopedic Cushion Supplier, Ergonomic Pillow Exporter, Wholesale Memory Foam Products, memory foam supplier India, car neck rest pillow supplier";
+    }
+    if (cat === "handicraft items") {
+      return "Indian Handicrafts Exporter, Jaipur Handicrafts Supplier, Moradabad Handicrafts Exporter, Home Decor Exporter India, blue pottery wholesale, wooden handicrafts supplier";
+    }
+    return "Indian Exporter, B2B wholesale marketplace India, wholesale supplier India, bulk order India, fashion apparel supplier, copper utensils supplier, handicrafts exporter";
+  })();
+
   useSEO({
     title: seoTitle,
     description: seoDesc,
     canonical: seoCanonical,
+    keywords: seoKeywords,
     ogImage: "https://www.yogoventures.com/Hero1.png",
     breadcrumb: [
       { name: "Home", url: "https://www.yogoventures.com/" },

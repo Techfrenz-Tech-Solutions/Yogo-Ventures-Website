@@ -495,6 +495,7 @@ export default function TermsAndConditions() {
     title: "Terms of Use — Terms & Conditions",
     description: "Read the Terms of Use for Yogo Ventures B2B marketplace. Understand the conditions governing product sourcing, quotation requests, and use of our platform.",
     canonical: "https://www.yogoventures.com/TermOfuse",
+    keywords: "Yogo Ventures terms of use, B2B wholesale terms India, export company terms conditions",
     robots: "index, follow, noarchive",
     breadcrumb: [
       { name: "Home",         url: "https://www.yogoventures.com/" },

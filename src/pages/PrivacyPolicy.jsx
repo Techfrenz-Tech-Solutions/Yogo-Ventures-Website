@@ -709,6 +709,7 @@ export default function PrivacyPolicy() {
     title: "Privacy Policy — How We Protect Your Data",
     description: "Read Yogo Ventures' Privacy Policy. We are committed to protecting your personal information and data privacy in compliance with applicable laws.",
     canonical: "https://www.yogoventures.com/PrivacyPolicy",
+    keywords: "Yogo Ventures privacy policy, data protection B2B India, wholesale supplier privacy",
     robots: "index, follow, noarchive",
     breadcrumb: [
       { name: "Home",           url: "https://www.yogoventures.com/" },

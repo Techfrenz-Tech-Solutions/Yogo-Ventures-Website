@@ -96,11 +96,11 @@ export default function SourcingPage() {
   const navigate = useNavigate();
 
   useSEO({
-    title: "B2B Sourcing Services — Pan-India Product Sourcing, Private Label & Bulk Orders",
-    description: "Yogo Ventures offers end-to-end B2B sourcing services across India — pan-India product sourcing, customized development, private label branding, quality inspection, and bulk order management.",
+    title: "Product Sourcing Services India — India Export Partner & Manufacturing Solutions",
+    description: "Yogo Ventures is your India export partner offering end-to-end sourcing services across India — pan-India product sourcing, customized development, private label branding, quality inspection, and bulk order management from manufacturing hubs.",
     canonical: "https://www.yogoventures.com/services",
     ogImage: "https://www.yogoventures.com/Hero1.png",
-    keywords: "global product sourcing, B2B sourcing services, private label manufacturer, bulk order management, quality inspection services, custom product development, packaging design, compliance certification, product sampling, worldwide manufacturer network, global supply chain solutions, international sourcing, wholesale procurement, factory sourcing, e-commerce seller sourcing, request quotation, sourcing solutions, reliable supplier, trusted supplier, business sourcing partner",
+    keywords: "Product Sourcing Services India, End-to-End Sourcing India, India Export Partner, Manufacturing Partner India, Export Solutions India, B2B sourcing services, pan-India product sourcing, private label sourcing India",
     breadcrumb: [
       { name: "Home",     url: "https://www.yogoventures.com/" },
       { name: "Services", url: "https://www.yogoventures.com/services" },

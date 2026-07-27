@@ -201,9 +201,10 @@ export default function HomePage() {
 
   /* ── SEO — Homepage ────────────────────────────────────────────────────── */
   useSEO({
-    title: "B2B Wholesale Supplier — Fashion, Copper Utensils, Memory Foam & Handicrafts",
-    description: "Yogo Ventures is India's trusted B2B wholesale supplier of premium fashion apparel, ayurvedic copper utensils, memory foam products, and authentic Indian handicrafts. Request a quotation for bulk orders.",
+    title: "Indian Exporter & Wholesale Supplier — B2B India Sourcing Company",
+    description: "Yogo Ventures is a global sourcing company in India and trusted B2B exporter of premium fashion apparel, ayurvedic copper utensils, memory foam products, and authentic Indian handicrafts. Request wholesale quotations for bulk orders.",
     canonical: "https://www.yogoventures.com/",
+    keywords: "Indian Exporter, Indian Wholesale Supplier, India Sourcing Company, B2B Exporter India, Export Company India, Global Sourcing Company India, wholesale supplier India, B2B marketplace India",
     ogImage: "https://www.yogoventures.com/Hero1.png",
     breadcrumb: [
       { name: "Home", url: "https://www.yogoventures.com/" },
