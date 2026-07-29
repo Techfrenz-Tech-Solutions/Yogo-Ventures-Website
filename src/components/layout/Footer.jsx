@@ -262,7 +262,7 @@ export default function Footer() {
       <div className="footer__bottom">
         <div className="container footer__bottom-inner">
           <div className="footer__bottom-left">
-            <small>© {year} Yogo Ventures. All rights reserved.</small>
+            <small>© {year} <Link to="/" className="footer__bottom-link footer__brand-link">Yogo Ventures</Link>. All rights reserved.</small>
             <span className="footer__bottom-sep" aria-hidden="true">·</span>
             <Link to="/PrivacyPolicy" className="footer__bottom-link">Privacy Policy</Link>
             <span className="footer__bottom-sep" aria-hidden="true">·</span>

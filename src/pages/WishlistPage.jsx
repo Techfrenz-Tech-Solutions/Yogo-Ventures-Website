@@ -4,6 +4,7 @@ import { useProducts } from "../hooks/useProducts";
 import { useApp } from "../context/AppContext";
 import { Link } from "react-router-dom";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+import { useSEO } from "../hooks/useSEO";
 import "./ShopPage.css";
 import "./WishlistPage.css";
 
@@ -75,6 +76,14 @@ export default function WishlistPage() {
   const { wishlist, toggleWishlist } = useApp();
   const { products, loading } = useProducts();
   useScrollReveal([wishlist.length]);
+
+  useSEO({
+    title: "My Wishlist — Saved Products | Yogo Ventures",
+    description: "View your saved products on Yogo Ventures. Browse and request wholesale quotations for your wishlisted fashion apparel, copper utensils, memory foam products and handicrafts.",
+    canonical: "https://www.yogoventures.com/wishlist",
+    robots: "noindex, nofollow",
+    keywords: "wishlist, saved products, Yogo Ventures, wholesale products India",
+  });
 
   const displayProducts = products.filter(p => wishlist.includes(p.id));
 
